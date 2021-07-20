@@ -6,6 +6,8 @@ using FluentAssertions;
 
 namespace Reservation.Domain.Tests
 {
+    // TODO: move to shared project
+    
     public static class TestExtensions
     {
         public static void ShouldSucceed(this Result result)

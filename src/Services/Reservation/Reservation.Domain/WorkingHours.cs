@@ -2,25 +2,26 @@
 using System.Threading.Tasks;
 using BuildingBlocks.Domain.BusinessRule;
 using BuildingBlocks.Domain.ValueObjects;
+using Reservation.Domain.Restaurants.Rules;
 
 namespace Reservation.Domain
 {
     /// <summary>
     /// Time period during a day when restaurant is open
     /// </summary>
-    public class WorkingHours:ValueObject
+    public sealed class WorkingHours:ValueObject
     {
         public static readonly TimeSpan MaxTime = new(23, 59, 59);
         public static readonly TimeSpan MinTime = new(06, 00, 00);
         
-        internal TimeSpan StartTime { get; private init; }
-        internal TimeSpan FinishTime { get; private init; }
+        private TimeSpan StartTime { get; init; }
+        private TimeSpan FinishTime { get; init; }
 
         private WorkingHours()
         {
         }
         
-        public static Result<WorkingHours> Create(TimeSpan startTime, TimeSpan finishTime)
+        public static Result<WorkingHours> TryCreate(TimeSpan startTime, TimeSpan finishTime)
         {
             var rule = new RestaurantWorkingHourMustBeInAcceptableRange(startTime, finishTime);
 

@@ -1,5 +1,6 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
 using BuildingBlocks.Domain.DomainEvent;
 

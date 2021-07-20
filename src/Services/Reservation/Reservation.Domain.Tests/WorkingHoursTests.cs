@@ -30,7 +30,7 @@ namespace Reservation.Domain.Tests
 
             _testOutputHelper.WriteLine(finishTime.Hours.ToString());
             
-            Result<WorkingHours> result = WorkingHours.Create(startTime, finishTime);
+            Result<WorkingHours> result = WorkingHours.TryCreate(startTime, finishTime);
             
             result.ShouldFail();
             
@@ -54,7 +54,7 @@ namespace Reservation.Domain.Tests
 
             _testOutputHelper.WriteLine(finishTime.Hours.ToString());
             
-            Result<WorkingHours> result = WorkingHours.Create(startTime, finishTime);
+            Result<WorkingHours> result = WorkingHours.TryCreate(startTime, finishTime);
             
             result.ShouldSucceed();
         } 

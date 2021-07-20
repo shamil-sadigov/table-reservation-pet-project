@@ -45,7 +45,7 @@ namespace BuildingBlocks.Domain.BusinessRule
 
     public class Result<T> : Result
     {
-        public T? Response { get; private init; }
+        public T? Value { get; private init; }
 
         public static Result<T> Success(T response)
         {
@@ -57,7 +57,7 @@ namespace BuildingBlocks.Domain.BusinessRule
             return new()
             {
                 Succeeded = true,
-                Response = response
+                Value = response
             };
         }
 
