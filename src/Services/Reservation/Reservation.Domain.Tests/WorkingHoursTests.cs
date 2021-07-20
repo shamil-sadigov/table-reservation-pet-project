@@ -1,5 +1,6 @@
 ﻿using System;
 using BuildingBlocks.Domain.BusinessRule;
+using Reservation.Domain.Restaurants;
 using Xunit;
 using Xunit.Abstractions;
 
