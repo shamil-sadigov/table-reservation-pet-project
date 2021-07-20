@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using BuildingBlocks.Domain.BusinessRule;
+using BuildingBlocks.Domain.BusinessRule.AsyncVersion;
 using FluentAssertions;
 using Xunit;
 
@@ -11,8 +12,8 @@ namespace BuildingBlocks.Domain.Tests.BusinessRule
         [Fact]
         public async Task Simple_OrCompositeRule_is_successful()
         {
-            var businessRule = new TestBusinessRule(isSuccessfulRule: true, "Error message1")
-                    .Or(new TestBusinessRule(isSuccessfulRule: false, "Error message2"));
+            var businessRule = new TestBusinessRuleAsync(isSuccessfulRule: true, "Error message1")
+                    .Or(new TestBusinessRuleAsync(isSuccessfulRule: false, "Error message2"));
             
             var checkResult = await businessRule.Check();
 
@@ -23,11 +24,11 @@ namespace BuildingBlocks.Domain.Tests.BusinessRule
         public async Task Complicated_OrCompositeRule_is_successful()
         {
             var compositeRule = 
-                new TestBusinessRule(isSuccessfulRule: false, "Error message1")
-                    .Or(new TestBusinessRule(isSuccessfulRule: false, "Error message2"))
-                    .Or(new TestBusinessRule(isSuccessfulRule: false, "Error message3"))
-                    .Or(new TestBusinessRule(isSuccessfulRule: true, "Error message4"))
-                    .Or(new TestBusinessRule(isSuccessfulRule: false, "Error message5"));
+                new TestBusinessRuleAsync(isSuccessfulRule: false, "Error message1")
+                    .Or(new TestBusinessRuleAsync(isSuccessfulRule: false, "Error message2"))
+                    .Or(new TestBusinessRuleAsync(isSuccessfulRule: false, "Error message3"))
+                    .Or(new TestBusinessRuleAsync(isSuccessfulRule: true, "Error message4"))
+                    .Or(new TestBusinessRuleAsync(isSuccessfulRule: false, "Error message5"));
             
             var checkResult = await compositeRule.Check();
 
@@ -39,9 +40,9 @@ namespace BuildingBlocks.Domain.Tests.BusinessRule
         public async Task OrCompositeRule_fails()
         {
             var compositeRule = 
-                new TestBusinessRule(isSuccessfulRule: false, errorMessage: "Error message1")
-                    .Or(new TestBusinessRule(isSuccessfulRule: false, errorMessage: "Error message2"))
-                    .Or(new TestBusinessRule(isSuccessfulRule: false, errorMessage: "Error message3"));
+                new TestBusinessRuleAsync(isSuccessfulRule: false, errorMessage: "Error message1")
+                    .Or(new TestBusinessRuleAsync(isSuccessfulRule: false, errorMessage: "Error message2"))
+                    .Or(new TestBusinessRuleAsync(isSuccessfulRule: false, errorMessage: "Error message3"));
             
             var checkResult = await compositeRule.Check();
 

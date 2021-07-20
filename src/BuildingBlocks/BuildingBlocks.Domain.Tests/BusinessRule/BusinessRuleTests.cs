@@ -24,7 +24,7 @@ namespace BuildingBlocks.Domain.Tests.BusinessRule
         [Fact]
         public async Task BusinessRule_check_is_successful()
         {
-            var businessRule = new TestBusinessRule(
+            var businessRule = new TestBusinessRuleAsync(
                 isSuccessfulRule: true,
                 errorMessage: "Error message");
 
@@ -36,7 +36,7 @@ namespace BuildingBlocks.Domain.Tests.BusinessRule
         [Fact]
         public async Task BusinessRule_check_is_failed()
         {
-            var businessRule = new TestBusinessRule(
+            var businessRule = new TestBusinessRuleAsync(
                 isSuccessfulRule: false,
                 errorMessage: "Error message");
 

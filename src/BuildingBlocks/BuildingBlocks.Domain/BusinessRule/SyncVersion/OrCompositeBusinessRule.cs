@@ -1,15 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace BuildingBlocks.Domain.BusinessRule
+namespace BuildingBlocks.Domain.BusinessRule.SyncVersion
 {
     public sealed class OrCompositeBusinessRule:CompositeBusinessRuleBase
     {
         public OrCompositeBusinessRule(ICollection<IBusinessRule> businessRules) 
             :base(businessRules) {}
         
-        protected override CheckResult CombineBusinessRulesResults(CheckResult[] results)
+        protected override Result CombineBusinessRulesResults(IEnumerable<Result> results)
         {
             var errors = new List<Error>();
             
@@ -21,7 +20,7 @@ namespace BuildingBlocks.Domain.BusinessRule
                 return isSuccessful || result.Succeeded;
             });
             
-            return anySuccessfulResultExist ? CheckResult.Success() : CheckResult.Failure(errors);
+            return anySuccessfulResultExist ? Result.Success() : Result.Failure(errors);
         }
     }
 }

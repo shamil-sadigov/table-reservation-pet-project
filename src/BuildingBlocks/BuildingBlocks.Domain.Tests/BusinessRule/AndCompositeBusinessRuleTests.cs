@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using BuildingBlocks.Domain.BusinessRule;
+using BuildingBlocks.Domain.BusinessRule.AsyncVersion;
 using FluentAssertions;
 using Xunit;
 
@@ -12,8 +13,8 @@ namespace BuildingBlocks.Domain.Tests.BusinessRule
         public async Task Simple_AndCompositeRule_is_successful()
         {
             var businessRule = 
-                new TestBusinessRule(isSuccessfulRule: true, "Error message1")
-                    .And(new TestBusinessRule(isSuccessfulRule: true, "Error message2"));
+                new TestBusinessRuleAsync(isSuccessfulRule: true, "Error message1")
+                    .And(new TestBusinessRuleAsync(isSuccessfulRule: true, "Error message2"));
             
             var checkResult = await businessRule.Check();
 
@@ -24,11 +25,11 @@ namespace BuildingBlocks.Domain.Tests.BusinessRule
         public async Task Complicated_AndCompositeRule_is_successful()
         {
             var compositeRule = 
-                new TestBusinessRule(isSuccessfulRule: true, "Error message1")
-                    .And(new TestBusinessRule(isSuccessfulRule: true, "Error message2"))
-                    .And(new TestBusinessRule(isSuccessfulRule: true, "Error message3"))
-                    .And(new TestBusinessRule(isSuccessfulRule: true, "Error message4"))
-                    .And(new TestBusinessRule(isSuccessfulRule: true, "Error message5"));
+                new TestBusinessRuleAsync(isSuccessfulRule: true, "Error message1")
+                    .And(new TestBusinessRuleAsync(isSuccessfulRule: true, "Error message2"))
+                    .And(new TestBusinessRuleAsync(isSuccessfulRule: true, "Error message3"))
+                    .And(new TestBusinessRuleAsync(isSuccessfulRule: true, "Error message4"))
+                    .And(new TestBusinessRuleAsync(isSuccessfulRule: true, "Error message5"));
             
             var checkResult = await compositeRule.Check();
 
@@ -40,8 +41,8 @@ namespace BuildingBlocks.Domain.Tests.BusinessRule
         public async Task Simple_AndCompositeRule_fails()
         {
             var compositeRule = 
-                new TestBusinessRule(isSuccessfulRule: true, errorMessage: "Error message1")
-                    .And(new TestBusinessRule(isSuccessfulRule: false, errorMessage: "Error message2"));
+                new TestBusinessRuleAsync(isSuccessfulRule: true, errorMessage: "Error message1")
+                    .And(new TestBusinessRuleAsync(isSuccessfulRule: false, errorMessage: "Error message2"));
             
             var checkResult = await compositeRule.Check();
 
@@ -57,13 +58,13 @@ namespace BuildingBlocks.Domain.Tests.BusinessRule
         public async Task Complicated_AndCompositeRule_fails()
         { 
             var compositeRule = 
-                     new TestBusinessRule(isSuccessfulRule: false, errorMessage: "Error message1")  // <--
-                .And(new TestBusinessRule(isSuccessfulRule: true, errorMessage: "Error message2")) 
-                .And(new TestBusinessRule(isSuccessfulRule: false, errorMessage: "Error message3")) // <--
-                .And(new TestBusinessRule(isSuccessfulRule: true, errorMessage: "Error message4"))
-                .And(new TestBusinessRule(isSuccessfulRule: false, errorMessage: "Error message5")) // <--
-                .And(new TestBusinessRule(isSuccessfulRule: false, errorMessage: "Error message6")) // <--
-                .And(new TestBusinessRule(isSuccessfulRule: true, errorMessage: "Error message7"));
+                     new TestBusinessRuleAsync(isSuccessfulRule: false, errorMessage: "Error message1")  // <--
+                .And(new TestBusinessRuleAsync(isSuccessfulRule: true, errorMessage: "Error message2")) 
+                .And(new TestBusinessRuleAsync(isSuccessfulRule: false, errorMessage: "Error message3")) // <--
+                .And(new TestBusinessRuleAsync(isSuccessfulRule: true, errorMessage: "Error message4"))
+                .And(new TestBusinessRuleAsync(isSuccessfulRule: false, errorMessage: "Error message5")) // <--
+                .And(new TestBusinessRuleAsync(isSuccessfulRule: false, errorMessage: "Error message6")) // <--
+                .And(new TestBusinessRuleAsync(isSuccessfulRule: true, errorMessage: "Error message7"));
             
             var checkResult = await compositeRule.Check();
 

@@ -7,9 +7,9 @@ using System.Collections.Generic;
 
 namespace BuildingBlocks.Domain.BusinessRule
 {
-    public class CheckResult
+    public class Result
     {
-        protected CheckResult()
+        protected Result()
         {
         }
 
@@ -19,35 +19,35 @@ namespace BuildingBlocks.Domain.BusinessRule
 
         public IReadOnlyCollection<Error>? Errors { get; protected init; }
 
-        public static CheckResult Success() => new()
+        public static Result Success() => new()
             {
                 Succeeded = true
             };
 
-        public static CheckResult Failure(Error error) => 
+        public static Result Failure(Error error) => 
             new()
             {
                 Errors = new[] {error}
             };
 
-        public static CheckResult Failure(IReadOnlyCollection<Error> errors) =>
+        public static Result Failure(IReadOnlyCollection<Error> errors) =>
             new()
             {
                 Errors = errors
             };
 
-        public CheckResult<T> WithResponse<T>(T response) =>
+        public Result<T> WithResponse<T>(T response) =>
             Succeeded
-                ? CheckResult<T>.Success(response)
-                : CheckResult<T>.Failure(Errors!);
+                ? Result<T>.Success(response)
+                : Result<T>.Failure(Errors!);
     }
 
 
-    public class CheckResult<T> : CheckResult
+    public class Result<T> : Result
     {
         public T? Response { get; private init; }
 
-        public static CheckResult<T> Success(T response)
+        public static Result<T> Success(T response)
         {
             if (response is null)
             {
@@ -61,7 +61,7 @@ namespace BuildingBlocks.Domain.BusinessRule
             };
         }
 
-        public new static CheckResult<T> Failure(Error error)
+        public new static Result<T> Failure(Error error)
         {
             return new()
             {
@@ -69,7 +69,7 @@ namespace BuildingBlocks.Domain.BusinessRule
             };
         }
 
-        public new static CheckResult<T> Failure(IReadOnlyCollection<Error> errors)
+        public new static Result<T> Failure(IReadOnlyCollection<Error> errors)
         {
             return new()
             {

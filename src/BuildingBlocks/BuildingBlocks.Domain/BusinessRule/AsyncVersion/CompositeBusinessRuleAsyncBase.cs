@@ -4,13 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using MoreLinq;
 
-namespace BuildingBlocks.Domain.BusinessRule
+namespace BuildingBlocks.Domain.BusinessRule.AsyncVersion
 {
-    public abstract class CompositeBusinessRuleBase:IBusinessRule
+    public abstract class CompositeBusinessRuleAsyncBase:IBusinessRuleAsync
     {
-        protected ICollection<IBusinessRule> BusinessRules { get;  }
+        protected ICollection<IBusinessRuleAsync> BusinessRules { get;  }
 
-        protected CompositeBusinessRuleBase(ICollection<IBusinessRule> businessRules)
+        protected CompositeBusinessRuleAsyncBase(ICollection<IBusinessRuleAsync> businessRules)
         {
             BusinessRules = businessRules ?? throw new ArgumentNullException(nameof(businessRules));
 
@@ -20,17 +20,17 @@ namespace BuildingBlocks.Domain.BusinessRule
             }
         }
 
-        public async Task<CheckResult> Check()
+        public async Task<Result> Check()
         {
             var rules = BusinessRules.Select(x => x.Check());
             
-            CheckResult[] results = await Task.WhenAll(rules);
+            Result[] results = await Task.WhenAll(rules);
             
             var result =  CombineBusinessRulesResults(results);
 
             return result;
         }
 
-        protected abstract CheckResult CombineBusinessRulesResults(CheckResult[] results);
+        protected abstract Result CombineBusinessRulesResults(Result[] results);
     }
 }

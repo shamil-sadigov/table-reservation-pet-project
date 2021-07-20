@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using BuildingBlocks.Domain.BusinessRule;
+using BuildingBlocks.Domain.BusinessRule.AsyncVersion;
 using FluentAssertions;
 using Xunit;
 
@@ -12,13 +13,13 @@ namespace BuildingBlocks.Domain.Tests.BusinessRule
         public async Task Composite_rule_succeed()
         {
             var businessRule =
-                new TestBusinessRule(isSuccessfulRule: true, errorMessage: "Error message")
-                    .And(new TestBusinessRule(isSuccessfulRule: true, errorMessage: "Error message2"))
-                    .Or(new TestBusinessRule(isSuccessfulRule: false, errorMessage: "Error message3"))
-                    .And(new TestBusinessRule(isSuccessfulRule: true, errorMessage: "Error message4"))
-                    .Or(new TestBusinessRule(isSuccessfulRule: true, errorMessage: "Error message3"))
-                    .Or(new TestBusinessRule(isSuccessfulRule: false, errorMessage: "Error message3"))
-                    .And(new TestBusinessRule(isSuccessfulRule: true, errorMessage: "Error message6"));
+                new TestBusinessRuleAsync(isSuccessfulRule: true, errorMessage: "Error message")
+                    .And(new TestBusinessRuleAsync(isSuccessfulRule: true, errorMessage: "Error message2"))
+                    .Or(new TestBusinessRuleAsync(isSuccessfulRule: false, errorMessage: "Error message3"))
+                    .And(new TestBusinessRuleAsync(isSuccessfulRule: true, errorMessage: "Error message4"))
+                    .Or(new TestBusinessRuleAsync(isSuccessfulRule: true, errorMessage: "Error message3"))
+                    .Or(new TestBusinessRuleAsync(isSuccessfulRule: false, errorMessage: "Error message3"))
+                    .And(new TestBusinessRuleAsync(isSuccessfulRule: true, errorMessage: "Error message6"));
 
             var checkResult = await businessRule.Check();
 
@@ -30,13 +31,13 @@ namespace BuildingBlocks.Domain.Tests.BusinessRule
         public async Task Composite_rule_fails()
         {
             var businessRule =
-                new TestBusinessRule(isSuccessfulRule: true, errorMessage: "Error message")
-                    .And(new TestBusinessRule(isSuccessfulRule: false, errorMessage: "Error message2"))
-                    .Or(new TestBusinessRule(isSuccessfulRule: true, errorMessage: "Error message3"))
-                    .And(new TestBusinessRule(isSuccessfulRule: true, errorMessage: "Error message4"))
-                    .Or(new TestBusinessRule(isSuccessfulRule: true, errorMessage: "Error message3"))
-                    .Or(new TestBusinessRule(isSuccessfulRule: false, errorMessage: "Error message3"))
-                    .And(new TestBusinessRule(isSuccessfulRule: false, errorMessage: "Error message6"));
+                new TestBusinessRuleAsync(isSuccessfulRule: true, errorMessage: "Error message")
+                    .And(new TestBusinessRuleAsync(isSuccessfulRule: false, errorMessage: "Error message2"))
+                    .Or(new TestBusinessRuleAsync(isSuccessfulRule: true, errorMessage: "Error message3"))
+                    .And(new TestBusinessRuleAsync(isSuccessfulRule: true, errorMessage: "Error message4"))
+                    .Or(new TestBusinessRuleAsync(isSuccessfulRule: true, errorMessage: "Error message3"))
+                    .Or(new TestBusinessRuleAsync(isSuccessfulRule: false, errorMessage: "Error message3"))
+                    .And(new TestBusinessRuleAsync(isSuccessfulRule: false, errorMessage: "Error message6"));
 
             var checkResult = await businessRule.Check();
 
