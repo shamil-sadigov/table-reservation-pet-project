@@ -37,7 +37,7 @@ namespace Reservation.Domain.Restaurants
             IReadOnlyCollection<NewTableInfo> newTablesInfo)
         {
             if (name.IsNullOrEmpty())
-                return Result<Restaurant>.Failure("name should contain value");
+                return new Error("name should contain value");
 
             var result = new RestaurantMustHaveAtLeastOneTable(newTablesInfo)
                 .Check();
@@ -45,11 +45,10 @@ namespace Reservation.Domain.Restaurants
             if (result.Failed)
                 return result.WithResponse<Restaurant>(null);
 
-            var restaurant = new Restaurant(workingHours, address, newTablesInfo);
-
             // TODO: Add domain event
-
-            return Result<Restaurant>.Success(restaurant);
+            
+            return new Restaurant(workingHours, address, newTablesInfo);
+            
         }
     }
 }

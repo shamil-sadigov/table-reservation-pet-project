@@ -22,13 +22,8 @@ namespace BuildingBlocks.Domain.Tests.DomainRules
         public async Task<Result> Check()
         {
             await Task.Yield();
-
-            if (_isSuccessfulRule)
-                return Result.Success();
-
-            var error = new Error(_errorMessage);
-
-            return Result.Failure(error);
+            
+            return _isSuccessfulRule ? Result.Success() : new Error(_errorMessage);
         }
     }
 }

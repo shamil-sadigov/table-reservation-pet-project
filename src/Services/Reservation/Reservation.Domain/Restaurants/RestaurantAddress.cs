@@ -1,5 +1,6 @@
 ﻿#region
 
+using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.ValueObjects;
 
@@ -19,11 +20,9 @@ namespace Reservation.Domain.Restaurants
         public static Result<RestaurantAddress> TryCreate(string address)
         {
             if (address.IsNullOrEmpty())
-                return Result<RestaurantAddress>.Failure("address should contain value");
+                return new Error( "address should contain value");
 
-            var restaurantAddress = new RestaurantAddress(address);
-
-            return Result<RestaurantAddress>.Success(restaurantAddress);
+            return new RestaurantAddress(address);
         }
     }
 }

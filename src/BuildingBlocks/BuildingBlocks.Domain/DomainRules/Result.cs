@@ -49,6 +49,8 @@ namespace BuildingBlocks.Domain.DomainRules
                 ? Result<T>.Success(response)
                 : Result<T>.Failure(Errors!);
         }
+
+        public static implicit operator Result(Error error) => Failure(error);
     }
 
 
@@ -58,7 +60,8 @@ namespace BuildingBlocks.Domain.DomainRules
 
         public static Result<T> Success(T response)
         {
-            if (response is null) throw new ArgumentNullException(nameof(response));
+            if (response is null) 
+                throw new ArgumentNullException(nameof(response));
 
             return new()
             {
@@ -82,5 +85,9 @@ namespace BuildingBlocks.Domain.DomainRules
                 Errors = errors
             };
         }
+        
+        public static implicit operator Result<T>(Error error) => Failure(error);
+        public static implicit operator Result<T>(T value) => Success(value);
+
     }
 }
