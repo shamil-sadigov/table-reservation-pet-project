@@ -1,8 +1,11 @@
-﻿using System;
-using BuildingBlocks.Domain.BusinessRule;
+﻿#region
+
+using System;
 using Reservation.Domain.Restaurants;
 using Xunit;
 using Xunit.Abstractions;
+
+#endregion
 
 namespace Reservation.Domain.Tests
 {
@@ -16,9 +19,9 @@ namespace Reservation.Domain.Tests
         }
 
         [Theory]
-        [InlineData(10,00, 55,00, "finishTime should not be greater that 23:59:59")]
-        [InlineData(03,00, 22,00, "startTime should be in range 06:00:00-23:59:59")]
-        [InlineData(18,00, 10,00, "startTime should not be greater than finishTime")]
+        [InlineData(10, 00, 55, 00, "finishTime should not be greater that 23:59:59")]
+        [InlineData(03, 00, 22, 00, "startTime should be in range 06:00:00-23:59:59")]
+        [InlineData(18, 00, 10, 00, "startTime should not be greater than finishTime")]
         public void Cannot_create_workingHours_when_startTime_or_finishTime_are_invalid(
             int startHour,
             int startMinutes,
@@ -30,20 +33,19 @@ namespace Reservation.Domain.Tests
             var finishTime = new TimeSpan(finishHour, finishMinutes, seconds: 00);
 
             _testOutputHelper.WriteLine(finishTime.Hours.ToString());
-            
-            Result<WorkingHours> result = WorkingHours.TryCreate(startTime, finishTime);
-            
+
+            var result = WorkingHours.TryCreate(startTime, finishTime);
+
             result.ShouldFail();
-            
+
             result.Errors!.ShouldContain(expectedErrorMessage);
-        }   
-        
-        
-        
+        }
+
+
         [Theory]
-        [InlineData(10,00, 19,00)]
-        [InlineData(06,00, 22,30)]
-        [InlineData(09,00, 10,00)]
+        [InlineData(10, 00, 19, 00)]
+        [InlineData(06, 00, 22, 30)]
+        [InlineData(09, 00, 10, 00)]
         public void Can_create_workingHours_when_startTime_or_finishTime_are_valid(
             int startHour,
             int startMinutes,
@@ -54,10 +56,10 @@ namespace Reservation.Domain.Tests
             var finishTime = new TimeSpan(finishHour, finishMinutes, seconds: 00);
 
             _testOutputHelper.WriteLine(finishTime.Hours.ToString());
-            
-            Result<WorkingHours> result = WorkingHours.TryCreate(startTime, finishTime);
-            
+
+            var result = WorkingHours.TryCreate(startTime, finishTime);
+
             result.ShouldSucceed();
-        } 
+        }
     }
 }

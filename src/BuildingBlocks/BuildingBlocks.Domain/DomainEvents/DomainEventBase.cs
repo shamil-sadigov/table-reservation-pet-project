@@ -4,7 +4,7 @@ using System;
 
 #endregion
 
-namespace BuildingBlocks.Domain.DomainEvent
+namespace BuildingBlocks.Domain.DomainEvents
 {
     public class DomainEventBase : IDomainEvent
     {

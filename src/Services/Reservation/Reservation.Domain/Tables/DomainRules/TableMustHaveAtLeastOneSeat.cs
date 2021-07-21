@@ -1,15 +1,15 @@
 #region
 
-using BuildingBlocks.Domain.BusinessRule;
-using BuildingBlocks.Domain.BusinessRule.SyncVersion;
+using BuildingBlocks.Domain.DomainRules;
+using BuildingBlocks.Domain.DomainRules.SyncVersion;
 
 #endregion
 
-namespace Reservation.Domain.Tables.Rules
+namespace Reservation.Domain.Tables.DomainRules
 {
     // TODO: add 'Rule' ending to all defined rules classes
 
-    public sealed class TableMustHaveAtLeastOneSeat : IBusinessRule
+    public sealed class TableMustHaveAtLeastOneSeat : IDomainRule
     {
         private readonly byte _numberOfSeats;
 

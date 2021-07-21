@@ -1,16 +1,19 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
-using BuildingBlocks.Domain.BusinessRule;
 using Reservation.Domain.Restaurants;
 using Reservation.Domain.Tables;
 using Xunit;
+
+#endregion
 
 namespace Reservation.Domain.Tests
 {
     public class RestaurantTests
     {
         // TODO: Add more tests
-        
+
         [Fact]
         public void Can_create_restaurant()
         {
@@ -25,22 +28,22 @@ namespace Reservation.Domain.Tests
             var tableSize4 = TableSize.TryCreate(4).Value;
             var tableSize8 = TableSize.TryCreate(8).Value;
 
-            var tablesInfo = new List<NewTableInfo>()
+            var tablesInfo = new List<NewTableInfo>
             {
                 new(tableSize2),
                 new(tableSize4),
                 new(tableSize2),
                 new(tableSize4),
                 new(tableSize8),
-                new(tableSize8),
+                new(tableSize8)
             };
-            
-            Result<Restaurant> result = Restaurant.TryRegisterNew(
-                "name", 
+
+            var result = Restaurant.TryRegisterNew(
+                "name",
                 workingHours,
                 addressResult,
                 tablesInfo);
-            
+
             result.ShouldSucceed();
         }
     }

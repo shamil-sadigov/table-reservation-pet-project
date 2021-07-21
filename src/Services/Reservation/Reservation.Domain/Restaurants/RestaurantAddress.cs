@@ -1,6 +1,6 @@
 ﻿#region
 
-using BuildingBlocks.Domain.BusinessRule;
+using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.ValueObjects;
 
 #endregion

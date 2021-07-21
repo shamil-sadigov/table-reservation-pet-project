@@ -4,8 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BuildingBlocks.Domain;
-using BuildingBlocks.Domain.BusinessRule;
-using Reservation.Domain.Restaurants.Rules;
+using BuildingBlocks.Domain.DomainRules;
+using Reservation.Domain.Restaurants.DomainRules;
 using Reservation.Domain.Tables;
 
 #endregion
@@ -48,7 +48,7 @@ namespace Reservation.Domain.Restaurants
             var restaurant = new Restaurant(workingHours, address, newTablesInfo);
 
             // TODO: Add domain event
-            
+
             return Result<Restaurant>.Success(restaurant);
         }
     }

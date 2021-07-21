@@ -1,9 +1,9 @@
 ﻿#region
 
 using System;
-using BuildingBlocks.Domain.BusinessRule;
+using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.ValueObjects;
-using Reservation.Domain.Restaurants.Rules;
+using Reservation.Domain.Restaurants.DomainRules;
 
 #endregion
 

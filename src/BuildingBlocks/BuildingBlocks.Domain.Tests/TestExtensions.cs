@@ -1,7 +1,11 @@
-﻿using BuildingBlocks.Domain.BusinessRule;
+﻿#region
+
+using BuildingBlocks.Domain.DomainRules;
 using FluentAssertions;
 
-namespace BuildingBlocks.Domain.Tests.BusinessRule
+#endregion
+
+namespace BuildingBlocks.Domain.Tests
 {
     public static class TestExtensions
     {
@@ -9,9 +13,8 @@ namespace BuildingBlocks.Domain.Tests.BusinessRule
         {
             result.Succeeded.Should().Be(true);
             result.Failed.Should().Be(false);
-            
         }
-        
+
         public static void ShouldFail(this Result result)
         {
             result.Failed.Should().Be(true);

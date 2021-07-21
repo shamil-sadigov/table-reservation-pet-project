@@ -1,46 +1,44 @@
 #region
 
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using MoreLinq;
 using Xunit;
 using Xunit.Abstractions;
 
 #endregion
 
-namespace BuildingBlocks.Domain.Tests.BusinessRule
+namespace BuildingBlocks.Domain.Tests.DomainRules
 {
-    public class BusinessRuleTests
+    public class DomainRuleTests
     {
         private readonly ITestOutputHelper _testOutputHelper;
 
-        public BusinessRuleTests(ITestOutputHelper testOutputHelper)
+        public DomainRuleTests(ITestOutputHelper testOutputHelper)
         {
             _testOutputHelper = testOutputHelper;
         }
 
         [Fact]
-        public async Task BusinessRule_check_is_successful()
+        public async Task DomainRule_check_is_successful()
         {
-            var businessRule = new TestBusinessRuleAsync(
+            var domainRule = new TestDomainRuleAsync(
                 isSuccessfulRule: true,
                 errorMessage: "Error message");
 
-            var result = await businessRule.Check();
+            var result = await domainRule.Check();
 
             result.ShouldSucceed();
         }
 
         [Fact]
-        public async Task BusinessRule_check_is_failed()
+        public async Task DomainRule_check_is_failed()
         {
-            var businessRule = new TestBusinessRuleAsync(
+            var domainRule = new TestDomainRuleAsync(
                 isSuccessfulRule: false,
                 errorMessage: "Error message");
 
-            var checkResult = await businessRule.Check();
+            var checkResult = await domainRule.Check();
 
             checkResult.ShouldFail();
 
@@ -51,6 +49,5 @@ namespace BuildingBlocks.Domain.Tests.BusinessRule
                 .Subject.Single().Message
                 .Should().Be("Error message");
         }
-       
     }
 }

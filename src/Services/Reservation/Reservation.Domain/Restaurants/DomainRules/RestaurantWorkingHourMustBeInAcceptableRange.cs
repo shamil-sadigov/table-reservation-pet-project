@@ -4,14 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using BuildingBlocks.Domain;
-using BuildingBlocks.Domain.BusinessRule;
-using BuildingBlocks.Domain.BusinessRule.SyncVersion;
+using BuildingBlocks.Domain.DomainRules;
+using BuildingBlocks.Domain.DomainRules.SyncVersion;
 
 #endregion
 
-namespace Reservation.Domain.Restaurants.Rules
+namespace Reservation.Domain.Restaurants.DomainRules
 {
-    internal sealed class RestaurantWorkingHourMustBeInAcceptableRange : IBusinessRule
+    internal sealed class RestaurantWorkingHourMustBeInAcceptableRange : IDomainRule
     {
         private readonly TimeSpan _finishTime;
         private readonly TimeSpan _startTime;

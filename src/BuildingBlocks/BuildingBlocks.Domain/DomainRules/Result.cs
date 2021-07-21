@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 #endregion
 
-namespace BuildingBlocks.Domain.BusinessRule
+namespace BuildingBlocks.Domain.DomainRules
 {
     public class Result
     {
@@ -19,27 +19,36 @@ namespace BuildingBlocks.Domain.BusinessRule
 
         public IReadOnlyCollection<Error>? Errors { get; protected init; }
 
-        public static Result Success() => new()
+        public static Result Success()
+        {
+            return new()
             {
                 Succeeded = true
             };
+        }
 
-        public static Result Failure(Error error) => 
-            new()
+        public static Result Failure(Error error)
+        {
+            return new()
             {
                 Errors = new[] {error}
             };
+        }
 
-        public static Result Failure(IReadOnlyCollection<Error> errors) =>
-            new()
+        public static Result Failure(IReadOnlyCollection<Error> errors)
+        {
+            return new()
             {
                 Errors = errors
             };
+        }
 
-        public Result<T> WithResponse<T>(T response) =>
-            Succeeded
+        public Result<T> WithResponse<T>(T response)
+        {
+            return Succeeded
                 ? Result<T>.Success(response)
                 : Result<T>.Failure(Errors!);
+        }
     }
 
 
@@ -49,11 +58,8 @@ namespace BuildingBlocks.Domain.BusinessRule
 
         public static Result<T> Success(T response)
         {
-            if (response is null)
-            {
-                throw new ArgumentNullException(nameof(response));
-            }
-            
+            if (response is null) throw new ArgumentNullException(nameof(response));
+
             return new()
             {
                 Succeeded = true,

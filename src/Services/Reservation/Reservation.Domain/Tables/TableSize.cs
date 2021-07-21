@@ -1,8 +1,8 @@
 #region
 
-using BuildingBlocks.Domain.BusinessRule;
+using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.ValueObjects;
-using Reservation.Domain.Tables.Rules;
+using Reservation.Domain.Tables.DomainRules;
 
 #endregion
 

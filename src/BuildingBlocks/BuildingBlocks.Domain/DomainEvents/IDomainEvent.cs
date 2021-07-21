@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region
+
+using System;
 using MediatR;
 
-namespace BuildingBlocks.Domain.DomainEvent
+#endregion
+
+namespace BuildingBlocks.Domain.DomainEvents
 {
     public interface IDomainEvent : INotification
     {

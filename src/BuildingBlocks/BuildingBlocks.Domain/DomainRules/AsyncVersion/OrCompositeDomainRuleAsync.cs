@@ -1,17 +1,23 @@
+#region
+
 using System.Collections.Generic;
 using System.Linq;
 
-namespace BuildingBlocks.Domain.BusinessRule.SyncVersion
+#endregion
+
+namespace BuildingBlocks.Domain.DomainRules.AsyncVersion
 {
-    public sealed class OrCompositeBusinessRule:CompositeBusinessRuleBase
+    public sealed class OrCompositeDomainRuleAsync : CompositeDomainRuleAsyncBase
     {
-        public OrCompositeBusinessRule(ICollection<IBusinessRule> businessRules) 
-            :base(businessRules) {}
-        
-        protected override Result CombineBusinessRulesResults(IEnumerable<Result> results)
+        public OrCompositeDomainRuleAsync(ICollection<IDomainRuleAsync> domainRule)
+            : base(domainRule)
+        {
+        }
+
+        protected override Result CombineDomainRulesResults(Result[] results)
         {
             var errors = new List<Error>();
-            
+
             var anySuccessfulResultExist = results.Aggregate(seed: false, (isSuccessful, result) =>
             {
                 if (result.Failed)
@@ -19,9 +25,8 @@ namespace BuildingBlocks.Domain.BusinessRule.SyncVersion
 
                 return isSuccessful || result.Succeeded;
             });
-            
+
             return anySuccessfulResultExist ? Result.Success() : Result.Failure(errors);
         }
     }
 }
-

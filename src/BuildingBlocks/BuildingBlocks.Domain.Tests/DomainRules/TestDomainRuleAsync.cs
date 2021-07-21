@@ -1,32 +1,34 @@
-﻿using System.Threading.Tasks;
-using BuildingBlocks.Domain.BusinessRule;
-using BuildingBlocks.Domain.BusinessRule.AsyncVersion;
+﻿#region
 
-namespace BuildingBlocks.Domain.Tests.BusinessRule
+using System.Threading.Tasks;
+using BuildingBlocks.Domain.DomainRules;
+using BuildingBlocks.Domain.DomainRules.AsyncVersion;
+
+#endregion
+
+namespace BuildingBlocks.Domain.Tests.DomainRules
 {
-    public class TestBusinessRuleAsync:IBusinessRuleAsync
+    public class TestDomainRuleAsync : IDomainRuleAsync
     {
-        private readonly bool _isSuccessfulRule;
         private readonly string _errorMessage;
+        private readonly bool _isSuccessfulRule;
 
-        public TestBusinessRuleAsync(bool isSuccessfulRule, string errorMessage)
+        public TestDomainRuleAsync(bool isSuccessfulRule, string errorMessage)
         {
             _isSuccessfulRule = isSuccessfulRule;
             _errorMessage = errorMessage;
         }
-        
+
         public async Task<Result> Check()
         {
             await Task.Yield();
-            
+
             if (_isSuccessfulRule)
                 return Result.Success();
 
             var error = new Error(_errorMessage);
-            
+
             return Result.Failure(error);
         }
-        
-        
     }
 }

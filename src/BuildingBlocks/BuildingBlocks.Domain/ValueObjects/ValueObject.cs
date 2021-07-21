@@ -58,7 +58,7 @@ namespace BuildingBlocks.Domain.ValueObjects
                 return hash;
             }
         }
-        
+
         private bool PropertiesAreEqual(object obj, PropertyInfo p)
         {
             return Equals(p.GetValue(this, null), p.GetValue(obj, null));

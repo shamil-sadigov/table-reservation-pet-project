@@ -1,15 +1,15 @@
 ﻿#region
 
 using System.Collections.Generic;
-using BuildingBlocks.Domain.BusinessRule;
-using BuildingBlocks.Domain.BusinessRule.SyncVersion;
+using BuildingBlocks.Domain.DomainRules;
+using BuildingBlocks.Domain.DomainRules.SyncVersion;
 using MoreLinq;
 
 #endregion
 
-namespace Reservation.Domain.Restaurants.Rules
+namespace Reservation.Domain.Restaurants.DomainRules
 {
-    public sealed class RestaurantMustHaveAtLeastOneTable : IBusinessRule
+    public sealed class RestaurantMustHaveAtLeastOneTable : IDomainRule
     {
         private readonly IReadOnlyCollection<NewTableInfo> _tables;
 
