@@ -1,5 +1,6 @@
 ﻿#region
 
+using System.Collections.Generic;
 using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.ValueObjects;
@@ -23,6 +24,11 @@ namespace Reservation.Domain.Restaurants
                 return new Error( "address should contain value");
 
             return new RestaurantAddress(address);
+        }
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return _address;
         }
     }
 }
