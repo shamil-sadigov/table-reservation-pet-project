@@ -51,6 +51,8 @@ namespace BuildingBlocks.Domain.DomainRules
         }
 
         public static implicit operator Result(Error error) => Failure(error);
+        public static implicit operator Result(List<Error> errors) => Failure(errors);
+
     }
 
 
@@ -87,6 +89,7 @@ namespace BuildingBlocks.Domain.DomainRules
         }
         
         public static implicit operator Result<T>(Error error) => Failure(error);
+        public static implicit operator Result<T>(List<Error> errors) => Failure(errors);
         public static implicit operator Result<T>(T value) => Success(value);
 
     }
