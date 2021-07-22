@@ -7,6 +7,7 @@ using BuildingBlocks.Domain.DomainEvents;
 
 namespace BuildingBlocks.Domain
 {
+    // TODO: Add equality comparison based on id
     public abstract class Entity
     {
         private List<IDomainEvent>? _domainEvents;
@@ -23,6 +24,12 @@ namespace BuildingBlocks.Domain
             _domainEvents ??= new List<IDomainEvent>();
 
             _domainEvents.Add(domainEvent);
+        }
+
+        // 😈
+        protected static bool ContainsNullValues(object obj, out List<Error> errors)
+        {
+            return NullChecker.TryCheckNullValues(obj, out errors);
         }
     }
 }

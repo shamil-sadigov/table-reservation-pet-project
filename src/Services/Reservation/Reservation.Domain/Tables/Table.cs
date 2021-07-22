@@ -2,6 +2,7 @@
 
 using System;
 using BuildingBlocks.Domain;
+using BuildingBlocks.Domain.DomainRules;
 using Reservation.Domain.Restaurants;
 
 #endregion
@@ -10,22 +11,35 @@ namespace Reservation.Domain.Tables
 {
     public sealed class Table : Entity
     {
-        private readonly RestaurantId _restaurantId;
-        private readonly TableSize _tableSize;
-        private TableId _id;
-        private TableStatus _status;
+        internal RestaurantId RestaurantId { get; }
+        internal  NumberOfSeats NumberOfSeats { get; }
+        internal  TableId Id { get; }
+        internal  TableStatus Status { get; }
 
         // for EF
         private Table()
         {
         }
 
-        public Table(RestaurantId restaurantId, TableSize tableSize)
+        private Table(RestaurantId restaurantId, NumberOfSeats numberOfSeats)
         {
-            _id = new TableId(Guid.NewGuid());
-            _restaurantId = restaurantId;
-            _tableSize = tableSize;
-            _status = TableStatus.Available;
+            NumberOfSeats = numberOfSeats;
+            RestaurantId = restaurantId;
+            Id = new TableId(Guid.NewGuid());
+            Status = TableStatus.Available;
         }
+
+
+        public static Result<Table> TryCreate(RestaurantId restaurantId, NumberOfSeats numberOfSeats)
+        {
+            if (ContainsNullValues(new {restaurantId, tableSize = numberOfSeats}, out var errors))
+            {
+                return errors;
+            }
+
+            return new Table(restaurantId, numberOfSeats);
+        }
+        
+        public bool IsAvailable => Status == TableStatus.Available;
     }
 }

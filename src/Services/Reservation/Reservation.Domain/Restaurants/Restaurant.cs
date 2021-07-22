@@ -2,9 +2,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
+using BuildingBlocks.Domain.DomainRules.SyncVersion;
+using Reservation.Domain.Restaurants.DomainEvents;
 using Reservation.Domain.Restaurants.DomainRules;
 using Reservation.Domain.Tables;
 
@@ -14,41 +15,77 @@ namespace Reservation.Domain.Restaurants
 {
     public sealed class Restaurant : Entity, IAggregateRoot
     {
-        private readonly RestaurantId _id;
+        private readonly List<Table> _tables;
         private RestaurantAddress _address;
-        private List<Table> _tables;
-        private WorkingHours _workingHours;
+        private RestaurantWorkingHours _restaurantWorkingHours;
 
-        private Restaurant(
-            WorkingHours workingHours,
-            RestaurantAddress address,
-            IReadOnlyCollection<NewTableInfo> newTablesInfo)
+        private Restaurant(string name, RestaurantWorkingHours restaurantWorkingHours, RestaurantAddress address)
         {
-            _id = new RestaurantId(Guid.NewGuid());
-            _workingHours = workingHours;
+            Id = new RestaurantId(Guid.NewGuid());
+            _restaurantWorkingHours = restaurantWorkingHours;
             _address = address;
-            _tables = newTablesInfo.Select(x => new Table(_id, x.TableSize)).ToList();
+            _tables = new List<Table>();
+
+            AddDomainEvent(new NewRestaurantRegisteredDomainEvent(
+                Id, 
+                name, 
+                restaurantWorkingHours, 
+                address));
         }
+
+        public RestaurantId Id { get; }
 
         public static Result<Restaurant> TryRegisterNew(
             string name,
-            WorkingHours workingHours,
-            RestaurantAddress address,
-            IReadOnlyCollection<NewTableInfo> newTablesInfo)
+            RestaurantWorkingHours restaurantWorkingHours,
+            RestaurantAddress address)
         {
-            if (name.IsNullOrEmpty())
-                return new Error("name should contain value");
+            if (ContainsNullValues(new {name, workingHours = restaurantWorkingHours, address}, out var errors)) return errors;
 
-            var result = new RestaurantMustHaveAtLeastOneTable(newTablesInfo)
-                .Check();
+            return new Restaurant(name, restaurantWorkingHours, address);
+        }
 
+
+        public Result TryAddTable(NumberOfSeats numberOfSeats)
+        {
+            if (ContainsNullValues(new {numberOfSeats}, out var errors)) 
+                return errors;
+
+            var result = Table.TryCreate(Id, numberOfSeats);
+            
             if (result.Failed)
-                return result.WithResponse<Restaurant>(null);
+                return result;
 
-            // TODO: Add domain event
+            Table newTable = result.Value!;
+
+            _tables.Add(newTable);
+
+            AddDomainEvent(new NewTableAddedInRestaurantDomainEvent(
+                Id, 
+                newTable.Id, 
+                numberOfSeats));
             
-            return new Restaurant(workingHours, address, newTablesInfo);
+            return Result.Success();
+        }
+
+        public Result<ReservationRequest> CreateReservationRequest(NumberOfSeats numberOfSeats)
+        {
+            var rule = new RestaurantMustBeOpen(_restaurantWorkingHours)
+                .And(new RestaurantMustHaveAtLeastOneAvailableTable(_tables, numberOfSeats));
+
+            var result = rule.Check();
             
+            if (result.Failed)
+            {
+                return result.WithResponse<ReservationRequest>(null);
+            }
+
+
+
+            throw new NotImplementedException();
+
+
+
         }
     }
 }

@@ -1,0 +1,2 @@
+- Add domain events in Entities where its missing
+- In domain models tests, assert that domain events are raise
