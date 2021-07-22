@@ -6,8 +6,9 @@ using BuildingBlocks.Domain.DomainEvents;
 
 namespace Reservation.Domain.Restaurants.DomainEvents
 {
-    public sealed class NewRestaurantRegisteredDomainEvent : DomainEventBase
-    {
-        // TODO: Add necessary properties
-    }
+    public sealed record NewRestaurantRegisteredDomainEvent(
+        RestaurantId RestaurantId,
+        string Name,
+        RestaurantWorkingHours RestaurantWorkingHours,
+        RestaurantAddress RestaurantAddress) : DomainEventBase;
 }

@@ -6,9 +6,9 @@ using System;
 
 namespace BuildingBlocks.Domain.DomainEvents
 {
-    public class DomainEventBase : IDomainEvent
+    public record DomainEventBase : IDomainEvent
     {
-        public DomainEventBase()
+        protected DomainEventBase()
         {
             Id = Guid.NewGuid();
             OccurredOn = DateTime.UtcNow;
