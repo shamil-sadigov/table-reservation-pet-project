@@ -2,24 +2,17 @@
 
 using System;
 using System.Collections.Generic;
+using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.ValueObjects;
 
 #endregion
 
 namespace Reservation.Domain.Restaurants
 {
-    public sealed class RestaurantId : ValueObject
+    public sealed class RestaurantId : GuidIdentity
     {
-        private readonly Guid _id;
-
-        public RestaurantId(Guid id)
+        public RestaurantId(Guid id):base(id)
         {
-            _id = id;
-        }
-
-        protected override IEnumerable<object> GetEqualityComponents()
-        {
-            yield return _id;
         }
     }
 }

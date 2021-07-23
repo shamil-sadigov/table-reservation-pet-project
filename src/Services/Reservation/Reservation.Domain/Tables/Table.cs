@@ -3,7 +3,10 @@
 using System;
 using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
+using BuildingBlocks.Domain.DomainRules.SyncVersion;
 using Reservation.Domain.Restaurants;
+using Reservation.Domain.Restaurants.DomainEvents;
+using Reservation.Domain.Tables.DomainRules;
 
 #endregion
 
@@ -11,10 +14,8 @@ namespace Reservation.Domain.Tables
 {
     public sealed class Table : Entity
     {
-        internal RestaurantId RestaurantId { get; }
-        internal  NumberOfSeats NumberOfSeats { get; }
-        internal  TableId Id { get; }
-        internal  TableStatus Status { get; }
+        private RestaurantId _restaurantId;
+        private readonly TableStatus _status;
 
         // for EF
         private Table()
@@ -24,22 +25,39 @@ namespace Reservation.Domain.Tables
         private Table(RestaurantId restaurantId, NumberOfSeats numberOfSeats)
         {
             NumberOfSeats = numberOfSeats;
-            RestaurantId = restaurantId;
+            _restaurantId = restaurantId;
             Id = new TableId(Guid.NewGuid());
-            Status = TableStatus.Available;
+            _status = TableStatus.Available;
+
+            AddDomainEvent(new NewTableAddedToRestaurantDomainEvent(
+                restaurantId,
+                Id,
+                numberOfSeats));
         }
 
+        public TableId Id { get; }
+        internal NumberOfSeats NumberOfSeats { get; }
 
-        public static Result<Table> TryCreate(RestaurantId restaurantId, NumberOfSeats numberOfSeats)
+        internal bool IsAvailable => _status == TableStatus.Available;
+
+        internal static Result<Table> TryCreate(RestaurantId restaurantId, NumberOfSeats numberOfSeats)
         {
-            if (ContainsNullValues(new {restaurantId, tableSize = numberOfSeats}, out var errors))
-            {
+            if (ContainsNullValues(new {restaurantId, numberOfSeats}, out var errors))
                 return errors;
-            }
 
             return new Table(restaurantId, numberOfSeats);
         }
+
+        internal bool HasAtLeast(NumberOfSeats numberOfSeats) => NumberOfSeats >= numberOfSeats;
         
-        public bool IsAvailable => Status == TableStatus.Available;
+        internal Result CanBeReserved(NumberOfSeats requestedNumberOfSeats)
+        {
+            var rule = new OnlyAvailableTableCanBeReserved(Id, _status)
+                .And(new RequestedNumberOfSeatsMustNotBeTooSmall(Id, NumberOfSeats, requestedNumberOfSeats));
+
+            var result = rule.Check();
+
+            return result;
+        }
     }
 }

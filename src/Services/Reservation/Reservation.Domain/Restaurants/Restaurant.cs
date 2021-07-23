@@ -2,9 +2,11 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.DomainRules.SyncVersion;
+using Reservation.Domain.ReservationRequests;
 using Reservation.Domain.Restaurants.DomainEvents;
 using Reservation.Domain.Restaurants.DomainRules;
 using Reservation.Domain.Tables;
@@ -15,21 +17,29 @@ namespace Reservation.Domain.Restaurants
 {
     public sealed class Restaurant : Entity, IAggregateRoot
     {
-        private readonly List<Table> _tables;
+        private List<Table> _tables;
         private RestaurantAddress _address;
-        private RestaurantWorkingHours _restaurantWorkingHours;
+        private string _name;
+        private RestaurantWorkingHours _workingHours;
 
-        private Restaurant(string name, RestaurantWorkingHours restaurantWorkingHours, RestaurantAddress address)
+        // for EF
+        private Restaurant()
+        {
+            
+        }
+        
+        private Restaurant(string name, RestaurantWorkingHours workingHours, RestaurantAddress address)
         {
             Id = new RestaurantId(Guid.NewGuid());
-            _restaurantWorkingHours = restaurantWorkingHours;
+            _name = name;
+            _workingHours = workingHours;
             _address = address;
             _tables = new List<Table>();
 
             AddDomainEvent(new NewRestaurantRegisteredDomainEvent(
                 Id, 
                 name, 
-                restaurantWorkingHours, 
+                workingHours, 
                 address));
         }
 
@@ -59,33 +69,50 @@ namespace Reservation.Domain.Restaurants
             Table newTable = result.Value!;
 
             _tables.Add(newTable);
-
-            AddDomainEvent(new NewTableAddedInRestaurantDomainEvent(
-                Id, 
-                newTable.Id, 
-                numberOfSeats));
             
             return Result.Success();
         }
 
-        public Result<ReservationRequest> CreateReservationRequest(NumberOfSeats numberOfSeats)
+        public Result<ReservationRequest> TryCreateReservationRequest(
+            NumberOfSeats numberOfSeats,
+            VisitingTime visitingTime)
         {
-            var rule = new RestaurantMustBeOpen(_restaurantWorkingHours)
+            var rule = new RestaurantMustBeOpenAtVisitingTime(Id, visitingTime, _workingHours)
                 .And(new RestaurantMustHaveAtLeastOneAvailableTable(_tables, numberOfSeats));
 
             var result = rule.Check();
             
             if (result.Failed)
-            {
                 return result.WithResponse<ReservationRequest>(null);
-            }
 
+            var availableTable = FindAvailableTableWithMinimumNumberOfSeats(numberOfSeats);
+            
+             result = availableTable.CanBeReserved(numberOfSeats);
 
+             if (result.Failed)
+                 return result.WithResponse<ReservationRequest>(null);
 
-            throw new NotImplementedException();
+             return ReservationRequest.TryCreate(availableTable.Id, visitingTime);
+        }
 
+        /// <returns>
+        ///     Returns Table that matches <paramref name="numberOfSeats"/>
+        ///     AND number of seats is minimum.
+        ///     Example:
+        ///         We have two available tables with 6 and 10 number of seats.
+        ///         if <paramref name="numberOfSeats"/> is 4 number of seats
+        ///         then we should return table with 6 number of seats
+        ///         as it is the minimum we can provide.
+        /// </returns>
+        private Table FindAvailableTableWithMinimumNumberOfSeats(NumberOfSeats numberOfSeats)
+        {
+            return _tables
+                .Where(table => table.IsAvailable)
+                .Where(x => x.HasAtLeast(numberOfSeats))
+                .OrderBy(x=> x.NumberOfSeats)
+                .First();
 
-
+            return null;
         }
     }
 }

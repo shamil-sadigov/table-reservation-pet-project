@@ -3,12 +3,13 @@
 using System;
 using FluentAssertions;
 using Reservation.Domain.Restaurants;
+using Reservation.Domain.Tests.Helpers;
 using Xunit;
 using Xunit.Abstractions;
 
 #endregion
 
-namespace Reservation.Domain.Tests
+namespace Reservation.Domain.Tests.Restaurants
 {
     public class RestaurantWorkingHoursTests
     {
@@ -39,7 +40,7 @@ namespace Reservation.Domain.Tests
 
             // Assert
             result.ShouldFail();
-            result.Errors!.ShouldContain(expectedErrorMessage);
+            result.Errors!.ShouldContainSomethingLike(expectedErrorMessage);
         }
 
 
@@ -85,7 +86,7 @@ namespace Reservation.Domain.Tests
 
             var timeOfDay = flintstonesDateTime.TimeOfDay;
 
-            // Act
+            // Act & Assert
             workingHours.IsWorkingTime(timeOfDay)
                 .Should()
                 .BeTrue();
@@ -112,12 +113,11 @@ namespace Reservation.Domain.Tests
 
             var timeOfDay = flintstonesDateTime.TimeOfDay;
 
-            // Act
+            // Act & Assert
             workingHours.IsWorkingTime(timeOfDay)
                 .Should()
                 .BeFalse();
         }
-
         
         private static RestaurantWorkingHours CreateWorkingHours(int fromHours, int toHours)
         {

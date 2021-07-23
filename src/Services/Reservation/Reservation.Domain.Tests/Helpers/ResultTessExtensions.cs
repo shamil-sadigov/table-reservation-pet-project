@@ -1,18 +1,12 @@
-﻿#region
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
 using FluentAssertions;
 
-#endregion
-
-namespace Reservation.Domain.Tests
+namespace Reservation.Domain.Tests.Helpers
 {
-    // TODO: move to shared project
-
-    public static class TestExtensions
+    public static class ResultTessExtensions
     {
         public static void ShouldSucceed(this Result result)
         {
@@ -24,13 +18,16 @@ namespace Reservation.Domain.Tests
         {
             result.Failed.Should().Be(true);
             result.Succeeded.Should().Be(false);
+            
         }
 
-        public static void ShouldContain(this IEnumerable<Error> errors, params string[] errorMessages)
+        
+        public static void ShouldContainSomethingLike(this IEnumerable<Error> errors, string errorMessages)
         {
             errors.Select(x => x.Message)
                 .Should()
-                .Contain(errorMessages);
+                .ContainMatch(errorMessages);
         }
+
     }
 }

@@ -18,12 +18,15 @@ namespace Reservation.Domain.Restaurants
         public static readonly TimeSpan MaxTime = new(23, 59, 59);
         public static readonly TimeSpan MinTime = new(06, 00, 00);
 
-        private RestaurantWorkingHours()
+        private RestaurantWorkingHours(TimeSpan startTime, TimeSpan finishTime)
         {
+            StartTime = startTime;
+            FinishTime = finishTime;
         }
 
-        private TimeSpan StartTime { get; init; }
-        private TimeSpan FinishTime { get; init; }
+        public TimeSpan StartTime { get; }
+        public TimeSpan FinishTime { get; }
+
 
         public static Result<RestaurantWorkingHours> TryCreate(TimeSpan startTime, TimeSpan finishTime)
         {
@@ -34,19 +37,15 @@ namespace Reservation.Domain.Restaurants
             if (!result.Succeeded)
                 return result.WithResponse<RestaurantWorkingHours>(null);
 
-            return new RestaurantWorkingHours
-            {
-                StartTime = startTime,
-                FinishTime = finishTime
-            };
+            return new RestaurantWorkingHours(startTime, finishTime);
         }
 
         public bool IsWorkingTime(TimeSpan timeSpan)
         {
-            return timeSpan < FinishTime 
-                && timeSpan > StartTime;
+            return timeSpan < FinishTime
+                   && timeSpan > StartTime;
         }
-        
+
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return StartTime;

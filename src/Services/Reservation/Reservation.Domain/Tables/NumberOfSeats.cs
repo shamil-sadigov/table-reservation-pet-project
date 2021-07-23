@@ -1,6 +1,8 @@
 #region
 
+using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.ValueObjects;
 using Reservation.Domain.Tables.DomainRules;
@@ -9,9 +11,9 @@ using Reservation.Domain.Tables.DomainRules;
 
 namespace Reservation.Domain.Tables
 {
-    public sealed class NumberOfSeats : ValueObject
+    public sealed class NumberOfSeats : ValueObject, IComparable<NumberOfSeats>
     {
-        private readonly byte _numberOfSeats;
+        private byte _numberOfSeats;
 
         private NumberOfSeats(byte numberOfSeats)
         {
@@ -45,7 +47,7 @@ namespace Reservation.Domain.Tables
 
         public static bool operator >(NumberOfSeats first, NumberOfSeats second)
             => first._numberOfSeats > second._numberOfSeats;
-
+        
         public static bool operator <(NumberOfSeats first, NumberOfSeats second) 
             => first._numberOfSeats < second._numberOfSeats;
 
@@ -54,7 +56,24 @@ namespace Reservation.Domain.Tables
 
         public static bool operator <=(NumberOfSeats first, NumberOfSeats second) 
             => first._numberOfSeats <= second._numberOfSeats;
+        
+        public static Result<NumberOfSeats> operator -(NumberOfSeats first, NumberOfSeats second)
+        {
+            var leftNumberOfSeats =  (byte) (first._numberOfSeats - second._numberOfSeats);
+
+            return TryCreate(leftNumberOfSeats);
+        }
 
         #endregion
+
+        public int CompareTo(NumberOfSeats? other)
+        {
+            if (ReferenceEquals(this, other)) 
+                return 0;
+            if (ReferenceEquals(null, other)) 
+                return 1;
+            
+            return _numberOfSeats.CompareTo(other._numberOfSeats);
+        }
     }
 }

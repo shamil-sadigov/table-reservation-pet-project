@@ -43,10 +43,10 @@ namespace BuildingBlocks.Domain.DomainRules
             };
         }
 
-        public Result<T> WithResponse<T>(T response)
+        public Result<T> WithResponse<T>(T? response)
         {
             return Succeeded
-                ? Result<T>.Success(response)
+                ? Result<T>.Success(response!)
                 : Result<T>.Failure(Errors!);
         }
 
@@ -58,6 +58,9 @@ namespace BuildingBlocks.Domain.DomainRules
 
     public class Result<T> : Result
     {
+        /// <summary>
+        /// Has value when Succeeded is true
+        /// </summary>
         public T? Value { get; private init; }
 
         public static Result<T> Success(T response)

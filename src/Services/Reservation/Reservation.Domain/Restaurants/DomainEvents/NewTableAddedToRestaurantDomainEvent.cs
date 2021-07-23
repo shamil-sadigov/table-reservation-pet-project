@@ -3,7 +3,7 @@ using Reservation.Domain.Tables;
 
 namespace Reservation.Domain.Restaurants.DomainEvents
 {
-    public sealed record NewTableAddedInRestaurantDomainEvent(
+    public sealed record NewTableAddedToRestaurantDomainEvent(
         RestaurantId RestaurantId,
         TableId TableId,
         NumberOfSeats NumberOfSeats) : DomainEventBase;

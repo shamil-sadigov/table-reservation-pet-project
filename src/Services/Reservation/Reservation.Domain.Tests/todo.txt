@@ -1,0 +1,1 @@
+- Add builders for frequently created classes, instead of creating local static methods

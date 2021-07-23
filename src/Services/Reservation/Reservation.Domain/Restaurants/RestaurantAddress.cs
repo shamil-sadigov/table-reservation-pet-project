@@ -11,24 +11,24 @@ namespace Reservation.Domain.Restaurants
 {
     public sealed class RestaurantAddress : ValueObject
     {
-        private string _address;
+        public string Value { get; }
 
-        private RestaurantAddress(string address)
+        private RestaurantAddress(string value)
         {
-            _address = address;
+            Value = value;
         }
 
         public static Result<RestaurantAddress> TryCreate(string address)
         {
             if (address.IsNullOrEmpty())
-                return new Error( "address should contain value");
+                return new Error("address should contain value");
 
             return new RestaurantAddress(address);
         }
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
-            yield return _address;
+            yield return Value;
         }
     }
 }
