@@ -7,7 +7,7 @@ using Reservation.Domain.Tables;
 
 #endregion
 
-namespace Reservation.Infrastructure.Database.Configurations
+namespace Reservation.Infrastructure.Databass.Configurations
 {
     public class TableEntityConfiguration : IEntityTypeConfiguration<Table>
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.Common;
 
-namespace Reservation.Infrastructure.Database.Configurations
+namespace Reservation.Infrastructure.Databass
 {
     public class DataCorruptionException:DbException
     {

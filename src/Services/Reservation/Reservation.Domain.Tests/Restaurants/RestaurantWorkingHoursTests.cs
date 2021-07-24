@@ -3,6 +3,7 @@
 using System;
 using FluentAssertions;
 using Reservation.Domain.Restaurants;
+using Reservation.Domain.Restaurants.ValueObjects;
 using Reservation.Domain.Tests.Helpers;
 using Xunit;
 using Xunit.Abstractions;

@@ -9,6 +9,7 @@ using BuildingBlocks.Domain.DomainRules.SyncVersion;
 using Reservation.Domain.ReservationRequests;
 using Reservation.Domain.Restaurants.DomainEvents;
 using Reservation.Domain.Restaurants.DomainRules;
+using Reservation.Domain.Restaurants.ValueObjects;
 using Reservation.Domain.Tables;
 
 #endregion
@@ -36,7 +37,7 @@ namespace Reservation.Domain.Restaurants
             _address = address;
             _tables = new List<Table>();
 
-            AddDomainEvent(new NewRestaurantRegisteredDomainEvent(
+            AddDomainEvent(new NewRestaurantCreatedDomainEvent(
                 Id, 
                 name, 
                 workingHours, 
@@ -45,12 +46,12 @@ namespace Reservation.Domain.Restaurants
 
         public RestaurantId Id { get; }
 
-        public static Result<Restaurant> TryRegisterNew(
+        public static Result<Restaurant> TryCreate(
             string name,
             RestaurantWorkingHours restaurantWorkingHours,
             RestaurantAddress address)
         {
-            if (ContainsNullValues(new {name, workingHours = restaurantWorkingHours, address}, out var errors)) return errors;
+            if (ContainsNullValues(new {name, restaurantWorkingHours, address}, out var errors)) return errors;
 
             return new Restaurant(name, restaurantWorkingHours, address);
         }

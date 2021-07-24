@@ -6,6 +6,7 @@ using System.Linq;
 using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.DomainRules.SyncVersion;
+using Reservation.Domain.Restaurants.ValueObjects;
 
 #endregion
 

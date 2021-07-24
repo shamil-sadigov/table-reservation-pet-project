@@ -1,13 +1,11 @@
 ﻿#region
 
 using System;
-using System.Collections.Generic;
 using BuildingBlocks.Domain;
-using BuildingBlocks.Domain.ValueObjects;
 
 #endregion
 
-namespace Reservation.Domain.Restaurants
+namespace Reservation.Domain.Restaurants.ValueObjects
 {
     public sealed class RestaurantId : GuidIdentity
     {

@@ -3,6 +3,7 @@ using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
 using Reservation.Domain.ReservationRequests.DomainEvents;
 using Reservation.Domain.Restaurants;
+using Reservation.Domain.Restaurants.ValueObjects;
 using Reservation.Domain.Tables;
 
 namespace Reservation.Domain.ReservationRequests

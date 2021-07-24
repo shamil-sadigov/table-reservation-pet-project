@@ -1,16 +1,15 @@
 ﻿#region
 
 using System;
-using BuildingBlocks.Domain.DomainRules;
 using FluentAssertions;
 using Reservation.Domain.ReservationRequests;
 using Reservation.Domain.ReservationRequests.DomainEvents;
 using Reservation.Domain.Restaurants;
 using Reservation.Domain.Restaurants.DomainEvents;
+using Reservation.Domain.Restaurants.ValueObjects;
 using Reservation.Domain.Tables;
 using Reservation.Domain.Tests.Helpers;
 using Xunit;
-using Xunit.Abstractions;
 
 #endregion
 
@@ -18,15 +17,8 @@ namespace Reservation.Domain.Tests.Restaurants
 {
     public class RestaurantTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
-
-        public RestaurantTests(ITestOutputHelper testOutputHelper)
-        {
-            _testOutputHelper = testOutputHelper;
-        }
-
         [Fact]
-        public void Can_register_restaurant()
+        public void Can_create_restaurant()
         {
             // Arrange
             var startWorkingTime = new TimeSpan(10, 00, 00);
@@ -36,7 +28,7 @@ namespace Reservation.Domain.Tests.Restaurants
             var address = RestaurantAddress.TryCreate("Some address").Value!;
 
             // Act
-            var result = Restaurant.TryRegisterNew(
+            var result = Restaurant.TryCreate(
                 "name",
                 workingHours,
                 address);
@@ -46,8 +38,8 @@ namespace Reservation.Domain.Tests.Restaurants
 
             var registeredRestaurant = result.Value!;
 
-            NewRestaurantRegisteredDomainEvent publishedDomainEvent =
-                registeredRestaurant.ShouldHavePublishedDomainEvent<NewRestaurantRegisteredDomainEvent>();
+            NewRestaurantCreatedDomainEvent publishedDomainEvent =
+                registeredRestaurant.ShouldHavePublishedDomainEvent<NewRestaurantCreatedDomainEvent>();
 
             publishedDomainEvent.RestaurantId
                 .Should()
@@ -69,15 +61,22 @@ namespace Reservation.Domain.Tests.Restaurants
         [InlineData(8)]
         public void Can_add_table_to_restaurant(byte number)
         {
-            // Arrange
-            var restaurant = CreateRestaurant();
+            // Arrange 
+            var restaurant = new RestaurantBuilder
+            {
+                Name = "restaurant name",
+                Address = "restaurant address",
+                StartTime = (09, 00),
+                FinishTime = (22, 00)
+            }.Build();
+
             var numberOfSeats = NumberOfSeats.TryCreate(number).Value!;
 
             // Act
-            var result = restaurant.TryAddTable(numberOfSeats);
+            var addToTableResult = restaurant.TryAddTable(numberOfSeats);
 
             // Assert
-            result.ShouldSucceed();
+            addToTableResult.ShouldSucceed();
 
             var publishedDomainEvent =
                 restaurant.ShouldHavePublishedDomainEvent<NewTableAddedToRestaurantDomainEvent>();
@@ -87,15 +86,15 @@ namespace Reservation.Domain.Tests.Restaurants
                 .Be(restaurant.Id);
 
             publishedDomainEvent.NumberOfSeats
+                .Value
                 .Should()
-                .Be(numberOfSeats);
+                .Be(number);
 
             publishedDomainEvent.TableId
                 .Should()
                 .NotBeNull();
         }
-
-
+        
         [Theory]
         [InlineData(2)]
         [InlineData(4)]
@@ -103,8 +102,15 @@ namespace Reservation.Domain.Tests.Restaurants
         public void Can_create_reservation_request_when_restaurant_has_available_table(byte numberOfSeats)
         {
             // Arrange
-            var restaurant = CreateRestaurant();
-            AddTablesToRestaurant(restaurant, numbersOfSeatsPerTable: new byte[] {2, 4, 2, 6, 8});
+            var restaurant = new RestaurantBuilder
+            {
+                Name = "restaurant name",
+                Address = "restaurant address",
+                StartTime = (09, 00),
+                FinishTime = (22, 00),
+                TablesWithNumberOfSeats = new byte[] {2, 4, 2, 6, 8}
+            }.Build();
+
             var numberOfRequestedSeats = NumberOfSeats.TryCreate(numberOfSeats).Value!;
             VisitingTime visitingTime = VisitingTime.TryCreate(hours: 12, minutes: 00).Value!;
 
@@ -131,11 +137,18 @@ namespace Reservation.Domain.Tests.Restaurants
         [Theory]
         [InlineData(1)]
         [InlineData(2)]
-        public void Cannot_create_reservation_request_when_number_of_requested_seats_is_too_big(byte numberOfSeats)
+        public void Cannot_create_reservation_request_when_number_of_requested_seats_is_too_small(byte numberOfSeats)
         {
             // Arrange
-            var restaurant = CreateRestaurant();
-            AddTablesToRestaurant(restaurant, numbersOfSeatsPerTable: new byte[] {6, 8, 10});
+            var restaurant = new RestaurantBuilder
+            {
+                Name = "restaurant name",
+                Address = "restaurant address",
+                StartTime = (09, 00),
+                FinishTime = (22, 00),
+                TablesWithNumberOfSeats = new byte[] {8, 10, 12, 14}
+            }.Build();
+
             NumberOfSeats numberOfRequestedSeats = NumberOfSeats.TryCreate(numberOfSeats).Value!;
             VisitingTime visitingTime = VisitingTime.TryCreate(hours: 12, minutes: 00).Value!;
 
@@ -144,9 +157,7 @@ namespace Reservation.Domain.Tests.Restaurants
 
             // Assert
             result.ShouldFail();
-
             result.Errors!.ShouldContainSomethingLike("Table * is too big for requested number of seats *");
-
             restaurant.ShouldNotHavePublishedDomainEvent<ReservationIsRequestedDomainEvent>();
         }
 
@@ -154,17 +165,19 @@ namespace Reservation.Domain.Tests.Restaurants
         [InlineData(10, 30)]
         [InlineData(20, 10)]
         [InlineData(22, 00)]
-        public void Cannot_create_ReservationRequest_at_time_when_restaurant_is_not_open(byte hours, byte minutes)
+        public void Cannot_create_ReservationRequest_when_restaurant_is_not_open(byte hours, byte minutes)
         {
             // Arrange
-            var startWorkingTime = new TimeSpan(12, 00, 00);
-            var finishWorkingTime = new TimeSpan(20, 00, 00);
-
-            var restaurant = CreateRestaurant(startWorkingTime, finishWorkingTime);
-            AddTablesToRestaurant(restaurant, numbersOfSeatsPerTable: new byte[] {6, 8, 10});
+            var restaurant = new RestaurantBuilder
+            {
+                Name = "restaurant name",
+                Address = "restaurant address",
+                StartTime = (12, 00),
+                FinishTime = (20, 00),
+                TablesWithNumberOfSeats = new byte[] {6, 8, 10}
+            }.Build();
 
             VisitingTime visitTime = VisitingTime.TryCreate(hours, minutes).Value!;
-
             NumberOfSeats numberOfRequestedSeats = NumberOfSeats.TryCreate(4).Value!;
 
             // Act
@@ -174,56 +187,6 @@ namespace Reservation.Domain.Tests.Restaurants
             result.ShouldFail();
             result.Errors!.ShouldContainSomethingLike($"Restaurant {restaurant.Id} is not open at {visitTime} time");
             restaurant.ShouldNotHavePublishedDomainEvent<ReservationIsRequestedDomainEvent>();
-        }
-
-
-        private static Restaurant CreateRestaurant(
-            TimeSpan? startWorkingTime = null,
-            TimeSpan? finishWorkingTime = null)
-        {
-            startWorkingTime ??= new TimeSpan(10, 00, 00);
-            finishWorkingTime ??= new TimeSpan(23, 00, 00);
-
-            var workingHours = RestaurantWorkingHours.TryCreate(
-                startWorkingTime.Value,
-                finishWorkingTime.Value).Value!;
-
-            var address = RestaurantAddress.TryCreate("Some address").Value!;
-
-            var result = Restaurant.TryRegisterNew(
-                "name",
-                workingHours,
-                address);
-
-            EnsureResultSuccessful(result);
-
-            var restaurant = result.Value!;
-
-            restaurant.ClearDomainEvents();
-
-            return restaurant;
-        }
-
-
-        private static void AddTablesToRestaurant(
-            Restaurant restaurant,
-            params byte[] numbersOfSeatsPerTable)
-        {
-            foreach (var numberOfSeats in numbersOfSeatsPerTable)
-            {
-                var tableSizeForTwo = NumberOfSeats.TryCreate(numberOfSeats).Value!;
-
-                var result = restaurant.TryAddTable(tableSizeForTwo);
-
-                EnsureResultSuccessful(result);
-
-                restaurant.ClearDomainEvents();
-            }
-        }
-
-        private static void EnsureResultSuccessful(Result result)
-        {
-            if (result.Failed) throw new InvalidOperationException("Failed to add table to a restaurant");
         }
     }
 }

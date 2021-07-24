@@ -7,7 +7,7 @@ using BuildingBlocks.Domain.ValueObjects;
 
 #endregion
 
-namespace Reservation.Domain.Restaurants
+namespace Reservation.Domain.Restaurants.ValueObjects
 {
     public sealed class RestaurantAddress : ValueObject
     {

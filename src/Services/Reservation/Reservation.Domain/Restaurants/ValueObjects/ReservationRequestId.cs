@@ -5,7 +5,7 @@ using BuildingBlocks.Domain;
 
 #endregion
 
-namespace Reservation.Domain.Restaurants
+namespace Reservation.Domain.Restaurants.ValueObjects
 {
     public class ReservationRequestId : GuidIdentity
     {

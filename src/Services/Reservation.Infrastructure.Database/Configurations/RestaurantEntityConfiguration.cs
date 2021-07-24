@@ -4,6 +4,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Reservation.Domain.Restaurants;
+using Reservation.Domain.Restaurants.ValueObjects;
 
 #endregion
 

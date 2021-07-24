@@ -8,7 +8,7 @@ using Reservation.Domain.Restaurants.DomainRules;
 
 #endregion
 
-namespace Reservation.Domain.Restaurants
+namespace Reservation.Domain.Restaurants.ValueObjects
 {
     /// <summary>
     ///     Time period during a day when restaurant is open

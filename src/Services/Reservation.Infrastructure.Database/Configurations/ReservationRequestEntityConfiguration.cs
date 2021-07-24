@@ -5,12 +5,12 @@ using Ardalis.SmartEnum;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Reservation.Domain.ReservationRequests;
-using Reservation.Domain.Restaurants;
+using Reservation.Domain.Restaurants.ValueObjects;
 using Reservation.Domain.Tables;
 
 #endregion
 
-namespace Reservation.Infrastructure.Database.Configurations
+namespace Reservation.Infrastructure.Databass.Configurations
 {
     public class ReservationRequestEntityConfiguration : IEntityTypeConfiguration<ReservationRequest>
     {

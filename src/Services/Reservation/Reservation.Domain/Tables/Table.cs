@@ -6,6 +6,7 @@ using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.DomainRules.SyncVersion;
 using Reservation.Domain.Restaurants;
 using Reservation.Domain.Restaurants.DomainEvents;
+using Reservation.Domain.Restaurants.ValueObjects;
 using Reservation.Domain.Tables.DomainRules;
 
 #endregion
