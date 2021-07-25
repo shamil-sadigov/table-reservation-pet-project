@@ -15,14 +15,17 @@ namespace Reservation.Application.Bahaviors
             _commandRepository = commandRepository;
         }
         
-        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+        public async Task<TResponse> Handle(
+            TRequest request,
+            CancellationToken cancellationToken,
+            RequestHandlerDelegate<TResponse> next)
         {
-            var command = await _commandRepository.GetAsync(request.Id);
+            Command? command = await _commandRepository.GetAsync(request.CommandId);
             
             if (command is null)
             {
                 var newCommand = new Command(
-                    request.Id, 
+                    request.CommandId, 
                     typeof(TRequest).FullName, 
                     DateTime.UtcNow);
                 
