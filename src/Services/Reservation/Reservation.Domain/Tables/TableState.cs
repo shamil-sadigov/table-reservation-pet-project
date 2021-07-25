@@ -1,7 +1,6 @@
 namespace Reservation.Domain.Tables
 {
-    // TODO: Rename to TableStatus
-    public enum TableStatus
+    public enum TableState
     {
         Available,
         Seated,

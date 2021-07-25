@@ -7,7 +7,7 @@ using Reservation.Domain.Restaurants.ValueObjects;
 
 namespace Reservation.Domain.Restaurants.DomainEvents
 {
-    public sealed record NewRestaurantCreatedDomainEvent(
+    public sealed record RestaurantCreatedDomainEvent(
         RestaurantId RestaurantId,
         string Name,
         RestaurantWorkingHours RestaurantWorkingHours,

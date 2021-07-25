@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Reservation.Domain.ReservationRequests;
+using Reservation.Domain.ReservationRequests.ReservationRequestStates;
 using Xunit;
 
 namespace Reservation.Domain.Tests.ReservationRequests

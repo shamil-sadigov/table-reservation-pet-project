@@ -6,8 +6,8 @@ namespace Reservation.Domain.Restaurants
 {
     public interface IRestaurantRepository
     {
-        Task<Restaurant> GetById(RestaurantId restaurantId);
-
-        Task Add(Restaurant newRestaurant);
+        Task<Restaurant?> GetById(RestaurantId restaurantId);
+        Task AddAsync(Restaurant newRestaurant);
+        void Update(Restaurant restaurant);
     }
 }

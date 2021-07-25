@@ -1,6 +1,6 @@
 ﻿using Ardalis.SmartEnum;
 
-namespace Reservation.Domain.ReservationRequests
+namespace Reservation.Domain.ReservationRequests.ReservationRequestStates
 {
     public abstract partial class ReservationRequestState : SmartEnum<ReservationRequestState>
     {

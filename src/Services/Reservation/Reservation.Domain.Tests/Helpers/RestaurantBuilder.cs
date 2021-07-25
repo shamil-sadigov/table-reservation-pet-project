@@ -1,6 +1,8 @@
 ﻿#region
 
 using System;
+using System.Threading.Tasks;
+using Moq;
 using MoreLinq;
 using Reservation.Domain.Restaurants;
 using Reservation.Domain.Restaurants.ValueObjects;
@@ -22,15 +24,21 @@ namespace Reservation.Domain.Tests.Helpers
 
         public byte[] TablesWithNumberOfSeats { get; init; }
 
-        public Restaurant Build(bool clearDomainEvent = true)
+        public async Task<Restaurant> BuildAsync(bool clearDomainEvent = true)
         {
             var workingHours = CreateWorkingHours();
             var address = CreateAddress();
 
-            var result = Restaurant.TryCreate(
+            var checker = new Mock<IRestaurantUniquenessChecker>();
+
+            checker.Setup(x => x.IsUniqueAsync(Name, address.Value))
+                .ReturnsAsync(true);
+            
+            var result = await Restaurant.TryCreateAsync(
                 Name,
                 workingHours,
-                address);
+                address,
+                checker.Object);
 
             result.ThrowIfNotSuccessful();
 

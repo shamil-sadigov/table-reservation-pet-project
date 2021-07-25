@@ -4,20 +4,20 @@ using BuildingBlocks.Domain.DomainRules.SyncVersion;
 
 namespace Reservation.Domain.Tables.DomainRules
 {
-    internal class OnlyAvailableTableCanBeReserved:IDomainRule
+    internal class OnlyAvailableTableCanBeReservedRule:IDomainRule
     {
-        private readonly TableStatus _tableStatus;
+        private readonly TableState _tableState;
 
-        public OnlyAvailableTableCanBeReserved(
+        public OnlyAvailableTableCanBeReservedRule(
             TableId tableId,
-            TableStatus tableStatus)
+            TableState tableState)
         {
-            _tableStatus = tableStatus;
+            _tableState = tableState;
         }
         
         public Result Check()
         {
-            return _tableStatus != TableStatus.Available
+            return _tableState != TableState.Available
                 ? new Error("Table cannot be reserved because it's not available")
                 : Result.Success();
         }

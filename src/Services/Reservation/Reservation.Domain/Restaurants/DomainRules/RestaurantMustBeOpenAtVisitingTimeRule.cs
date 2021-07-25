@@ -4,19 +4,20 @@ using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.DomainRules.SyncVersion;
 using Reservation.Domain.ReservationRequests;
+using Reservation.Domain.ReservationRequests.ValueObjects;
 using Reservation.Domain.Restaurants.ValueObjects;
 
 #endregion
 
 namespace Reservation.Domain.Restaurants.DomainRules
 {
-    internal sealed class RestaurantMustBeOpenAtVisitingTime : IDomainRule
+    internal sealed class RestaurantMustBeOpenAtVisitingTimeRule : IDomainRule
     {
         private readonly RestaurantId _restaurantId;
         private readonly VisitingTime _visitingTime;
         private readonly RestaurantWorkingHours _workingHours;
 
-        public RestaurantMustBeOpenAtVisitingTime(
+        public RestaurantMustBeOpenAtVisitingTimeRule(
             RestaurantId restaurantId,
             VisitingTime visitingTime, 
             RestaurantWorkingHours workingHours)

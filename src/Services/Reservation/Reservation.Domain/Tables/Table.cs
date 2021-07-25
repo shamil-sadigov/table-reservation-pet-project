@@ -16,7 +16,7 @@ namespace Reservation.Domain.Tables
     public sealed class Table : Entity
     {
         private RestaurantId _restaurantId;
-        private readonly TableStatus _status;
+        private readonly TableState _state;
 
         // for EF
         private Table()
@@ -28,9 +28,9 @@ namespace Reservation.Domain.Tables
             NumberOfSeats = numberOfSeats;
             _restaurantId = restaurantId;
             Id = new TableId(Guid.NewGuid());
-            _status = TableStatus.Available;
+            _state = TableState.Available;
 
-            AddDomainEvent(new NewTableAddedToRestaurantDomainEvent(
+            AddDomainEvent(new TableAddedToRestaurantDomainEvent(
                 restaurantId,
                 Id,
                 numberOfSeats));
@@ -39,7 +39,7 @@ namespace Reservation.Domain.Tables
         public TableId Id { get; }
         internal NumberOfSeats NumberOfSeats { get; }
 
-        internal bool IsAvailable => _status == TableStatus.Available;
+        internal bool IsAvailable => _state == TableState.Available;
 
         internal static Result<Table> TryCreate(RestaurantId restaurantId, NumberOfSeats numberOfSeats)
         {
@@ -53,8 +53,8 @@ namespace Reservation.Domain.Tables
         
         internal Result CanBeReserved(NumberOfSeats requestedNumberOfSeats)
         {
-            var rule = new OnlyAvailableTableCanBeReserved(Id, _status)
-                .And(new RequestedNumberOfSeatsMustNotBeTooSmall(Id, NumberOfSeats, requestedNumberOfSeats));
+            var rule = new OnlyAvailableTableCanBeReservedRule(Id, _state)
+                .And(new RequestedNumberOfSeatsMustNotBeTooSmallRule(Id, NumberOfSeats, requestedNumberOfSeats));
 
             var result = rule.Check();
 

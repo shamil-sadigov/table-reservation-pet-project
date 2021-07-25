@@ -11,12 +11,12 @@ using Reservation.Domain.Tables;
 
 namespace Reservation.Domain.Restaurants.DomainRules
 {
-    internal sealed class RestaurantMustHaveAtLeastOneAvailableTable : IDomainRule
+    internal sealed class RestaurantMustHaveAtLeastOneAvailableTableRule : IDomainRule
     {
         private readonly NumberOfSeats _numberOfSeats;
         private readonly List<Table> _tables;
 
-        public RestaurantMustHaveAtLeastOneAvailableTable(List<Table> tables, NumberOfSeats numberOfSeats)
+        public RestaurantMustHaveAtLeastOneAvailableTableRule(List<Table> tables, NumberOfSeats numberOfSeats)
         {
             _tables = tables;
             _numberOfSeats = numberOfSeats;

@@ -12,12 +12,12 @@ using Reservation.Domain.Restaurants.ValueObjects;
 
 namespace Reservation.Domain.Restaurants.DomainRules
 {
-    internal sealed class RestaurantWorkingHourMustBeInAcceptableRange : IDomainRule
+    internal sealed class RestaurantWorkingHourMustBeInAcceptableRangeRule : IDomainRule
     {
         private readonly TimeSpan _finishTime;
         private readonly TimeSpan _startTime;
 
-        public RestaurantWorkingHourMustBeInAcceptableRange(TimeSpan startTime, TimeSpan finishTime)
+        public RestaurantWorkingHourMustBeInAcceptableRangeRule(TimeSpan startTime, TimeSpan finishTime)
         {
             _startTime = startTime;
             _finishTime = finishTime;

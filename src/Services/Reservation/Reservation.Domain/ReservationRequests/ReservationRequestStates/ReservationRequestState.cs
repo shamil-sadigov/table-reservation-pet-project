@@ -4,7 +4,7 @@ using Ardalis.SmartEnum;
 
 #endregion
 
-namespace Reservation.Domain.ReservationRequests
+namespace Reservation.Domain.ReservationRequests.ReservationRequestStates
 {
     public abstract partial class ReservationRequestState : SmartEnum<ReservationRequestState>
     {

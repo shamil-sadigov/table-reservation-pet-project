@@ -4,12 +4,12 @@ using BuildingBlocks.Domain.DomainRules.SyncVersion;
 
 namespace Reservation.Domain.Tables.DomainRules
 {
-    public sealed class TableMustHaveAvailableNumberOfSets:IDomainRule
+    public sealed class TableMustHaveAvailableNumberOfSetsRule:IDomainRule
     {
         private readonly NumberOfSeats _actualNumberOfSeats;
         private readonly NumberOfSeats _requestedNumberOfSeats;
 
-        public TableMustHaveAvailableNumberOfSets(
+        public TableMustHaveAvailableNumberOfSetsRule(
             NumberOfSeats actualNumberOfSeats, 
             NumberOfSeats requestedNumberOfSeats)
         {

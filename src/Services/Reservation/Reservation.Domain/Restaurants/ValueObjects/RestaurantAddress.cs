@@ -26,6 +26,8 @@ namespace Reservation.Domain.Restaurants.ValueObjects
             return new RestaurantAddress(address);
         }
 
+        public override string ToString() => Value;
+
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return Value;

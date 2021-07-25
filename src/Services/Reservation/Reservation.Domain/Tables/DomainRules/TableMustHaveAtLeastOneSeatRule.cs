@@ -8,11 +8,11 @@ using BuildingBlocks.Domain.DomainRules.SyncVersion;
 namespace Reservation.Domain.Tables.DomainRules
 {
     // TODO: add 'Rule' ending to all defined rules classes
-    public sealed class TableMustHaveAtLeastOneSeat : IDomainRule
+    public sealed class TableMustHaveAtLeastOneSeatRule : IDomainRule
     {
         private readonly byte _numberOfSeats;
 
-        public TableMustHaveAtLeastOneSeat(byte numberOfSeats)
+        public TableMustHaveAtLeastOneSeatRule(byte numberOfSeats)
         {
             _numberOfSeats = numberOfSeats;
         }

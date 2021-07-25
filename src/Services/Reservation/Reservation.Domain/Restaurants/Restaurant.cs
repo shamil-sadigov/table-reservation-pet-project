@@ -3,10 +3,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.DomainRules.SyncVersion;
 using Reservation.Domain.ReservationRequests;
+using Reservation.Domain.ReservationRequests.ValueObjects;
 using Reservation.Domain.Restaurants.DomainEvents;
 using Reservation.Domain.Restaurants.DomainRules;
 using Reservation.Domain.Restaurants.ValueObjects;
@@ -37,7 +39,7 @@ namespace Reservation.Domain.Restaurants
             _address = address;
             _tables = new List<Table>();
 
-            AddDomainEvent(new NewRestaurantCreatedDomainEvent(
+            AddDomainEvent(new RestaurantCreatedDomainEvent(
                 Id, 
                 name, 
                 workingHours, 
@@ -46,13 +48,22 @@ namespace Reservation.Domain.Restaurants
 
         public RestaurantId Id { get; }
 
-        public static Result<Restaurant> TryCreate(
+        public static async Task<Result<Restaurant>> TryCreateAsync(
             string name,
             RestaurantWorkingHours restaurantWorkingHours,
-            RestaurantAddress address)
+            RestaurantAddress address,
+            IRestaurantUniquenessChecker uniquenessChecker)
         {
-            if (ContainsNullValues(new {name, restaurantWorkingHours, address}, out var errors)) return errors;
+            if (ContainsNullValues(new {name, restaurantWorkingHours, address}, out var errors))
+                return errors;
+            
+            var rule = new RestaurantMustBeUniqueRule(uniquenessChecker, name, address);
+            
+            var result =  await rule.CheckAsync();
 
+            if (result.Failed)
+                return result.WithoutValue<Restaurant>();
+            
             return new Restaurant(name, restaurantWorkingHours, address);
         }
 
@@ -78,22 +89,20 @@ namespace Reservation.Domain.Restaurants
             NumberOfSeats numberOfSeats,
             VisitingTime visitingTime)
         {
-            var rule = new RestaurantMustBeOpenAtVisitingTime(Id, visitingTime, _workingHours)
-                .And(new RestaurantMustHaveAtLeastOneAvailableTable(_tables, numberOfSeats));
+            var rule = new RestaurantMustBeOpenAtVisitingTimeRule(Id, visitingTime, _workingHours)
+                .And(new RestaurantMustHaveAtLeastOneAvailableTableRule(_tables, numberOfSeats));
 
             var result = rule.Check();
             
             if (result.Failed)
-                return result.WithResponse<ReservationRequest>(null);
+                return result.WithoutValue<ReservationRequest>();
 
             var availableTable = FindAvailableTableWithMinimumNumberOfSeats(numberOfSeats);
             
              result = availableTable.CanBeReserved(numberOfSeats);
 
-             if (result.Failed)
-                 return result.WithResponse<ReservationRequest>(null);
-
-             return ReservationRequest.TryCreate(availableTable.Id, visitingTime);
+             return result.Failed ? result.WithoutValue<ReservationRequest>() 
+                                  : ReservationRequest.TryCreate(availableTable.Id, visitingTime, numberOfSeats);
         }
 
         /// <returns>
@@ -112,8 +121,14 @@ namespace Reservation.Domain.Restaurants
                 .Where(x => x.HasAtLeast(numberOfSeats))
                 .OrderBy(x=> x.NumberOfSeats)
                 .First();
-
-            return null;
         }
     }
+    
+    
+    
+    
+    
+    
+    
+    
 }

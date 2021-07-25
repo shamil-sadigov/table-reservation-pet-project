@@ -8,7 +8,7 @@ using BuildingBlocks.Domain.ValueObjects;
 
 #endregion
 
-namespace Reservation.Domain.ReservationRequests
+namespace Reservation.Domain.ReservationRequests.ValueObjects
 {
     /// <summary>
     /// Time that is specified during creation of reservation request

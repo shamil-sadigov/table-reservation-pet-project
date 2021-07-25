@@ -5,13 +5,13 @@ using BuildingBlocks.Domain.DomainRules.SyncVersion;
 namespace Reservation.Domain.Tables.DomainRules
 {
     // TODO: Think about renaming it. It doesnt reveal much domain knowledge
-    internal class RequestedNumberOfSeatsMustNotBeTooSmall:IDomainRule
+    internal class RequestedNumberOfSeatsMustNotBeTooSmallRule:IDomainRule
     {
         private readonly TableId _tableId;
         private readonly NumberOfSeats _existingNumberOfSeats;
         private readonly NumberOfSeats _requestedNumberOfSeats;
 
-        public RequestedNumberOfSeatsMustNotBeTooSmall(
+        public RequestedNumberOfSeatsMustNotBeTooSmallRule(
             TableId tableId,
             NumberOfSeats existingNumberOfSeats, 
             NumberOfSeats requestedNumberOfSeats)

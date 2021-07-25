@@ -23,34 +23,27 @@ namespace Reservation.Domain.Tables
         {
             if (ReferenceEquals(this, other))
                 return 0;
-            if (ReferenceEquals(null, other))
-                return 1;
-
-            return Value.CompareTo(other.Value);
+            
+            return ReferenceEquals(null, other) ? 1 : Value.CompareTo(other.Value);
         }
 
         public static Result<NumberOfSeats> TryCreate(byte numberOfSeats)
         {
-            var rule = new TableMustHaveAtLeastOneSeat(numberOfSeats);
+            var rule = new TableMustHaveAtLeastOneSeatRule(numberOfSeats);
 
             var result = rule.Check();
 
-            if (result.Failed)
-                return result.WithResponse<NumberOfSeats>(null);
-
-            return new NumberOfSeats(numberOfSeats);
+            return result.Succeeded 
+                ? new NumberOfSeats(numberOfSeats) 
+                : result.WithoutValue<NumberOfSeats>();
         }
-
-
+        
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return Value;
         }
 
-        public override string ToString()
-        {
-            return Value.ToString();
-        }
+        public override string ToString() => Value.ToString();
 
         #region Equality operators
 

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.ValueObjects;
+using FluentAssertions;
 using Reservation.Domain.Restaurants.DomainRules;
 
 #endregion
@@ -30,14 +31,13 @@ namespace Reservation.Domain.Restaurants.ValueObjects
 
         public static Result<RestaurantWorkingHours> TryCreate(TimeSpan startTime, TimeSpan finishTime)
         {
-            var rule = new RestaurantWorkingHourMustBeInAcceptableRange(startTime, finishTime);
+            var rule = new RestaurantWorkingHourMustBeInAcceptableRangeRule(startTime, finishTime);
 
             var result = rule.Check();
 
-            if (!result.Succeeded)
-                return result.WithResponse<RestaurantWorkingHours>(null);
-
-            return new RestaurantWorkingHours(startTime, finishTime);
+            return result.Succeeded
+                ? new RestaurantWorkingHours(startTime, finishTime)
+                : result.WithoutValue<RestaurantWorkingHours>();
         }
 
         public bool IsWorkingTime(TimeSpan timeSpan)
