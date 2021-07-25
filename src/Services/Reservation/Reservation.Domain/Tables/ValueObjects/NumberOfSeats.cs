@@ -8,17 +8,12 @@ using Reservation.Domain.Tables.DomainRules;
 
 #endregion
 
-namespace Reservation.Domain.Tables
+namespace Reservation.Domain.Tables.ValueObjects
 {
-    public sealed class NumberOfSeats : ValueObject, IComparable<NumberOfSeats>
+    public sealed class NumberOfSeats : SingleValueObject<byte>, IComparable<NumberOfSeats>
     {
-        private NumberOfSeats(byte value)
-        {
-            Value = value;
-        }
-
-        public byte Value { get; }
-
+        private NumberOfSeats(byte value):base(value){}
+        
         public int CompareTo(NumberOfSeats? other)
         {
             if (ReferenceEquals(this, other))
@@ -38,13 +33,6 @@ namespace Reservation.Domain.Tables
                 : result.WithoutValue<NumberOfSeats>();
         }
         
-        protected override IEnumerable<object> GetEqualityComponents()
-        {
-            yield return Value;
-        }
-
-        public override string ToString() => Value.ToString();
-
         #region Equality operators
 
         public static bool operator >(NumberOfSeats first, NumberOfSeats second)

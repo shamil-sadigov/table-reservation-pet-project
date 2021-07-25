@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Reservation.Domain.Restaurants;
 using Reservation.Domain.Tables;
+using Reservation.Domain.Tables.ValueObjects;
 
 #endregion
 

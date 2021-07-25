@@ -14,7 +14,8 @@ namespace Reservation.Infrastructure.Databass.Repositories
         
         public async Task AddAsync(ReservationRequest reservationRequest)
         {
-            await _reservationContext.ReservationRequests.AddAsync(reservationRequest);
+            await _reservationContext.ReservationRequests.
+                AddAsync(reservationRequest);
         }
     }
 }

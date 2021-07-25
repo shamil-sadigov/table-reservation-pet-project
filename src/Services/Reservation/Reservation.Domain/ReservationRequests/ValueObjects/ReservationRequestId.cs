@@ -2,6 +2,7 @@
 
 using System;
 using BuildingBlocks.Domain;
+using BuildingBlocks.Domain.ValueObjects;
 
 #endregion
 

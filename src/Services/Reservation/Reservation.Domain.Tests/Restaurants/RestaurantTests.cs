@@ -13,6 +13,7 @@ using Reservation.Domain.Restaurants;
 using Reservation.Domain.Restaurants.DomainEvents;
 using Reservation.Domain.Restaurants.ValueObjects;
 using Reservation.Domain.Tables;
+using Reservation.Domain.Tables.ValueObjects;
 using Reservation.Domain.Tests.Helpers;
 using Xunit;
 using Xunit.Abstractions;

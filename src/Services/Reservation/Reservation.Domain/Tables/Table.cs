@@ -8,6 +8,7 @@ using Reservation.Domain.Restaurants;
 using Reservation.Domain.Restaurants.DomainEvents;
 using Reservation.Domain.Restaurants.ValueObjects;
 using Reservation.Domain.Tables.DomainRules;
+using Reservation.Domain.Tables.ValueObjects;
 
 #endregion
 

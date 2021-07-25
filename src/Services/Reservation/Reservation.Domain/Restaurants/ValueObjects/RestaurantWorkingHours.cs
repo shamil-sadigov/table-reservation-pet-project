@@ -51,5 +51,7 @@ namespace Reservation.Domain.Restaurants.ValueObjects
             yield return StartTime;
             yield return FinishTime;
         }
+
+        public override string ToString() => $"{StartTime:c}-{FinishTime:c}";
     }
 }

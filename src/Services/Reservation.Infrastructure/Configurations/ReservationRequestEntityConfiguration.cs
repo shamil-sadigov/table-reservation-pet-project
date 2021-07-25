@@ -9,6 +9,7 @@ using Reservation.Domain.ReservationRequests.ReservationRequestStates;
 using Reservation.Domain.ReservationRequests.ValueObjects;
 using Reservation.Domain.Restaurants.ValueObjects;
 using Reservation.Domain.Tables;
+using Reservation.Domain.Tables.ValueObjects;
 
 #endregion
 

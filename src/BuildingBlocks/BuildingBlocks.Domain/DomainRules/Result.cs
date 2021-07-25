@@ -2,6 +2,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using MoreLinq;
+using MoreLinq.Extensions;
 
 #endregion
 
@@ -42,17 +45,37 @@ namespace BuildingBlocks.Domain.DomainRules
                 Errors = errors
             };
         }
-
-        public Result<T> WithResponse<T>(T? response)
+        
+        public Result<T> WithValue<T>(T? response)
         {
             return Succeeded
                 ? Result<T>.Success(response!)
                 : Result<T>.Failure(Errors!);
         }
+        
+        public Result<T> WithoutValue<T>() 
+            => Result<T>.Failure(Errors!);
+        
+        // TODO: add tests for it
+        public Result CombineWith(params Result[] otherResults)
+        {
+            var errors = new List<Error>();
+            
+            var allResultAreSuccessful = otherResults.Aggregate(seed: true, (isSuccessful, result) =>
+            {
+                if (result.Failed)
+                    errors.AddRange(result.Errors!);
+
+                return isSuccessful && result.Succeeded;
+            });
+
+            return allResultAreSuccessful ? Success() : Failure(errors);
+        }
+        
 
         public static implicit operator Result(Error error) => Failure(error);
         public static implicit operator Result(List<Error> errors) => Failure(errors);
-
+        
     }
 
 

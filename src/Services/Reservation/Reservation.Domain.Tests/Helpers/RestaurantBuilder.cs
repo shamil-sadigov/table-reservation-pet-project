@@ -7,6 +7,7 @@ using MoreLinq;
 using Reservation.Domain.Restaurants;
 using Reservation.Domain.Restaurants.ValueObjects;
 using Reservation.Domain.Tables;
+using Reservation.Domain.Tables.ValueObjects;
 
 #endregion
 

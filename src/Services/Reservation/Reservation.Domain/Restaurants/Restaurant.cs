@@ -13,6 +13,7 @@ using Reservation.Domain.Restaurants.DomainEvents;
 using Reservation.Domain.Restaurants.DomainRules;
 using Reservation.Domain.Restaurants.ValueObjects;
 using Reservation.Domain.Tables;
+using Reservation.Domain.Tables.ValueObjects;
 
 #endregion
 

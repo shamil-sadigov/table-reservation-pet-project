@@ -1,6 +1,5 @@
 ﻿#region
 
-using System.Collections.Generic;
 using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.ValueObjects;
@@ -9,13 +8,10 @@ using BuildingBlocks.Domain.ValueObjects;
 
 namespace Reservation.Domain.Restaurants.ValueObjects
 {
-    public sealed class RestaurantAddress : ValueObject
+    public sealed class RestaurantAddress : SingleValueObject<string>
     {
-        public string Value { get; }
-
-        private RestaurantAddress(string value)
+        private RestaurantAddress(string value) : base(value)
         {
-            Value = value;
         }
 
         public static Result<RestaurantAddress> TryCreate(string address)
@@ -24,13 +20,6 @@ namespace Reservation.Domain.Restaurants.ValueObjects
                 return new Error("address should contain value");
 
             return new RestaurantAddress(address);
-        }
-
-        public override string ToString() => Value;
-
-        protected override IEnumerable<object> GetEqualityComponents()
-        {
-            yield return Value;
         }
     }
 }
