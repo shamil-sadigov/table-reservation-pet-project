@@ -24,16 +24,31 @@ namespace Reservation.Infrastructure.Databass.Configurations
             builder.Property(x => x.Id)
                 .HasConversion(x => x.Value, guid => new TableId(guid));
 
-            builder.OwnsOne<NumberOfSeats>("NumberOfSeats",
-                x => x.Property("_numberOfSeats")
-                    .HasColumnName("NumberOfSeats"));
-
+            builder.Property<NumberOfSeats>("NumberOfSeats")
+                .HasConversion(x=> x.Value, value => CreateNumberOfSeatsFromValue(value));
+            
             builder.HasOne<Restaurant>()
-                .WithMany()
+                .WithMany("_tables")
                 .HasForeignKey("_restaurantId");
 
             builder.Property("_restaurantId")
                 .HasColumnName("RestaurantId");
+        }
+
+        private static NumberOfSeats CreateNumberOfSeatsFromValue(byte value)
+        {
+            var result = NumberOfSeats.TryCreate(value);
+
+            if (result.Succeeded)
+                return result.Value!;
+
+            var exception = new DataCorruptionException(
+                "Retrieved byte value is corrupted. " +
+                "Unable to create NumberOfSeats");
+
+            exception.Data.Add("value", value);
+
+            throw exception;
         }
     }
 }

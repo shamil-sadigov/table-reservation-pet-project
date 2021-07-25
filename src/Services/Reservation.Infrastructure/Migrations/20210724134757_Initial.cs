@@ -18,8 +18,8 @@ namespace Reservation.Infrastructure.Databass.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StartWorkingAt = table.Column<TimeSpan>(type: "time", nullable: false),
-                    FinishWorkingAt = table.Column<TimeSpan>(type: "time", nullable: false)
+                    StartWorkingAt = table.Column<TimeSpan>(type: "time", precision: 0, scale: 0, nullable: false),
+                    FinishWorkingAt = table.Column<TimeSpan>(type: "time", precision: 0, scale: 0, nullable: false)
                 },
                 constraints: table =>
                 {

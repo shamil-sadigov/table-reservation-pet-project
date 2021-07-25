@@ -1,10 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using Reservation.Application;
 
 namespace Reservation.Infrastructure.Databass
 {
+    // TODO: Add configuration for IncomingCommand
     public class ApplicationContext:DbContext
     {
-        // TODO: Add 'Commands' set to check idempotency
+        public DbSet<Command> Commands { get; set; }
         
         // TODO: Add outgoing 'IntegrationEvents' set
         

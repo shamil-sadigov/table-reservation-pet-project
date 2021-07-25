@@ -1,6 +1,5 @@
 ﻿#region
 
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Reservation.Domain.Restaurants;
@@ -17,31 +16,33 @@ namespace Reservation.Infrastructure.Databass.Configurations
             builder.ToTable("Restaurants", schema: "reservation");
 
             builder.HasKey(x => x.Id);
-            
+
             builder.Property(x => x.Id)
                 .HasConversion(x => x.Value, guid => new RestaurantId(guid));
-            
+
             builder.Property<string>("_name")
                 .HasColumnName("Name");
-            
+
             builder.OwnsOne<RestaurantAddress>("_address", x =>
             {
                 x.Property(ra => ra.Value)
                     .HasColumnName("Address");
             });
-            
+
             builder.OwnsOne<RestaurantWorkingHours>("_workingHours", x =>
             {
                 x.Property(ra => ra.StartTime)
-                    .HasColumnName("StartWorkingAt");
-                
+                    .HasColumnName("StartWorkingAt")
+                    .HasPrecision(0, 0);
+
                 x.Property(ra => ra.FinishTime)
-                    .HasColumnName("FinishWorkingAt");
+                    .HasColumnName("FinishWorkingAt")
+                    .HasPrecision(0, 0);
             });
 
             builder.Navigation("_address")
                 .IsRequired();
-            
+
             builder.Navigation("_workingHours")
                 .IsRequired();
         }

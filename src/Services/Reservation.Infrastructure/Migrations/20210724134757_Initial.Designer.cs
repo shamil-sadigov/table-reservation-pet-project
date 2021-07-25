@@ -10,7 +10,7 @@ using Reservation.Infrastructure.Databass;
 namespace Reservation.Infrastructure.Databass.Migrations
 {
     [DbContext(typeof(ReservationContext))]
-    [Migration("20210723210942_Initial")]
+    [Migration("20210724134757_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -66,6 +66,9 @@ namespace Reservation.Infrastructure.Databass.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<byte>("NumberOfSeats")
+                        .HasColumnType("tinyint");
+
                     b.Property<Guid>("_restaurantId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("RestaurantId");
@@ -93,7 +96,7 @@ namespace Reservation.Infrastructure.Databass.Migrations
 
             modelBuilder.Entity("Reservation.Domain.Restaurants.Restaurant", b =>
                 {
-                    b.OwnsOne("Reservation.Domain.Restaurants.RestaurantAddress", "_address", b1 =>
+                    b.OwnsOne("Reservation.Domain.Restaurants.ValueObjects.RestaurantAddress", "_address", b1 =>
                         {
                             b1.Property<Guid>("RestaurantId")
                                 .HasColumnType("uniqueidentifier");
@@ -111,16 +114,18 @@ namespace Reservation.Infrastructure.Databass.Migrations
                                 .HasForeignKey("RestaurantId");
                         });
 
-                    b.OwnsOne("Reservation.Domain.Restaurants.RestaurantWorkingHours", "_workingHours", b1 =>
+                    b.OwnsOne("Reservation.Domain.Restaurants.ValueObjects.RestaurantWorkingHours", "_workingHours", b1 =>
                         {
                             b1.Property<Guid>("RestaurantId")
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<TimeSpan>("FinishTime")
+                                .HasPrecision(0)
                                 .HasColumnType("time")
                                 .HasColumnName("FinishWorkingAt");
 
                             b1.Property<TimeSpan>("StartTime")
+                                .HasPrecision(0)
                                 .HasColumnType("time")
                                 .HasColumnName("StartWorkingAt");
 
@@ -145,26 +150,6 @@ namespace Reservation.Infrastructure.Databass.Migrations
                         .WithMany()
                         .HasForeignKey("_restaurantId")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.OwnsOne("Reservation.Domain.Tables.NumberOfSeats", "NumberOfSeats", b1 =>
-                        {
-                            b1.Property<Guid>("TableId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<byte>("_numberOfSeats")
-                                .HasColumnType("tinyint")
-                                .HasColumnName("NumberOfSeats");
-
-                            b1.HasKey("TableId");
-
-                            b1.ToTable("Tables");
-
-                            b1.WithOwner()
-                                .HasForeignKey("TableId");
-                        });
-
-                    b.Navigation("NumberOfSeats")
                         .IsRequired();
                 });
 #pragma warning restore 612, 618
