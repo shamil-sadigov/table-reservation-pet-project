@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Reservation.Domain.ReservationRequests;
 using Reservation.Domain.Restaurants;
 
 namespace Reservation.Infrastructure.Databass
@@ -17,6 +18,7 @@ namespace Reservation.Infrastructure.Databass
         // uncomment useSQLServer in OnConfiguring
         
         public DbSet<Restaurant> Restaurants { get; set; }
+        public DbSet<ReservationRequest> ReservationRequests { get; set; }
         
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
