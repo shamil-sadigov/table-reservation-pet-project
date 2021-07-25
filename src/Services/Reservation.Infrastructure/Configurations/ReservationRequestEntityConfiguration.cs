@@ -5,6 +5,8 @@ using Ardalis.SmartEnum;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Reservation.Domain.ReservationRequests;
+using Reservation.Domain.ReservationRequests.ReservationRequestStates;
+using Reservation.Domain.ReservationRequests.ValueObjects;
 using Reservation.Domain.Restaurants.ValueObjects;
 using Reservation.Domain.Tables;
 
@@ -29,6 +31,9 @@ namespace Reservation.Infrastructure.Databass.Configurations
 
             builder.Property("_tableId")
                 .HasColumnName("TableId");
+            
+            builder.Property<NumberOfSeats>("_numberOfRequestedSeats")
+                .HasConversion(x=> x.Value, value => CreateNumberOfSeatsFromValue(value));
             
             builder.Property<ReservationRequestState>("_state")
                 .HasColumnName("State")
@@ -75,6 +80,22 @@ namespace Reservation.Infrastructure.Databass.Configurations
 
                 throw exception;
             }
+        }
+        
+        private static NumberOfSeats CreateNumberOfSeatsFromValue(byte value)
+        {
+            var result = NumberOfSeats.TryCreate(value);
+
+            if (result.Succeeded)
+                return result.Value!;
+
+            var exception = new DataCorruptionException(
+                "Retrieved byte value is corrupted. " +
+                "Unable to create NumberOfSeats");
+
+            exception.Data.Add("value", value);
+
+            throw exception;
         }
     }
 }

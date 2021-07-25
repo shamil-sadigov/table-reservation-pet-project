@@ -17,9 +17,9 @@ namespace Reservation.Infrastructure.Databass.Configurations
 
             builder.HasKey(x => x.Id);
 
-            builder.Property<TableStatus>("_status")
+            builder.Property<TableState>("_state")
                 .HasConversion<string>()
-                .HasColumnName("Status");
+                .HasColumnName("State");
 
             builder.Property(x => x.Id)
                 .HasConversion(x => x.Value, guid => new TableId(guid));
