@@ -26,7 +26,7 @@ namespace BuildingBlocks.Domain.Tests.DomainRules
                 isSuccessfulRule: true,
                 errorMessage: "Error message");
 
-            var result = await domainRule.Check();
+            var result = await domainRule.CheckAsync();
 
             result.ShouldSucceed();
         }
@@ -38,7 +38,7 @@ namespace BuildingBlocks.Domain.Tests.DomainRules
                 isSuccessfulRule: false,
                 errorMessage: "Error message");
 
-            var checkResult = await domainRule.Check();
+            var checkResult = await domainRule.CheckAsync();
 
             checkResult.ShouldFail();
 

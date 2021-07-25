@@ -24,7 +24,7 @@ namespace BuildingBlocks.Domain.Tests.DomainRules
                     .Or(new TestDomainRuleAsync(isSuccessfulRule: false, errorMessage: "Error message3"))
                     .And(new TestDomainRuleAsync(isSuccessfulRule: true, errorMessage: "Error message6"));
 
-            var checkResult = await domainRule.Check();
+            var checkResult = await domainRule.CheckAsync();
 
             checkResult.ShouldSucceed();
         }
@@ -42,7 +42,7 @@ namespace BuildingBlocks.Domain.Tests.DomainRules
                     .Or(new TestDomainRuleAsync(isSuccessfulRule: false, errorMessage: "Error message3"))
                     .And(new TestDomainRuleAsync(isSuccessfulRule: false, errorMessage: "Error message6"));
 
-            var checkResult = await domainRule.Check();
+            var checkResult = await domainRule.CheckAsync();
 
             checkResult.ShouldFail();
 

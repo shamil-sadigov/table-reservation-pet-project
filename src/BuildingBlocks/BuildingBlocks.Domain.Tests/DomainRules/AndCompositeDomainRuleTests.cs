@@ -19,7 +19,7 @@ namespace BuildingBlocks.Domain.Tests.DomainRules
                 new TestDomainRuleAsync(isSuccessfulRule: true, "Error message1")
                     .And(new TestDomainRuleAsync(isSuccessfulRule: true, "Error message2"));
 
-            var checkResult = await domainRule.Check();
+            var checkResult = await domainRule.CheckAsync();
 
             checkResult.ShouldSucceed();
         }
@@ -34,7 +34,7 @@ namespace BuildingBlocks.Domain.Tests.DomainRules
                     .And(new TestDomainRuleAsync(isSuccessfulRule: true, "Error message4"))
                     .And(new TestDomainRuleAsync(isSuccessfulRule: true, "Error message5"));
 
-            var checkResult = await compositeRule.Check();
+            var checkResult = await compositeRule.CheckAsync();
 
             checkResult.ShouldSucceed();
         }
@@ -47,7 +47,7 @@ namespace BuildingBlocks.Domain.Tests.DomainRules
                 new TestDomainRuleAsync(isSuccessfulRule: true, errorMessage: "Error message1")
                     .And(new TestDomainRuleAsync(isSuccessfulRule: false, errorMessage: "Error message2"));
 
-            var checkResult = await compositeRule.Check();
+            var checkResult = await compositeRule.CheckAsync();
 
             checkResult.ShouldFail();
 
@@ -69,7 +69,7 @@ namespace BuildingBlocks.Domain.Tests.DomainRules
                     .And(new TestDomainRuleAsync(isSuccessfulRule: false, errorMessage: "Error message6")) // <--
                     .And(new TestDomainRuleAsync(isSuccessfulRule: true, errorMessage: "Error message7"));
 
-            var checkResult = await compositeRule.Check();
+            var checkResult = await compositeRule.CheckAsync();
 
             checkResult.ShouldFail();
 

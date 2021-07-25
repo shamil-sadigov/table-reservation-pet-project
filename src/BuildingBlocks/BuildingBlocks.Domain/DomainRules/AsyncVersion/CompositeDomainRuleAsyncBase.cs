@@ -22,9 +22,9 @@ namespace BuildingBlocks.Domain.DomainRules.AsyncVersion
 
         protected ICollection<IDomainRuleAsync> DomainRules { get; }
 
-        public async Task<Result> Check()
+        public async Task<Result> CheckAsync()
         {
-            var rules = DomainRules.Select(x => x.Check());
+            var rules = DomainRules.Select(x => x.CheckAsync());
 
             Result[] results = await Task.WhenAll(rules);
 

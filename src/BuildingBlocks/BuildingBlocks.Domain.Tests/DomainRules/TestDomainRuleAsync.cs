@@ -19,7 +19,7 @@ namespace BuildingBlocks.Domain.Tests.DomainRules
             _errorMessage = errorMessage;
         }
 
-        public async Task<Result> Check()
+        public async Task<Result> CheckAsync()
         {
             await Task.Yield();
             

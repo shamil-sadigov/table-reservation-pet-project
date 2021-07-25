@@ -8,6 +8,6 @@ namespace BuildingBlocks.Domain.DomainRules.AsyncVersion
 {
     public interface IDomainRuleAsync
     {
-        Task<Result> Check();
+        Task<Result> CheckAsync();
     }
 }
