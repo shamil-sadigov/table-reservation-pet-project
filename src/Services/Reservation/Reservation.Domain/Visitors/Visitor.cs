@@ -10,16 +10,20 @@ namespace Reservation.Domain.Visitors
     /// </summary>
     public class Visitor : Entity, IAggregateRoot
     {
-        private VisitorId _visitorId;
+        public VisitorId Id { get; }
         
         // Additional data will be added
         
         // For EF
+        private Visitor()
+        {
+            
+        }
+        
         private Visitor(VisitorId visitorId)
         {
-            _visitorId = visitorId;
-            
-            AddDomainEvent(new VisitorCreatedDomainEvent(_visitorId));
+            Id = visitorId;
+            AddDomainEvent(new VisitorCreatedDomainEvent(Id));
         }
         
         public static Result<Visitor> TryCreate(VisitorId visitorId)

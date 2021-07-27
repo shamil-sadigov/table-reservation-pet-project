@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Reservation.Infrastructure.Databass;
+using Reservation.Infrastructure.Databass.Contexts;
 
 namespace Reservation.Infrastructure.Databass.Migrations
 {
@@ -24,6 +24,10 @@ namespace Reservation.Infrastructure.Databass.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<byte>("_numberOfRequestedSeats")
+                        .HasColumnType("tinyint")
+                        .HasColumnName("NumberOfRequestedSeats");
+
                     b.Property<string>("_state")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
@@ -33,13 +37,19 @@ namespace Reservation.Infrastructure.Databass.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("TableId");
 
-                    b.Property<TimeSpan>("_visitingTime")
-                        .HasColumnType("time")
-                        .HasColumnName("VisitingTime");
+                    b.Property<DateTime>("_visitingDateTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("VisitingDateTime");
+
+                    b.Property<Guid>("_visitorId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("VisitorId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("_tableId");
+
+                    b.HasIndex("_visitorId");
 
                     b.ToTable("ReservationRequests", "reservation");
                 });
@@ -71,10 +81,10 @@ namespace Reservation.Infrastructure.Databass.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("RestaurantId");
 
-                    b.Property<string>("_status")
+                    b.Property<string>("_state")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Status");
+                        .HasColumnName("State");
 
                     b.HasKey("Id");
 
@@ -83,11 +93,27 @@ namespace Reservation.Infrastructure.Databass.Migrations
                     b.ToTable("Tables", "reservation");
                 });
 
+            modelBuilder.Entity("Reservation.Domain.Visitors.Visitor", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Visitors", "reservation");
+                });
+
             modelBuilder.Entity("Reservation.Domain.ReservationRequests.ReservationRequest", b =>
                 {
                     b.HasOne("Reservation.Domain.Tables.Table", null)
                         .WithMany()
                         .HasForeignKey("_tableId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Reservation.Domain.Visitors.Visitor", null)
+                        .WithMany()
+                        .HasForeignKey("_visitorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -145,10 +171,15 @@ namespace Reservation.Infrastructure.Databass.Migrations
             modelBuilder.Entity("Reservation.Domain.Tables.Table", b =>
                 {
                     b.HasOne("Reservation.Domain.Restaurants.Restaurant", null)
-                        .WithMany()
+                        .WithMany("_tables")
                         .HasForeignKey("_restaurantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Reservation.Domain.Restaurants.Restaurant", b =>
+                {
+                    b.Navigation("_tables");
                 });
 #pragma warning restore 612, 618
         }

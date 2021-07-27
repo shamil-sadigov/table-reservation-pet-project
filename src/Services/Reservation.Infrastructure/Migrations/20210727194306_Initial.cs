@@ -27,6 +27,18 @@ namespace Reservation.Infrastructure.Databass.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Visitors",
+                schema: "reservation",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Visitors", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Tables",
                 schema: "reservation",
                 columns: table => new
@@ -34,7 +46,7 @@ namespace Reservation.Infrastructure.Databass.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     NumberOfSeats = table.Column<byte>(type: "tinyint", nullable: false),
                     RestaurantId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    State = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -54,9 +66,11 @@ namespace Reservation.Infrastructure.Databass.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    NumberOfRequestedSeats = table.Column<byte>(type: "tinyint", nullable: false),
                     State = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TableId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    VisitingTime = table.Column<TimeSpan>(type: "time", nullable: false)
+                    VisitingDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    VisitorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -68,6 +82,13 @@ namespace Reservation.Infrastructure.Databass.Migrations
                         principalTable: "Tables",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ReservationRequests_Visitors_VisitorId",
+                        column: x => x.VisitorId,
+                        principalSchema: "reservation",
+                        principalTable: "Visitors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -75,6 +96,12 @@ namespace Reservation.Infrastructure.Databass.Migrations
                 schema: "reservation",
                 table: "ReservationRequests",
                 column: "TableId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReservationRequests_VisitorId",
+                schema: "reservation",
+                table: "ReservationRequests",
+                column: "VisitorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tables_RestaurantId",
@@ -91,6 +118,10 @@ namespace Reservation.Infrastructure.Databass.Migrations
 
             migrationBuilder.DropTable(
                 name: "Tables",
+                schema: "reservation");
+
+            migrationBuilder.DropTable(
+                name: "Visitors",
                 schema: "reservation");
 
             migrationBuilder.DropTable(
