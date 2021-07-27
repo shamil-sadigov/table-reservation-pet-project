@@ -7,8 +7,6 @@ using System.Linq;
 
 namespace BuildingBlocks.Domain.ValueObjects
 {
-    // TODO: Add tests for value object
-
     public abstract class ValueObject
     {
         public static bool operator ==(ValueObject? left, ValueObject? right)

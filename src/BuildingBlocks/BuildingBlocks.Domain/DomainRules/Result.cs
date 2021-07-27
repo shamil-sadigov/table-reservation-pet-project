@@ -56,7 +56,6 @@ namespace BuildingBlocks.Domain.DomainRules
         public Result<T> WithoutValue<T>() 
             => Result<T>.Failure(Errors!);
         
-        // TODO: add tests for it
         public Result CombineWith(params Result[] otherResults)
         {
             var errors = new List<Error>();

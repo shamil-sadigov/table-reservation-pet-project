@@ -7,7 +7,6 @@ using BuildingBlocks.Domain.DomainEvents;
 
 namespace BuildingBlocks.Domain
 {
-    // TODO: Add equality comparison based on id
     public abstract class Entity
     {
         private List<IDomainEvent>? _domainEvents;
