@@ -2,8 +2,9 @@ using System;
 
 namespace BuildingBlocks.Domain.DomainRules
 {
-    public class SystemTime
+    public interface ISystemTime
     {
-        public static DateTime Now => DateTime.UtcNow;
+        public DateTime DateNow => DateTime.Today;
+        public DateTime DateTimeNow => DateTime.UtcNow;
     }
 }
