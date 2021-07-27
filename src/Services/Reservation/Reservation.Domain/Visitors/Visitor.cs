@@ -5,6 +5,9 @@ using Reservation.Domain.Visitors.ValueObjects;
 
 namespace Reservation.Domain.Visitors
 {
+    /// <summary>
+    /// Person who creates reservation request to visit a restaurant.
+    /// </summary>
     public class Visitor : Entity, IAggregateRoot
     {
         private VisitorId _visitorId;
