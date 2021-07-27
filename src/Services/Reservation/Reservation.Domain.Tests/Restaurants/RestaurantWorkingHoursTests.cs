@@ -2,7 +2,6 @@
 
 using System;
 using FluentAssertions;
-using Reservation.Domain.Restaurants;
 using Reservation.Domain.Restaurants.ValueObjects;
 using Reservation.Domain.Tests.Helpers;
 using Xunit;
@@ -35,7 +34,7 @@ namespace Reservation.Domain.Tests.Restaurants
             // Arrange
             var startTime = new TimeSpan(startHour, startMinutes, seconds: 00);
             var finishTime = new TimeSpan(finishHour, finishMinutes, seconds: 00);
-            
+
             // Act
             var result = RestaurantWorkingHours.TryCreate(startTime, finishTime);
 
@@ -58,14 +57,14 @@ namespace Reservation.Domain.Tests.Restaurants
             // Arrange
             var startTime = new TimeSpan(startHour, startMinutes, 00);
             var finishTime = new TimeSpan(finishHour, finishMinutes, 00);
-            
+
             // Act
             var result = RestaurantWorkingHours.TryCreate(startTime, finishTime);
 
             // Assert
             result.ShouldSucceed();
         }
-        
+
         [Theory]
         [InlineData(09, 15)]
         [InlineData(11, 30)]
@@ -79,10 +78,10 @@ namespace Reservation.Domain.Tests.Restaurants
 
             var flintstonesDateTime = new DateTime(
                 year: 1,
-                month: 1, 
-                day: 1, 
-                hours, 
-                minutes, 
+                month: 1,
+                day: 1,
+                hours,
+                minutes,
                 second: 0);
 
             var timeOfDay = flintstonesDateTime.TimeOfDay;
@@ -106,10 +105,10 @@ namespace Reservation.Domain.Tests.Restaurants
 
             var flintstonesDateTime = new DateTime(
                 year: 1,
-                month: 1, 
-                day: 1, 
-                hours, 
-                minutes, 
+                month: 1,
+                day: 1,
+                hours,
+                minutes,
                 second: 0);
 
             var timeOfDay = flintstonesDateTime.TimeOfDay;
