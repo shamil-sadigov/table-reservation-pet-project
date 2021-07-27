@@ -27,6 +27,13 @@ namespace Reservation.Domain.Tests.Restaurants
 {
     public class RestaurantTests
     {
+        private readonly ITestOutputHelper _testOutputHelper;
+
+        public RestaurantTests(ITestOutputHelper testOutputHelper)
+        {
+            _testOutputHelper = testOutputHelper;
+        }
+
         [Fact]
         public async Task Can_create_restaurant()
         {
@@ -161,7 +168,11 @@ namespace Reservation.Domain.Tests.Restaurants
             var visitorId = new VisitorId(Guid.NewGuid());
             
             // Act
-            var result = restaurant.TryCreateReservationRequest(numberOfRequestedSeats, visitingTime, visitorId);
+            var result = restaurant.TryCreateReservationRequest(
+                numberOfRequestedSeats,
+                visitingTime,
+                visitorId,
+                SystemTimeStub.Instance);
 
             // Assert
             result.ShouldSucceed();
@@ -201,7 +212,11 @@ namespace Reservation.Domain.Tests.Restaurants
             var visitorId = new VisitorId(Guid.NewGuid());
 
             // Act
-            var result = restaurant.TryCreateReservationRequest(numberOfRequestedSeats, visitingTime, visitorId);
+            var result = restaurant.TryCreateReservationRequest(
+                numberOfRequestedSeats,
+                visitingTime,
+                visitorId,
+                SystemTimeStub.Instance);
 
             // Assert
             result.ShouldFail();
@@ -230,7 +245,11 @@ namespace Reservation.Domain.Tests.Restaurants
             var visitorId = new VisitorId(Guid.NewGuid());
 
             // Act
-            var result = restaurant.TryCreateReservationRequest(numberOfRequestedSeats, visitTime, visitorId);
+            var result = restaurant.TryCreateReservationRequest(
+                numberOfRequestedSeats,
+                visitTime,
+                visitorId,
+                SystemTimeStub.Instance);
 
             // Assert
             result.ShouldFail();

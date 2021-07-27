@@ -1,5 +1,6 @@
 ﻿#region
 
+using System;
 using BuildingBlocks.Domain.DomainEvents;
 using Reservation.Domain.ReservationRequests.ValueObjects;
 using Reservation.Domain.Tables;
@@ -15,7 +16,7 @@ namespace Reservation.Domain.ReservationRequests.DomainEvents
             ReservationRequestId ReservationRequestId,
             TableId RequestedTableId,
             NumberOfSeats NumberOfRequestedSeats,
-            VisitingTime VisitingTime,
+            DateTime VisitingDateTime,
             VisitorId VisitorId)
         : DomainEventBase;
 }

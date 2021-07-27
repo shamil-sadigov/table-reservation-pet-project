@@ -91,7 +91,8 @@ namespace Reservation.Domain.Restaurants
         public Result<ReservationRequest> TryCreateReservationRequest(
             NumberOfSeats numberOfSeats,
             VisitingTime visitingTime,
-            VisitorId visitorId)
+            VisitorId visitorId,
+            ISystemTime systemTime)
         {
             var rule = new RestaurantMustBeOpenAtVisitingTimeRule(Id, visitingTime, _workingHours)
                 .And(new RestaurantMustHaveAtLeastOneAvailableTableRule(_tables, numberOfSeats));
@@ -111,7 +112,8 @@ namespace Reservation.Domain.Restaurants
              return ReservationRequest.TryCreate(availableTable.Id,
                                       numberOfSeats,
                                       visitingTime,
-                                      visitorId);
+                                      visitorId,
+                                      systemTime);
         }
 
         /// <returns>
