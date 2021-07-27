@@ -2,12 +2,11 @@
 
 namespace Reservation.Domain.ReservationRequests.ReservationRequestStates
 {
-    // TODO: Add tests 
     public abstract partial class ReservationRequestState : SmartEnum<ReservationRequestState>
     {
         private sealed class RejectedReservationRequestState:ReservationRequestState
         {
-            public RejectedReservationRequestState()
+            internal RejectedReservationRequestState()
                 : base("Rejected", 4)
             {
             }

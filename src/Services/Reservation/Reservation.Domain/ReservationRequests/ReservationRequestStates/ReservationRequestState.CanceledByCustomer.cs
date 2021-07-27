@@ -6,7 +6,7 @@ namespace Reservation.Domain.ReservationRequests.ReservationRequestStates
     {
         private sealed class CanceledByCustomerReservationRequestState:ReservationRequestState
         {
-            public CanceledByCustomerReservationRequestState()
+            internal CanceledByCustomerReservationRequestState()
                 : base("CanceledByCustomer", 2)
             {
             }

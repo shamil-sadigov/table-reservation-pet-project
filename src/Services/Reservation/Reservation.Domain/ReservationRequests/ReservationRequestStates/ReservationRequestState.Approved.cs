@@ -6,7 +6,7 @@ namespace Reservation.Domain.ReservationRequests.ReservationRequestStates
     {
         private sealed class ApprovedReservationRequestState:ReservationRequestState
         {
-            public ApprovedReservationRequestState()
+            internal ApprovedReservationRequestState()
                 : base("Approved", 1)
             {
             }

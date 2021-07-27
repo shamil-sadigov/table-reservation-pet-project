@@ -6,7 +6,7 @@ namespace Reservation.Domain.ReservationRequests.ReservationRequestStates
     {
         private sealed class PendingReservationRequestState:ReservationRequestState
         {
-            public PendingReservationRequestState()
+            internal PendingReservationRequestState()
                 : base("Pending", 3)
             {
             }
