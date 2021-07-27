@@ -20,7 +20,6 @@ namespace Reservation.Domain.Tests.Helpers
         {
             result.Failed.Should().Be(true);
             result.Succeeded.Should().Be(false);
-            
         }
         
         public static void ShouldContainSomethingLike(this IEnumerable<Error> errors, string errorMessages)

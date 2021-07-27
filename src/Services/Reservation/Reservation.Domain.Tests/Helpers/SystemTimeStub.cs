@@ -4,6 +4,6 @@ namespace Reservation.Domain.Tests.Helpers
 {
     public class SystemTimeStub:ISystemTime
     {
-        public static SystemTimeStub Instance = new();
+        public static readonly ISystemTime Instance = new SystemTimeStub();
     }
 }

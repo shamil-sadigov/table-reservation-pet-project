@@ -88,7 +88,7 @@ namespace Reservation.Domain.Restaurants
             return Result.Success();
         }
 
-        public Result<ReservationRequest> TryCreateReservationRequest(
+        public Result<PendingReservationRequest> TryCreateReservationRequest(
             NumberOfSeats numberOfSeats,
             VisitingTime visitingTime,
             VisitorId visitorId,
@@ -100,16 +100,17 @@ namespace Reservation.Domain.Restaurants
             var result = rule.Check();
             
             if (result.Failed)
-                return result.WithoutValue<ReservationRequest>();
+                return result.WithoutValue<PendingReservationRequest>();
 
             var availableTable = FindAvailableTableWithMinimumNumberOfSeats(numberOfSeats);
             
              result = availableTable.CanBeReserved(numberOfSeats);
              
              if (result.Failed)
-                 return result.WithoutValue<ReservationRequest>();
+                 return result.WithoutValue<PendingReservationRequest>();
              
-             return ReservationRequest.TryCreate(availableTable.Id,
+             return ReservationRequestBase.TryCreatePending(
+                                      availableTable.Id,
                                       numberOfSeats,
                                       visitingTime,
                                       visitorId,

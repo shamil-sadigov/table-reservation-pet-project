@@ -1,22 +1,19 @@
 ﻿#region
 
 using System;
-using System.Linq;
 using System.Threading.Tasks;
+using BuildingBlocks.Domain.DomainRules;
 using FluentAssertions;
 using Moq;
-using MoreLinq;
 using Reservation.Domain.ReservationRequests;
 using Reservation.Domain.ReservationRequests.DomainEvents;
 using Reservation.Domain.ReservationRequests.ValueObjects;
 using Reservation.Domain.Restaurants;
 using Reservation.Domain.Restaurants.DomainEvents;
 using Reservation.Domain.Restaurants.ValueObjects;
-using Reservation.Domain.Tables;
 using Reservation.Domain.Tables.DomainEvents;
 using Reservation.Domain.Tables.ValueObjects;
 using Reservation.Domain.Tests.Helpers;
-using Reservation.Domain.Visitors;
 using Reservation.Domain.Visitors.ValueObjects;
 using Xunit;
 using Xunit.Abstractions;
@@ -76,14 +73,14 @@ namespace Reservation.Domain.Tests.Restaurants
                 .Should()
                 .Be(address);
         }
-        
+
         [Fact]
         public async Task Cannot_create_restaurant_when_name_and_address_is_not_unique()
         {
             // Arrange
             var startWorkingTime = new TimeSpan(10, 00, 00);
             var finishWorkingTime = new TimeSpan(23, 00, 00);
-            
+
             var workingHours = RestaurantWorkingHours.TryCreate(startWorkingTime, finishWorkingTime).Value!;
             var address = RestaurantAddress.TryCreate("Some address").Value!;
 
@@ -104,7 +101,6 @@ namespace Reservation.Domain.Tests.Restaurants
             result.Errors!.ShouldContainSomethingLike("Restaurant * already exists");
         }
 
-        
 
         [Theory]
         [InlineData(2)]
@@ -166,7 +162,7 @@ namespace Reservation.Domain.Tests.Restaurants
             var numberOfRequestedSeats = NumberOfSeats.TryCreate(numberOfSeats).Value!;
             VisitingTime visitingTime = VisitingTime.TryCreate(hours: 12, minutes: 00).Value!;
             var visitorId = new VisitorId(Guid.NewGuid());
-            
+
             // Act
             var result = restaurant.TryCreateReservationRequest(
                 numberOfRequestedSeats,
@@ -177,10 +173,10 @@ namespace Reservation.Domain.Tests.Restaurants
             // Assert
             result.ShouldSucceed();
 
-            ReservationRequest reservationRequest = result.Value!;
+            ReservationRequestBase reservationRequestBase = result.Value!;
 
             ReservationIsRequestedDomainEvent publishedDomainEvent
-                = reservationRequest.ShouldHavePublishedDomainEvent<ReservationIsRequestedDomainEvent>();
+                = reservationRequestBase.ShouldHavePublishedDomainEvent<ReservationIsRequestedDomainEvent>();
 
             publishedDomainEvent.RequestedTableId
                 .Should()
@@ -256,5 +252,7 @@ namespace Reservation.Domain.Tests.Restaurants
             result.Errors!.ShouldContainSomethingLike($"Restaurant {restaurant.Id} is not open at {visitTime} time");
             restaurant.ShouldNotHavePublishedDomainEvent<ReservationIsRequestedDomainEvent>();
         }
+
+     
     }
 }
