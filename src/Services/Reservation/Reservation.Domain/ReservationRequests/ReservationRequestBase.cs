@@ -31,7 +31,7 @@ namespace Reservation.Domain.ReservationRequests
             NumberOfSeats numberOfRequestedSeats,
             DateTime visitingDateTime,
             VisitorId visitorId,
-            ISystemTime systemTime)
+            DateTime createdDateTime)
         {
             Id = id;
             TableId = tableId;
@@ -39,7 +39,7 @@ namespace Reservation.Domain.ReservationRequests
             NumberOfRequestedSeats = numberOfRequestedSeats;
             VisitingDateTime = visitingDateTime;
             
-            CreatedDateTime = systemTime.DateNow;
+            CreatedDateTime = createdDateTime;
         }
 
         public ReservationRequestId Id { get; }

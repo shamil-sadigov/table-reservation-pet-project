@@ -19,14 +19,14 @@ namespace Reservation.Domain.ReservationRequests
             NumberOfSeats numberOfRequestedSeats,
             DateTime visitingDateTime,
             VisitorId visitorId,
-            ISystemTime systemTime)
+            DateTime createdDateTime)
             : base(
                 new ReservationRequestId(Guid.NewGuid()),
                 tableId,
                 numberOfRequestedSeats,
                 visitingDateTime,
                 visitorId,
-                systemTime)
+                createdDateTime)
         {
             AddDomainEvent(new ReservationIsRequestedDomainEvent(Id,
                 TableId,
@@ -48,16 +48,30 @@ namespace Reservation.Domain.ReservationRequests
 
             var visitingDateTIme = systemTime.DateNow.Add(visitingTime.AsTimeSpan());
 
-            return new PendingReservationRequest(tableId, numberOfRequestedSeats, visitingDateTIme, visitorId,
-                systemTime);
+            return new PendingReservationRequest(
+                tableId,
+                numberOfRequestedSeats,
+                visitingDateTIme,
+                visitorId,
+                systemTime.DateTimeNow);
         }
 
         public Result<ApprovedReservationRequest> TryApprove(
             AdministratorId administratorId,
-            DateTime approvedDateTime,
-            ISystemTime systemTime)
+            DateTime approvedDateTime)
         {
-            return ApprovedReservationRequest.TryCreateFrom(this, administratorId, approvedDateTime, systemTime);
+            return ApprovedReservationRequest.TryApprove(this, administratorId, approvedDateTime);
         }
+        
+        public Result<RejectedReservationRequest> TryReject(
+            AdministratorId administratorId,
+            DateTime rejectedDateTime,
+            string reason)
+        {
+            return RejectedReservationRequest.TryReject(this, administratorId, rejectedDateTime, reason);
+        }
+
+        
+        // TODO: Add TryCancel method
     }
 }

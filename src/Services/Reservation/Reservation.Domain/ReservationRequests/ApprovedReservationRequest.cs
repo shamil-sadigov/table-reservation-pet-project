@@ -1,7 +1,10 @@
 ﻿#region
 
 using System;
+using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
+using Reservation.Domain.ReservationRequests.DomainEvents;
+using Reservation.Domain.ReservationRequests.DomainRules;
 
 #endregion
 
@@ -14,50 +17,64 @@ namespace Reservation.Domain.ReservationRequests
             // TODO: Create Reservation in ReservationRequestApprovedDomainEvent
             
             private readonly AdministratorId _approvedByAdministratorId;
-            private readonly DateTime _approvalDateTime;
+            private readonly DateTime _approvedDateTime;
 
-            protected ApprovedReservationRequest(
+            private ApprovedReservationRequest(
                 PendingReservationRequest reservationRequest,
-                ISystemTime systemTime,
                 AdministratorId approvedByAdministratorId,
-                DateTime approvalDateTime)
+                DateTime approvedDateTime)
                 : base(
                     reservationRequest.Id,
                     reservationRequest.TableId,
                     reservationRequest.NumberOfRequestedSeats,
                     reservationRequest.VisitingDateTime,
                     reservationRequest.VisitorId,
-                    systemTime)
+                    reservationRequest.CreatedDateTime)
             {
                 _approvedByAdministratorId = approvedByAdministratorId;
-                _approvalDateTime = approvalDateTime;
-                // TODO: Add domain event here
+                _approvedDateTime = approvedDateTime;
+                
+                AddDomainEvent(new ReservationRequestIsApproved(Id, approvedByAdministratorId, approvedDateTime));
             }
 
-            internal static Result<ApprovedReservationRequest> TryCreateFrom(
+            internal static Result<ApprovedReservationRequest> TryApprove(
                 PendingReservationRequest pendingReservationRequest,
                 AdministratorId approvedByAdministratorId,
-                DateTime approvalDateTime,
-                ISystemTime systemTime)
+                DateTime approvedDateTime)
             {
-                var rule = new CannotApprovePendingReservationRequestWhenVisitingDateTimeIsExpiredRule(
+                if (ContainsNullValues(new {pendingReservationRequest, approvedByAdministratorId}, out var errors))
+                    return errors;
+                
+                var rule = new ApprovedDateTimeMustNotPassVisitingDateTimeRule(
                     pendingReservationRequest.Id,
                     pendingReservationRequest.VisitingDateTime,
-                    approvalDateTime);
+                    approvedDateTime);
 
                 var result = rule.Check();
 
                 if (result.Failed)
-                {
                     return result.WithoutValue<ApprovedReservationRequest>();
-                }
 
                 return new ApprovedReservationRequest(
-                    pendingReservationRequest, 
-                    systemTime,
+                    pendingReservationRequest,
                     approvedByAdministratorId, 
-                    approvalDateTime);
+                    approvedDateTime);
+            }
+
+            public Reservation MakeReservation()
+            {
+                
             }
         }
+    }
+
+    public class Reservation:Entity, IAggregateRoot
+    {
+        
+    }
+
+    public class ReservationId:
+    {
+        
     }
 }
