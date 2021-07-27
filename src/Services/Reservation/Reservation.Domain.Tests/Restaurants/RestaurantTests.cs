@@ -13,8 +13,11 @@ using Reservation.Domain.Restaurants;
 using Reservation.Domain.Restaurants.DomainEvents;
 using Reservation.Domain.Restaurants.ValueObjects;
 using Reservation.Domain.Tables;
+using Reservation.Domain.Tables.DomainEvents;
 using Reservation.Domain.Tables.ValueObjects;
 using Reservation.Domain.Tests.Helpers;
+using Reservation.Domain.Visitors;
+using Reservation.Domain.Visitors.ValueObjects;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -155,9 +158,10 @@ namespace Reservation.Domain.Tests.Restaurants
 
             var numberOfRequestedSeats = NumberOfSeats.TryCreate(numberOfSeats).Value!;
             VisitingTime visitingTime = VisitingTime.TryCreate(hours: 12, minutes: 00).Value!;
-
+            var visitorId = new VisitorId(Guid.NewGuid());
+            
             // Act
-            var result = restaurant.TryCreateReservationRequest(numberOfRequestedSeats, visitingTime);
+            var result = restaurant.TryCreateReservationRequest(numberOfRequestedSeats, visitingTime, visitorId);
 
             // Assert
             result.ShouldSucceed();
@@ -194,9 +198,10 @@ namespace Reservation.Domain.Tests.Restaurants
 
             NumberOfSeats numberOfRequestedSeats = NumberOfSeats.TryCreate(numberOfSeats).Value!;
             VisitingTime visitingTime = VisitingTime.TryCreate(hours: 12, minutes: 00).Value!;
+            var visitorId = new VisitorId(Guid.NewGuid());
 
             // Act
-            var result = restaurant.TryCreateReservationRequest(numberOfRequestedSeats, visitingTime);
+            var result = restaurant.TryCreateReservationRequest(numberOfRequestedSeats, visitingTime, visitorId);
 
             // Assert
             result.ShouldFail();
@@ -222,9 +227,10 @@ namespace Reservation.Domain.Tests.Restaurants
 
             VisitingTime visitTime = VisitingTime.TryCreate(hours, minutes).Value!;
             NumberOfSeats numberOfRequestedSeats = NumberOfSeats.TryCreate(4).Value!;
+            var visitorId = new VisitorId(Guid.NewGuid());
 
             // Act
-            var result = restaurant.TryCreateReservationRequest(numberOfRequestedSeats, visitTime);
+            var result = restaurant.TryCreateReservationRequest(numberOfRequestedSeats, visitTime, visitorId);
 
             // Assert
             result.ShouldFail();

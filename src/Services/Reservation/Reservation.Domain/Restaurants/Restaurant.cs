@@ -14,6 +14,8 @@ using Reservation.Domain.Restaurants.DomainRules;
 using Reservation.Domain.Restaurants.ValueObjects;
 using Reservation.Domain.Tables;
 using Reservation.Domain.Tables.ValueObjects;
+using Reservation.Domain.Visitors;
+using Reservation.Domain.Visitors.ValueObjects;
 
 #endregion
 
@@ -88,11 +90,12 @@ namespace Reservation.Domain.Restaurants
 
         public Result<ReservationRequest> TryCreateReservationRequest(
             NumberOfSeats numberOfSeats,
-            VisitingTime visitingTime)
+            VisitingTime visitingTime,
+            VisitorId visitorId)
         {
             var rule = new RestaurantMustBeOpenAtVisitingTimeRule(Id, visitingTime, _workingHours)
                 .And(new RestaurantMustHaveAtLeastOneAvailableTableRule(_tables, numberOfSeats));
-
+            
             var result = rule.Check();
             
             if (result.Failed)
@@ -101,9 +104,14 @@ namespace Reservation.Domain.Restaurants
             var availableTable = FindAvailableTableWithMinimumNumberOfSeats(numberOfSeats);
             
              result = availableTable.CanBeReserved(numberOfSeats);
-
-             return result.Failed ? result.WithoutValue<ReservationRequest>() 
-                                  : ReservationRequest.TryCreate(availableTable.Id, visitingTime, numberOfSeats);
+             
+             if (result.Failed)
+                 return result.WithoutValue<ReservationRequest>();
+             
+             return ReservationRequest.TryCreate(availableTable.Id,
+                                      numberOfSeats,
+                                      visitingTime,
+                                      visitorId);
         }
 
         /// <returns>

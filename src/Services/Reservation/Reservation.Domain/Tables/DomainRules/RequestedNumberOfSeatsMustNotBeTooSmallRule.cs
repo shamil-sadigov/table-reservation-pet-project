@@ -1,10 +1,10 @@
 using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.DomainRules.SyncVersion;
+using Reservation.Domain.Tables.ValueObjects;
 
 namespace Reservation.Domain.Tables.DomainRules
 {
-    // TODO: Think about renaming it. It doesnt reveal much domain knowledge
     internal class RequestedNumberOfSeatsMustNotBeTooSmallRule:IDomainRule
     {
         private readonly TableId _tableId;
