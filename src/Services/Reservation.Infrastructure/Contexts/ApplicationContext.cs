@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Reservation.Application;
 
-namespace Reservation.Infrastructure.Databass
+namespace Reservation.Infrastructure.Databass.Contexts
 {
     // TODO: Add configuration for IncomingCommand
     public class ApplicationContext:DbContext

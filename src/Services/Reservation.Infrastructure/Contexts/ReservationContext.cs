@@ -2,20 +2,21 @@
 using Reservation.Domain.ReservationRequests;
 using Reservation.Domain.Restaurants;
 
-namespace Reservation.Infrastructure.Databass
+namespace Reservation.Infrastructure.Databass.Contexts
 {
     public class ReservationContext:DbContext
     {
         // Uncomment when application layer is added
-        public ReservationContext(DbContextOptions<ReservationContext> ops)
-            :base(ops)
+        // public ReservationContext(DbContextOptions<ReservationContext> ops)
+        //     :base(ops)
+        // {
+        //     
+        // }
+
+        public ReservationContext()
         {
             
         }
-
-        // FOR migrations do the following
-        // add default ctor
-        // uncomment useSQLServer in OnConfiguring
         
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<ReservationRequest> ReservationRequests { get; set; }
@@ -24,7 +25,7 @@ namespace Reservation.Infrastructure.Databass
         {
             // TODO: Extract to settings
             // Uncomment if you want to add migrations
-            // optionsBuilder.UseSqlServer("Data Source=darwin;Initial Catalog=ReservationApp;Integrated Security=True;");
+            optionsBuilder.UseSqlServer("Data Source=darwin;Initial Catalog=ReservationApp;Integrated Security=True;");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
