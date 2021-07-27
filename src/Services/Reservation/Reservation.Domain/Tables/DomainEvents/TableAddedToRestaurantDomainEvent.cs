@@ -1,8 +1,8 @@
 ﻿using BuildingBlocks.Domain.DomainEvents;
 using Reservation.Domain.Restaurants.ValueObjects;
-using Reservation.Domain.Tables;
+using Reservation.Domain.Tables.ValueObjects;
 
-namespace Reservation.Domain.Restaurants.DomainEvents
+namespace Reservation.Domain.Tables.DomainEvents
 {
     public sealed record TableAddedToRestaurantDomainEvent(
         RestaurantId RestaurantId,
