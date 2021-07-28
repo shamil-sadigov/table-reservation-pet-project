@@ -6,28 +6,28 @@ using Reservation.Domain.ReservationRequests.ValueObjects;
 
 namespace Reservation.Domain.ReservationRequests.DomainRules
 {
-    public class RejectedDateTimeMustNotPassVisitingDateTimeRule:IDomainRule
+    public class ApprovalDateTimeMustNotPassVisitingDateTimeRule:IDomainRule
     {
         private readonly ReservationRequestId _reservationRequestId;
         private readonly DateTime _visitingDateTime;
-        private readonly DateTime _rejectedDateTime;
+        private readonly DateTime _approvalDateTime;
 
-        public RejectedDateTimeMustNotPassVisitingDateTimeRule(
+        public ApprovalDateTimeMustNotPassVisitingDateTimeRule(
             ReservationRequestId reservationRequestId,
             DateTime visitingDateTime,
-            DateTime rejectedDateTime)
+            DateTime approvalDateTime)
         {
             _reservationRequestId = reservationRequestId;
             _visitingDateTime = visitingDateTime;
-            _rejectedDateTime = rejectedDateTime;
+            _approvalDateTime = approvalDateTime;
         }   
         
         
         public Result Check()
         {
-            if (_rejectedDateTime > _visitingDateTime)
+            if (_approvalDateTime > _visitingDateTime)
             {
-                return new Error($"Cannot reject pending reservation request {_reservationRequestId} " +
+                return new Error($"Cannot approve pending reservation request {_reservationRequestId} " +
                                  $"which visitingDateTime is expired");
             }
             

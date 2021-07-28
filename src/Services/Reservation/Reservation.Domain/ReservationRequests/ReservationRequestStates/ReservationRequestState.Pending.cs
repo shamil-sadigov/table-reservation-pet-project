@@ -15,7 +15,6 @@ namespace Reservation.Domain.ReservationRequests.ReservationRequestStates
             public override bool CanSwitchTo(ReservationRequestState nextState) 
                 => nextState switch
                 {
-                    CanceledByCustomerReservationRequestState _ => true,
                     ApprovedReservationRequestState _ => true,
                     RejectedReservationRequestState _ => true,
                     _ => throw new ArgumentOutOfRangeException(nameof(nextState), "Unexpected state")

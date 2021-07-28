@@ -11,35 +11,41 @@ using Reservation.Domain.ReservationRequests.ValueObjects;
 
 namespace Reservation.Domain.ReservationRequests
 {
-    public class ReservationRequestApproval : Entity, IAggregateRoot
+    public class Reservation : Entity, IAggregateRoot
     {
-        public ReservationRequestApprovalId Id { get; }
-        
-        private readonly AdministratorId _approvedByAdministratorId;
-        private readonly DateTime _approvedDateTime;
-        
-        // TODO: Create Reservation in ReservationRequestApprovedDomainEvent
+        private  AdministratorId _approvedByAdministratorId;
+        private  DateTime _approvedDateTime;
+        private  ReservationRequestId _reservationRequestId;
+        // public  ReservationRequest ReservationRequest;
 
-        private readonly ReservationRequestId _reservationRequestId;
 
-        private ReservationRequestApproval(
+        private Reservation()
+        {
+            
+        }
+        
+        private Reservation(
             ReservationRequestId reservationRequestId,
             AdministratorId approvedByAdministratorId,
             DateTime approvedDateTime)
         {
+            // _reservationRequestId = reservationRequestId;
             _reservationRequestId = reservationRequestId;
             _approvedByAdministratorId = approvedByAdministratorId;
             _approvedDateTime = approvedDateTime;
 
-            Id = new ReservationRequestApprovalId(Guid.NewGuid());
-            
-            AddDomainEvent(new ReservationRequestIsApproved(
+            Id = new ReservationId(Guid.NewGuid());
+
+            // TODO: Add here id of approval and and maybe visiting time
+            AddDomainEvent(new ReservationIsMade(
                 _reservationRequestId,
                 _approvedByAdministratorId,
                 _approvedDateTime));
         }
 
-        internal static Result<ReservationRequestApproval> TryCreate(
+        public ReservationId Id { get; }
+
+        internal static Result<Reservation> TryCreate(
             ReservationRequestId reservationRequestId,
             AdministratorId approvedByAdministratorId,
             DateTime approvedDateTime,
@@ -51,27 +57,17 @@ namespace Reservation.Domain.ReservationRequests
                 return errors;
             }
 
-            var rule = new ApprovedDateTimeMustNotBeFutureDateRule(approvedDateTime, systemTime);
-            
+            var rule = new ApprovalDateTimeMustNotBeFutureDateRule(approvedDateTime, systemTime);
+
             var result = rule.Check();
-            
+
             if (result.Failed)
-                return result.WithoutValue<ReservationRequestApproval>();
-            
-            return new ReservationRequestApproval(
+                return result.WithoutValue<Reservation>();
+
+            return new Reservation(
                 reservationRequestId,
                 approvedByAdministratorId,
                 approvedDateTime);
         }
-
-        public Reservation MakeReservation()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-
-    public class Reservation : Entity, IAggregateRoot
-    {
     }
 }

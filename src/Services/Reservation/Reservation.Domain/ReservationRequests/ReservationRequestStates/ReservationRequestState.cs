@@ -6,6 +6,8 @@ using BuildingBlocks.Domain.DomainRules;
 
 #endregion
 
+// TODO: Add canceled by visitor state
+
 namespace Reservation.Domain.ReservationRequests.ReservationRequestStates
 {
     public abstract partial class ReservationRequestState : SmartEnum<ReservationRequestState>
@@ -13,10 +15,7 @@ namespace Reservation.Domain.ReservationRequests.ReservationRequestStates
         public static readonly ReservationRequestState Pending = new PendingReservationRequestState();
         public  static readonly ReservationRequestState Approved = new ApprovedReservationRequestState();
         public  static readonly ReservationRequestState Rejected = new RejectedReservationRequestState();
-
-        public  static readonly ReservationRequestState CanceledByCustomer =
-            new CanceledByCustomerReservationRequestState();
-
+        
         private ReservationRequestState(string name, int value) : base(name, value)
         {
         }

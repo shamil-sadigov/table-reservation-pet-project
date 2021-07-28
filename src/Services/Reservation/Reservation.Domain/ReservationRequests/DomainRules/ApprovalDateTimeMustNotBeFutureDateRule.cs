@@ -5,12 +5,12 @@ using BuildingBlocks.Domain.DomainRules.SyncVersion;
 
 namespace Reservation.Domain.ReservationRequests.DomainRules
 {
-    public class ApprovedDateTimeMustNotBeFutureDateRule:IDomainRule
+    public class ApprovalDateTimeMustNotBeFutureDateRule:IDomainRule
     {
         private readonly DateTime _approvalDateTime;
         private readonly ISystemTime _systemTime;
 
-        public ApprovedDateTimeMustNotBeFutureDateRule(DateTime approvalDateTime, ISystemTime systemTime)
+        public ApprovalDateTimeMustNotBeFutureDateRule(DateTime approvalDateTime, ISystemTime systemTime)
         {
             _approvalDateTime = approvalDateTime;
             _systemTime = systemTime;

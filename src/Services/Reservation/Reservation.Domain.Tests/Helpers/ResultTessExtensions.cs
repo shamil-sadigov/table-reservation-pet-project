@@ -12,14 +12,24 @@ namespace Reservation.Domain.Tests.Helpers
     {
         public static void ShouldSucceed(this Result result)
         {
-            result.Succeeded.Should().Be(true);
-            result.Failed.Should().Be(false);
+            string becauseMessage = string.Empty;
+            
+            if (result.Failed) 
+                becauseMessage = result.Errors.Select(x => x.Message).ToDelimitedString("\n");
+            
+            result.Succeeded.Should().Be(true, becauseMessage);
+            result.Failed.Should().Be(false, becauseMessage);
         }
 
         public static void ShouldFail(this Result result)
         {
-            result.Failed.Should().Be(true);
-            result.Succeeded.Should().Be(false);
+            string becauseMessage = string.Empty;
+            
+            if (result.Failed) 
+                becauseMessage = result.Errors.Select(x => x.Message).ToDelimitedString("\n");
+            
+            result.Failed.Should().Be(true, becauseMessage);
+            result.Succeeded.Should().Be(false, becauseMessage);
         }
         
         public static void ShouldContainSomethingLike(this IEnumerable<Error> errors, string errorMessages)

@@ -7,12 +7,12 @@ using Reservation.Domain.ReservationRequests.ValueObjects;
 
 namespace Reservation.Domain.ReservationRequests.DomainRules
 {
-    public class ReservationRequestMustBePendingToBeApprovedRule:IDomainRule
+    public class ReservationRequestMustBePendingRule:IDomainRule
     {
         private readonly ReservationRequestId _reservationRequestId;
         private readonly ReservationRequestState _reservationRequestState;
 
-        public ReservationRequestMustBePendingToBeApprovedRule(
+        public ReservationRequestMustBePendingRule(
             ReservationRequestId reservationRequestId,
             ReservationRequestState reservationRequestState)
         {
@@ -24,8 +24,7 @@ namespace Reservation.Domain.ReservationRequests.DomainRules
         {
             if (_reservationRequestState != ReservationRequestState.Pending)
             {
-                return new Error($"Reservation request {_reservationRequestId}" +
-                                 $" must be pending to be approved");
+                return new Error($"Reservation request {_reservationRequestId} must be pending");
             }
             
             return Result.Success();

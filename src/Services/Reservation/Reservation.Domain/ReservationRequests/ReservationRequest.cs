@@ -78,30 +78,51 @@ namespace Reservation.Domain.ReservationRequests
                 systemTime.DateTimeNow);
         }
         
-        public Result<ReservationRequestApproval> TryApprove(
+        public Result<Reservation> TryApprove(
             AdministratorId administratorId,
-            DateTime approvedDateTime,
+            DateTime rejectionDateTime,
             ISystemTime systemTime)
         {
-            if (ContainsNullValues(new {administratorId}, out var errors))
+            if (ContainsNullValues(new {administratorId, systemTime}, out var errors))
                 return errors;
-            
-            var rule = new ApprovedDateTimeMustNotPassVisitingDateTimeRule(Id, _visitingDateTime, approvedDateTime)
-                .And(new ReservationRequestMustBePendingToBeApprovedRule(Id, _state));
-                
-            var result = rule.Check();
 
+            var checkResult = new ApprovalDateTimeMustNotPassVisitingDateTimeRule(Id, _visitingDateTime, rejectionDateTime)
+                    .Check();
+            
             var switchResult = _state.TrySwitchTo(ReservationRequestState.Approved);
             
-            if (switchResult.Failed)
-                return switchResult.WithoutValue<ReservationRequestApproval>();
+            var combinedResult = checkResult.CombineWith(switchResult);
+            
+            if (combinedResult.Failed)
+                return switchResult.WithoutValue<Reservation>();
+            
+            _state = switchResult.Value!;
+            
+            return Reservation.TryCreate(Id, administratorId, rejectionDateTime, systemTime);
+        }
+     
+        public Result<ReservationRequestRejection> TryReject(
+            AdministratorId administratorId,
+            DateTime rejectionDateTime,
+            ISystemTime systemTime,
+            string reason)
+        {
+            if (ContainsNullValues(new {administratorId, systemTime}, out var errors))
+                return errors;
+            
+            var ruleResult = new RejectionDateTimeMustNotPassVisitingDateTimeRule(Id, _visitingDateTime, rejectionDateTime)
+                .Check();
+
+            var switchResult = _state.TrySwitchTo(ReservationRequestState.Rejected);
+
+            var combinedResult = ruleResult.CombineWith(switchResult);
+            
+            if (combinedResult.Failed)
+                return switchResult.WithoutValue<ReservationRequestRejection>();
 
             _state = switchResult.Value!;
             
-            if (result.Failed)
-                return result.WithoutValue<ReservationRequestApproval>();
-            
-            return ReservationRequestApproval.TryCreate(Id, administratorId, approvedDateTime, systemTime);
+            return ReservationRequestRejection.TryCreate(Id, administratorId, rejectionDateTime, reason, systemTime);
         }
     }
 }

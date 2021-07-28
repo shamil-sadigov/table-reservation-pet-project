@@ -3,9 +3,9 @@ using BuildingBlocks.Domain.ValueObjects;
 
 namespace Reservation.Domain.ReservationRequests
 {
-    public class ReservationRequestApprovalId : GuidIdentity
+    public class ReservationRequestRejectionId : GuidIdentity
     {
-        public ReservationRequestApprovalId(Guid value) : base(value)
+        public ReservationRequestRejectionId(Guid value) : base(value)
         {
         }
     }
