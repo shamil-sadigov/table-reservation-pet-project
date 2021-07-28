@@ -1,6 +1,8 @@
 ﻿#region
 
 using Ardalis.SmartEnum;
+using BuildingBlocks.Domain;
+using BuildingBlocks.Domain.DomainRules;
 
 #endregion
 
@@ -19,6 +21,15 @@ namespace Reservation.Domain.ReservationRequests.ReservationRequestStates
         {
         }
 
+        public Result<ReservationRequestState> TrySwitchTo(ReservationRequestState nextState)
+        {
+            if (CanSwitchTo(nextState))
+                return nextState;
+
+            return new Error($"Cannot switch from '{Name}' state to '{nextState.Name}' state");
+        }
+        
+        // TODO: make protected
         public abstract bool CanSwitchTo(ReservationRequestState nextState);
     }
 }

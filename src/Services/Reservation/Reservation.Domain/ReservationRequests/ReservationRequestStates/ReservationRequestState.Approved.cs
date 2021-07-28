@@ -10,14 +10,12 @@ namespace Reservation.Domain.ReservationRequests.ReservationRequestStates
                 : base("Approved", 1)
             {
             }
-
+            
             public override bool CanSwitchTo(ReservationRequestState nextState) 
                 => nextState switch 
                 {
-                    CanceledByCustomerReservationRequestState _ => true,
                     _ => false
                 };
         }
     }
-
 }

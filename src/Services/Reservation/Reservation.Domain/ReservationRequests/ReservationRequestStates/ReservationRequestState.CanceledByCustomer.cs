@@ -15,5 +15,4 @@ namespace Reservation.Domain.ReservationRequests.ReservationRequestStates
                 => false;
         }
     }
-
 }

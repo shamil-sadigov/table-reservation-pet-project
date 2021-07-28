@@ -164,7 +164,7 @@ namespace Reservation.Domain.Tests.Restaurants
             var visitorId = new VisitorId(Guid.NewGuid());
 
             // Act
-            var result = restaurant.TryCreateReservationRequest(
+            var result = restaurant.TryRequestReservation(
                 numberOfRequestedSeats,
                 visitingTime,
                 visitorId,
@@ -173,10 +173,10 @@ namespace Reservation.Domain.Tests.Restaurants
             // Assert
             result.ShouldSucceed();
 
-            ReservationRequestBase reservationRequestBase = result.Value!;
+            ReservationRequest reservationRequest = result.Value!;
 
             ReservationIsRequestedDomainEvent publishedDomainEvent
-                = reservationRequestBase.ShouldHavePublishedDomainEvent<ReservationIsRequestedDomainEvent>();
+                = reservationRequest.ShouldHavePublishedDomainEvent<ReservationIsRequestedDomainEvent>();
 
             publishedDomainEvent.RequestedTableId
                 .Should()
@@ -208,7 +208,7 @@ namespace Reservation.Domain.Tests.Restaurants
             var visitorId = new VisitorId(Guid.NewGuid());
 
             // Act
-            var result = restaurant.TryCreateReservationRequest(
+            var result = restaurant.TryRequestReservation(
                 numberOfRequestedSeats,
                 visitingTime,
                 visitorId,
@@ -241,7 +241,7 @@ namespace Reservation.Domain.Tests.Restaurants
             var visitorId = new VisitorId(Guid.NewGuid());
 
             // Act
-            var result = restaurant.TryCreateReservationRequest(
+            var result = restaurant.TryRequestReservation(
                 numberOfRequestedSeats,
                 visitTime,
                 visitorId,

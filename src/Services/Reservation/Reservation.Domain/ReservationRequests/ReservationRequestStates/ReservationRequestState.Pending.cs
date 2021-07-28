@@ -1,4 +1,5 @@
-﻿using Ardalis.SmartEnum;
+﻿using System;
+using Ardalis.SmartEnum;
 
 namespace Reservation.Domain.ReservationRequests.ReservationRequestStates
 {
@@ -17,7 +18,7 @@ namespace Reservation.Domain.ReservationRequests.ReservationRequestStates
                     CanceledByCustomerReservationRequestState _ => true,
                     ApprovedReservationRequestState _ => true,
                     RejectedReservationRequestState _ => true,
-                    _ => false
+                    _ => throw new ArgumentOutOfRangeException(nameof(nextState), "Unexpected state")
                 };
         }
     }

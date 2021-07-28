@@ -1,0 +1,30 @@
+﻿using System;
+using BuildingBlocks.Domain;
+using BuildingBlocks.Domain.DomainRules;
+using BuildingBlocks.Domain.DomainRules.SyncVersion;
+
+namespace Reservation.Domain.ReservationRequests.DomainRules
+{
+    public class ApprovedDateTimeMustNotBeFutureDateRule:IDomainRule
+    {
+        private readonly DateTime _approvalDateTime;
+        private readonly ISystemTime _systemTime;
+
+        public ApprovedDateTimeMustNotBeFutureDateRule(DateTime approvalDateTime, ISystemTime systemTime)
+        {
+            _approvalDateTime = approvalDateTime;
+            _systemTime = systemTime;
+        }
+        
+        public Result Check()
+        {
+            if (_approvalDateTime > _systemTime.DateTimeNow)
+            {
+                return new Error($"Approval date '{_approvalDateTime}' " +
+                                 $"must not be greater than current system date '{_systemTime.DateTimeNow}'");
+            }
+            
+            return Result.Success();
+        }
+    }
+}
