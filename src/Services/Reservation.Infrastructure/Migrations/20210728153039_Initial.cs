@@ -66,6 +66,7 @@ namespace Reservation.Infrastructure.Databass.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     NumberOfRequestedSeats = table.Column<byte>(type: "tinyint", nullable: false),
                     State = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TableId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -88,8 +89,60 @@ namespace Reservation.Infrastructure.Databass.Migrations
                         principalSchema: "reservation",
                         principalTable: "Visitors",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "ReservationRequestRejections",
+                schema: "reservation",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Reason = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RejectedByAdministratorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RejectionDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ReservationRequestId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReservationRequestRejections", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ReservationRequestRejections_ReservationRequests_ReservationRequestId",
+                        column: x => x.ReservationRequestId,
+                        principalSchema: "reservation",
+                        principalTable: "ReservationRequests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Reservations",
+                schema: "reservation",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ApprovedByAdministratorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ApprovedDateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ReservationRequestId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reservations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Reservations_ReservationRequests_ReservationRequestId",
+                        column: x => x.ReservationRequestId,
+                        principalSchema: "reservation",
+                        principalTable: "ReservationRequests",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReservationRequestRejections_ReservationRequestId",
+                schema: "reservation",
+                table: "ReservationRequestRejections",
+                column: "ReservationRequestId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_ReservationRequests_TableId",
@@ -104,6 +157,13 @@ namespace Reservation.Infrastructure.Databass.Migrations
                 column: "VisitorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Reservations_ReservationRequestId",
+                schema: "reservation",
+                table: "Reservations",
+                column: "ReservationRequestId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tables_RestaurantId",
                 schema: "reservation",
                 table: "Tables",
@@ -112,6 +172,14 @@ namespace Reservation.Infrastructure.Databass.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "ReservationRequestRejections",
+                schema: "reservation");
+
+            migrationBuilder.DropTable(
+                name: "Reservations",
+                schema: "reservation");
+
             migrationBuilder.DropTable(
                 name: "ReservationRequests",
                 schema: "reservation");

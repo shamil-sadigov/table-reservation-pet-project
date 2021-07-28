@@ -19,10 +19,39 @@ namespace Reservation.Infrastructure.Databass.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.2");
 
+            modelBuilder.Entity("Reservation.Domain.ReservationRequests.Reservation", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("_approvedByAdministratorId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("ApprovedByAdministratorId");
+
+                    b.Property<DateTime>("_approvedDateTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("ApprovedDateTime");
+
+                    b.Property<Guid>("_reservationRequestId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("ReservationRequestId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("_reservationRequestId")
+                        .IsUnique();
+
+                    b.ToTable("Reservations", "reservation");
+                });
+
             modelBuilder.Entity("Reservation.Domain.ReservationRequests.ReservationRequest", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("_createdDateTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreatedDateTime");
 
                     b.Property<byte>("_numberOfRequestedSeats")
                         .HasColumnType("tinyint")
@@ -52,6 +81,36 @@ namespace Reservation.Infrastructure.Databass.Migrations
                     b.HasIndex("_visitorId");
 
                     b.ToTable("ReservationRequests", "reservation");
+                });
+
+            modelBuilder.Entity("Reservation.Domain.ReservationRequests.ReservationRequestRejection", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("_reason")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Reason");
+
+                    b.Property<Guid>("_rejectedByAdministratorId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("RejectedByAdministratorId");
+
+                    b.Property<DateTime>("_rejectionDateTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("RejectionDateTime");
+
+                    b.Property<Guid>("_reservationRequestId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("ReservationRequestId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("_reservationRequestId")
+                        .IsUnique();
+
+                    b.ToTable("ReservationRequestRejections", "reservation");
                 });
 
             modelBuilder.Entity("Reservation.Domain.Restaurants.Restaurant", b =>
@@ -103,6 +162,15 @@ namespace Reservation.Infrastructure.Databass.Migrations
                     b.ToTable("Visitors", "reservation");
                 });
 
+            modelBuilder.Entity("Reservation.Domain.ReservationRequests.Reservation", b =>
+                {
+                    b.HasOne("Reservation.Domain.ReservationRequests.ReservationRequest", null)
+                        .WithOne()
+                        .HasForeignKey("Reservation.Domain.ReservationRequests.Reservation", "_reservationRequestId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Reservation.Domain.ReservationRequests.ReservationRequest", b =>
                 {
                     b.HasOne("Reservation.Domain.Tables.Table", null)
@@ -114,7 +182,16 @@ namespace Reservation.Infrastructure.Databass.Migrations
                     b.HasOne("Reservation.Domain.Visitors.Visitor", null)
                         .WithMany()
                         .HasForeignKey("_visitorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Reservation.Domain.ReservationRequests.ReservationRequestRejection", b =>
+                {
+                    b.HasOne("Reservation.Domain.ReservationRequests.ReservationRequest", null)
+                        .WithOne()
+                        .HasForeignKey("Reservation.Domain.ReservationRequests.ReservationRequestRejection", "_reservationRequestId")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
                 });
 

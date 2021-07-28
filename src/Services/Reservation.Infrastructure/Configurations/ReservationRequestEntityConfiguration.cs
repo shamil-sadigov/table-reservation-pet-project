@@ -21,18 +21,21 @@ namespace Reservation.Infrastructure.Databass.Configurations
         {
             builder.ToTable("ReservationRequests", schema: "reservation");
 
-            builder.HasKey(x => x.Id);
 
             builder.Property(x => x.Id)
                 .HasConversion(x => x.Value, guid => new ReservationRequestId(guid));
 
+            builder.HasKey(x => x.Id);
+
+            
             builder.HasOne<Table>()
                 .WithMany()
                 .HasForeignKey("_tableId");
 
             builder.HasOne<Visitor>()
                 .WithMany()
-                .HasForeignKey("_visitorId");
+                .HasForeignKey("_visitorId")
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.Property("_tableId")
                 .HasColumnName("TableId");
@@ -43,8 +46,7 @@ namespace Reservation.Infrastructure.Databass.Configurations
             builder.Property<NumberOfSeats>("_numberOfRequestedSeats")
                 .HasConversion(x => x.Value, value => CreateNumberOfSeatsFromValue(value))
                 .HasColumnName("NumberOfRequestedSeats");
-
-
+            
             builder.Property<ReservationRequestState>("_state")
                 .HasColumnName("State")
                 .HasConversion(
@@ -53,6 +55,9 @@ namespace Reservation.Infrastructure.Databass.Configurations
 
             builder.Property<DateTime>("_visitingDateTime")
                 .HasColumnName("VisitingDateTime");
+            
+            builder.Property<DateTime>("_createdDateTime")
+                .HasColumnName("CreatedDateTime");
         }
 
         private static ReservationRequestState ReservationRequestFromName(string name)

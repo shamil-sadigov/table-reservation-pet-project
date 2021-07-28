@@ -30,7 +30,8 @@ namespace Reservation.Infrastructure.Databass.Configurations
             
             builder.HasOne<Restaurant>()
                 .WithMany("_tables")
-                .HasForeignKey("_restaurantId");
+                .HasForeignKey("_restaurantId")
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Property("_restaurantId")
                 .HasColumnName("RestaurantId");
