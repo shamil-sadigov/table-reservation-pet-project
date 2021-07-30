@@ -11,6 +11,7 @@ using Reservation.Domain.ReservationRequests.ValueObjects;
 using Reservation.Domain.Restaurants;
 using Reservation.Domain.Restaurants.DomainEvents;
 using Reservation.Domain.Restaurants.ValueObjects;
+using Reservation.Domain.Tables;
 using Reservation.Domain.Tables.DomainEvents;
 using Reservation.Domain.Tables.ValueObjects;
 using Reservation.Domain.Tests.Helpers;
@@ -24,13 +25,6 @@ namespace Reservation.Domain.Tests.Restaurants
 {
     public class RestaurantTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
-
-        public RestaurantTests(ITestOutputHelper testOutputHelper)
-        {
-            _testOutputHelper = testOutputHelper;
-        }
-
         [Fact]
         public async Task Can_create_restaurant()
         {
@@ -43,12 +37,12 @@ namespace Reservation.Domain.Tests.Restaurants
 
             var checker = new Mock<IRestaurantUniquenessChecker>();
 
-            checker.Setup(x => x.IsUniqueAsync("name", address.Value))
+            checker.Setup(x => x.IsUniqueAsync("restaurant-name", address))
                 .ReturnsAsync(true);
 
             // Act
             var result = await Restaurant.TryCreateAsync(
-                "name",
+                "restaurant-name",
                 workingHours,
                 address,
                 checker.Object);
@@ -86,12 +80,12 @@ namespace Reservation.Domain.Tests.Restaurants
 
             var checker = new Mock<IRestaurantUniquenessChecker>();
 
-            checker.Setup(x => x.IsUniqueAsync("name", address.Value))
+            checker.Setup(x => x.IsUniqueAsync("restaurant-name", address))
                 .ReturnsAsync(false);
 
             // Act
             var result = await Restaurant.TryCreateAsync(
-                "name",
+                "restaurant-name",
                 workingHours,
                 address,
                 checker.Object);
@@ -107,7 +101,7 @@ namespace Reservation.Domain.Tests.Restaurants
         [InlineData(3)]
         [InlineData(4)]
         [InlineData(8)]
-        public async Task Can_add_table_to_restaurant(byte number)
+        public async Task Can_add_table_to_restaurant(byte numberOfSeats_)
         {
             // Arrange 
             var restaurant = await new RestaurantBuilder
@@ -118,13 +112,22 @@ namespace Reservation.Domain.Tests.Restaurants
                 FinishTime = (22, 00)
             }.BuildAsync();
 
-            var numberOfSeats = NumberOfSeats.TryCreate(number).Value!;
+            var numberOfSeats = NumberOfSeats.TryCreate(numberOfSeats_).Value!;
+            var tableId = TableId.TryCreate("TBL-1").Value!;
+
+            var tableUniquenessChecker = new Mock<ITableUniquenessChecker>();
+            
+            tableUniquenessChecker.Setup(x => x.IsUniqueAsync(restaurant.Id, tableId))
+                .ReturnsAsync(true);
 
             // Act
-            var addToTableResult = restaurant.TryAddTable(numberOfSeats);
+            var addTableResult = await restaurant.TryAddTableAsync(
+                tableId,
+                numberOfSeats,
+                tableUniquenessChecker.Object);
 
             // Assert
-            addToTableResult.ShouldSucceed();
+            addTableResult.ShouldSucceed();
 
             var publishedDomainEvent =
                 restaurant.ShouldHavePublishedDomainEvent<TableAddedToRestaurantDomainEvent>();
@@ -136,17 +139,55 @@ namespace Reservation.Domain.Tests.Restaurants
             publishedDomainEvent.NumberOfSeats
                 .Value
                 .Should()
-                .Be(number);
+                .Be(numberOfSeats_);
 
             publishedDomainEvent.TableId
                 .Should()
                 .NotBeNull();
         }
 
+        
+        [Theory]
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(8)]
+        public async Task Cannot_add_table_to_restaurant_when_tableId_is_not_unique(byte numberOfSeats_)
+        {
+            // Arrange 
+            var restaurant = await new RestaurantBuilder
+            {
+                Name = "restaurant name",
+                Address = "restaurant address",
+                StartTime = (09, 00),
+                FinishTime = (22, 00)
+            }.BuildAsync();
+
+            var numberOfSeats = NumberOfSeats.TryCreate(numberOfSeats_).Value!;
+            var tableId = TableId.TryCreate("TBL-1").Value!;
+
+            var tableUniquenessChecker = new Mock<ITableUniquenessChecker>();
+            
+            tableUniquenessChecker.Setup(x => x.IsUniqueAsync(restaurant.Id, tableId))
+                .ReturnsAsync(false);
+
+            // Act
+            var addTableResult = await restaurant.TryAddTableAsync(
+                tableId,
+                numberOfSeats,
+                tableUniquenessChecker.Object);
+
+            // Assert
+            addTableResult.ShouldFail();
+
+            restaurant.ShouldNotHavePublishedDomainEvent<TableAddedToRestaurantDomainEvent>();
+        }
+
+        
         [Theory]
         [InlineData(2)]
         [InlineData(4)]
-        [InlineData(8)]
+        [InlineData(6)]
         public async Task Can_create_reservation_request_when_restaurant_has_available_table(byte numberOfSeats)
         {
             // Arrange
@@ -156,7 +197,10 @@ namespace Reservation.Domain.Tests.Restaurants
                 Address = "restaurant address",
                 StartTime = (09, 00),
                 FinishTime = (22, 00),
-                TablesWithNumberOfSeats = new byte[] {2, 4, 2, 6, 8}
+                TablesInfo = new (string tableId, byte numberOfSeats)[]
+                {
+                    ("TBL-1", 2),("TBL-2", 4), ("TBL-3", 2), ("TBL-4", 8)
+                }
             }.BuildAsync();
 
             var numberOfRequestedSeats = NumberOfSeats.TryCreate(numberOfSeats).Value!;
@@ -181,10 +225,23 @@ namespace Reservation.Domain.Tests.Restaurants
             publishedDomainEvent.RequestedTableId
                 .Should()
                 .NotBeNull();
-
+            
             publishedDomainEvent.ReservationRequestId
                 .Should()
                 .NotBeNull();
+            
+            publishedDomainEvent.VisitorId
+                .Should()
+                .Be(visitorId);
+            
+            publishedDomainEvent.NumberOfRequestedSeats
+                .Should()
+                .Be(numberOfRequestedSeats);
+            
+            publishedDomainEvent.VisitingDateTime
+                .TimeOfDay
+                .Should()
+                .Be(visitingTime.AsTimeSpan());
         }
 
         [Theory]
@@ -200,7 +257,10 @@ namespace Reservation.Domain.Tests.Restaurants
                 Address = "restaurant address",
                 StartTime = (09, 00),
                 FinishTime = (22, 00),
-                TablesWithNumberOfSeats = new byte[] {8, 10, 12, 14}
+                TablesInfo = new (string tableId, byte numberOfSeats)[]
+                {
+                    ("TBL-1", 8),("TBL-2", 10), ("TBL-3", 12), ("TBL-4", 14)
+                }
             }.BuildAsync();
 
             NumberOfSeats numberOfRequestedSeats = NumberOfSeats.TryCreate(numberOfSeats).Value!;
@@ -233,7 +293,10 @@ namespace Reservation.Domain.Tests.Restaurants
                 Address = "restaurant address",
                 StartTime = (12, 00),
                 FinishTime = (20, 00),
-                TablesWithNumberOfSeats = new byte[] {6, 8, 10}
+                TablesInfo = new (string tableId, byte numberOfSeats)[]
+                {
+                    ("TBL-1", 6),("TBL-2", 8), ("TBL-3", 10)
+                }
             }.BuildAsync();
 
             VisitingTime visitTime = VisitingTime.TryCreate(hours, minutes).Value!;
@@ -252,7 +315,5 @@ namespace Reservation.Domain.Tests.Restaurants
             result.Errors!.ShouldContainSomethingLike($"Restaurant {restaurant.Id} is not open at {visitTime} time");
             restaurant.ShouldNotHavePublishedDomainEvent<ReservationIsRequestedDomainEvent>();
         }
-
-     
     }
 }

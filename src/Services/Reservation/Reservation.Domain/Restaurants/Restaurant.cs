@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.DomainRules.SyncVersion;
+using FluentAssertions;
 using Reservation.Domain.ReservationRequests;
 using Reservation.Domain.ReservationRequests.ValueObjects;
 using Reservation.Domain.Restaurants.DomainEvents;
@@ -57,7 +58,7 @@ namespace Reservation.Domain.Restaurants
             RestaurantAddress address,
             IRestaurantUniquenessChecker uniquenessChecker)
         {
-            if (ContainsNullValues(new {name, restaurantWorkingHours, address}, out var errors))
+            if (ContainsNullValues(new {name, restaurantWorkingHours, address, uniquenessChecker}, out var errors))
                 return errors;
             
             var rule = new RestaurantMustBeUniqueRule(uniquenessChecker, name, address);
@@ -69,19 +70,28 @@ namespace Reservation.Domain.Restaurants
             
             return new Restaurant(name, restaurantWorkingHours, address);
         }
-
-
-        public Result TryAddTable(NumberOfSeats numberOfSeats)
+        
+        public async Task<Result> TryAddTableAsync(
+            TableId tableId,
+            NumberOfSeats numberOfSeats,
+            ITableUniquenessChecker tableUniquenessChecker)
         {
             if (ContainsNullValues(new {numberOfSeats}, out var errors)) 
                 return errors;
-
-            var result = Table.TryCreate(Id, numberOfSeats);
             
-            if (result.Failed)
-                return result;
+            var rule = new TableInRestaurantMustBeUniqueRule(tableUniquenessChecker, Id, tableId);
 
-            Table newTable = result.Value!;
+            var ruleCheckResult = await rule.CheckAsync();
+
+            if (ruleCheckResult.Failed)
+                return ruleCheckResult;
+            
+            var tableResult = Table.TryCreate(tableId, Id, numberOfSeats);
+            
+            if (tableResult.Failed)
+                return tableResult;
+
+            Table newTable = tableResult.Value!;
 
             _tables.Add(newTable);
             

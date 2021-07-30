@@ -25,11 +25,11 @@ namespace Reservation.Domain.Tables
         {
         }
 
-        private Table(RestaurantId restaurantId, NumberOfSeats numberOfSeats)
+        private Table(TableId tableId, RestaurantId restaurantId, NumberOfSeats numberOfSeats)
         {
             NumberOfSeats = numberOfSeats;
             _restaurantId = restaurantId;
-            Id = new TableId(Guid.NewGuid());
+            Id = tableId;
             _state = TableState.Available;
 
             AddDomainEvent(new TableAddedToRestaurantDomainEvent(
@@ -43,12 +43,12 @@ namespace Reservation.Domain.Tables
 
         internal bool IsAvailable => _state == TableState.Available;
 
-        internal static Result<Table> TryCreate(RestaurantId restaurantId, NumberOfSeats numberOfSeats)
+        internal static Result<Table> TryCreate(TableId tableId,RestaurantId restaurantId, NumberOfSeats numberOfSeats)
         {
             if (ContainsNullValues(new {restaurantId, numberOfSeats}, out var errors))
                 return errors;
 
-            return new Table(restaurantId, numberOfSeats);
+            return new Table(tableId, restaurantId, numberOfSeats);
         }
 
         internal bool HasAtLeast(NumberOfSeats numberOfSeats) => NumberOfSeats >= numberOfSeats;

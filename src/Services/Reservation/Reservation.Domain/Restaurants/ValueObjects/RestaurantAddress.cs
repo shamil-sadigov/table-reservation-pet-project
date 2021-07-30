@@ -17,7 +17,7 @@ namespace Reservation.Domain.Restaurants.ValueObjects
 
         public static Result<RestaurantAddress> TryCreate(string address)
         {
-            if (address.IsNullOrEmpty())
+            if (address.IsNullOrWhiteSpace())
                 return new Error("address should contain value");
 
             return new RestaurantAddress(address);

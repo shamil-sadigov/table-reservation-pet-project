@@ -13,13 +13,6 @@ namespace Reservation.Domain.Tests.Restaurants
 {
     public class RestaurantWorkingHoursTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
-
-        public RestaurantWorkingHoursTests(ITestOutputHelper testOutputHelper)
-        {
-            _testOutputHelper = testOutputHelper;
-        }
-
         [Theory]
         [InlineData(10, 00, 55, 00, "finishTime should not be greater that 23:59:59")]
         [InlineData(03, 00, 22, 00, "startTime should be in range 06:00:00-23:59:59")]
@@ -48,7 +41,7 @@ namespace Reservation.Domain.Tests.Restaurants
         [InlineData(10, 00, 19, 00)]
         [InlineData(06, 00, 22, 30)]
         [InlineData(09, 00, 10, 00)]
-        public void Can_create_workingHours_when_startTime_or_finishTime_are_valid(
+        public void Can_create_workingHours_when_startTime_and_finishTime_are_in_acceptable_range(
             int startHour,
             int startMinutes,
             int finishHour,
@@ -71,7 +64,7 @@ namespace Reservation.Domain.Tests.Restaurants
         [InlineData(13, 45)]
         [InlineData(15, 45)]
         [InlineData(18, 45)]
-        public void Specified_time_is_restaurant_working_time(int hours, int minutes)
+        public void Specified_time_should_be_restaurant_working_time(int hours, int minutes)
         {
             // Arrange
             var workingHours = CreateWorkingHours(fromHours: 09, toHours: 20);
@@ -98,7 +91,7 @@ namespace Reservation.Domain.Tests.Restaurants
         [InlineData(20, 05)]
         [InlineData(23, 00)]
         [InlineData(00, 30)]
-        public void Specified_time_is_not_working_time_of_a_restaurant(int hours, int minutes)
+        public void Specified_time_should_not_be_working_time_of_a_restaurant(int hours, int minutes)
         {
             // Arrange
             var workingHours = CreateWorkingHours(fromHours: 09, toHours: 20);

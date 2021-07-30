@@ -23,7 +23,7 @@ namespace Reservation.Domain.Tests.Helpers
 
         public string Address { get; init; }
 
-        public byte[] TablesWithNumberOfSeats { get; init; }
+        public (string tableId, byte numberOfSeats)[] TablesInfo { get; init; }
 
         public async Task<Restaurant> BuildAsync(bool clearDomainEvent = true)
         {
@@ -32,7 +32,7 @@ namespace Reservation.Domain.Tests.Helpers
 
             var checker = new Mock<IRestaurantUniquenessChecker>();
 
-            checker.Setup(x => x.IsUniqueAsync(Name, address.Value))
+            checker.Setup(x => x.IsUniqueAsync(Name, address))
                 .ReturnsAsync(true);
             
             var result = await Restaurant.TryCreateAsync(
@@ -45,20 +45,49 @@ namespace Reservation.Domain.Tests.Helpers
 
             Restaurant restaurant = result.Value!;
 
-            TablesWithNumberOfSeats?.ForEach(number =>
+            TablesInfo?.ForEach(async tableInfo =>
             {
-                var creationResult = NumberOfSeats.TryCreate(number);
-                creationResult.ThrowIfNotSuccessful();
+                (TableId tableId, NumberOfSeats numberOfSeats) = CreateTableIdAndNumberOfSeats(tableInfo);
+                
+                var tableUniquenessCheckerMock = CreateTableUniquenessChecker(restaurant, tableId);
 
-                NumberOfSeats numberOfSeats = creationResult.Value!;
-
-                var addToTableResult = restaurant.TryAddTable(numberOfSeats);
+                var addToTableResult = await restaurant.TryAddTableAsync(
+                    tableId,
+                    numberOfSeats,
+                    tableUniquenessCheckerMock.Object);
+                
                 addToTableResult.ThrowIfNotSuccessful();
             });
 
             restaurant.ClearDomainEvents();
             
             return restaurant;
+        }
+
+        private static Mock<ITableUniquenessChecker> CreateTableUniquenessChecker(Restaurant restaurant, TableId tableId)
+        {
+            var tableUniquenessCheckerMock = new Mock<ITableUniquenessChecker>();
+
+            tableUniquenessCheckerMock.Setup(x => x.IsUniqueAsync(restaurant.Id, tableId))
+                .ReturnsAsync(true);
+            
+            return tableUniquenessCheckerMock;
+        }
+
+        private static (TableId tableId, NumberOfSeats numberOfSeats) 
+            CreateTableIdAndNumberOfSeats((string tableId, byte numberOfSeats) table)
+        {
+            var numberOfSeatsResult = NumberOfSeats.TryCreate(table.numberOfSeats);
+            var tableIdResult = TableId.TryCreate(table.tableId);
+
+            numberOfSeatsResult
+                .CombineWith(tableIdResult)
+                .ThrowIfNotSuccessful();
+
+            NumberOfSeats numberOfSeats = numberOfSeatsResult.Value!;
+            TableId tableId = tableIdResult.Value!;
+            
+            return (tableId, numberOfSeats);
         }
 
         private RestaurantAddress CreateAddress()

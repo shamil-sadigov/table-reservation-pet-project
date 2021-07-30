@@ -24,7 +24,7 @@ namespace Reservation.Domain.Tests.ReservationRequests
         [InlineData(15, 00, 13, 00)]
         [InlineData(10, 15, 10, 05)]
         [InlineData(19, 15, 15, 20)]
-        public async Task Can_make_reservation(
+        public async Task Can_approve_reservation_request(
             byte visitingHours,
             byte visitingMinutes,
             byte approvalHours,
@@ -32,7 +32,7 @@ namespace Reservation.Domain.Tests.ReservationRequests
         {
             // Arrange
             var visitingTime = VisitingTime.TryCreate(visitingHours, visitingMinutes).Value;
-            ReservationRequest? pendingReservationRequest = await RequestReservation(visitingTime);
+            ReservationRequest? reservationRequest = await RequestReservation(visitingTime);
             var administratorId = new AdministratorId(Guid.NewGuid());
             var approvalDateTime = DateTime.Today.Add(new TimeSpan(approvalHours, approvalMinutes, 0));
 
@@ -44,7 +44,7 @@ namespace Reservation.Domain.Tests.ReservationRequests
                 .Returns(() => DateTime.Today + timeOfTheDay); 
             
             // Act
-            var result = pendingReservationRequest.TryApprove(
+            var result = reservationRequest.TryApprove(
                 administratorId,
                 approvalDateTime,
                 systemTimeMock.Object);
@@ -52,9 +52,9 @@ namespace Reservation.Domain.Tests.ReservationRequests
             // Assert
             result.ShouldSucceed();
             
-            var approvedReservationRequest = result.Value!;
+            Domain.ReservationRequests.Reservation reservation = result.Value!;
 
-            var domainEvent = approvedReservationRequest.ShouldHavePublishedDomainEvent<ReservationIsMade>();
+            var domainEvent = reservation.ShouldHavePublishedDomainEvent<ReservationIsMade>();
 
             domainEvent.ApprovedByAdministratorId
                 .Should()
@@ -62,19 +62,18 @@ namespace Reservation.Domain.Tests.ReservationRequests
 
             domainEvent.ReservationRequestId
                 .Should()
-                .Be(pendingReservationRequest.Id);
+                .Be(reservationRequest.Id);
 
             domainEvent.ApprovalDateTime
                 .Should()
                 .Be(approvalDateTime);
         }
         
-          
         [Theory]
         [InlineData(15, 00, 15, 15)]
         [InlineData(10, 15, 11, 15)]
         [InlineData(13, 15, 13, 20)]
-        public async Task Cannot_make_reservation_when_visiting_dateTime_has_expired(
+        public async Task Cannot_approve_reservation_request_when_visiting_dateTime_has_expired(
             byte visitingHours,
             byte visitingMinutes,
             byte approvalHours,
@@ -95,15 +94,14 @@ namespace Reservation.Domain.Tests.ReservationRequests
             // Assert
             result.ShouldFail();
             result.Errors!.ShouldContainSomethingLike(
-                "Cannot approve pending reservation request * visitingDateTime is expired");
+                "Cannot approve reservation request * visitingDateTime is expired");
         }
-
         
         [Theory]
         [InlineData(15, 00, 14, 15)]
         [InlineData(10, 15, 10, 05)]
         [InlineData(17, 15, 12, 20)]
-        public async Task Cannot_make_reservation_when_approval_dateTime_is_greater_than_currentSystemTimeDateTime(
+        public async Task Cannot_approve_reservation_when_approval_dateTime_is_greater_than_currentSystemTimeDateTime(
             byte visitingHours,
             byte visitingMinutes,
             byte approvalHours,
@@ -131,7 +129,6 @@ namespace Reservation.Domain.Tests.ReservationRequests
             result.ShouldFail();
             result.Errors!.ShouldContainSomethingLike("Approval date * must not be greater than current system date *");
         }
-        
         
         [Theory]
         [InlineData(15, 00, 13, 00)]
@@ -166,7 +163,7 @@ namespace Reservation.Domain.Tests.ReservationRequests
             // Assert
             result.ShouldSucceed();
             
-            var reservationRequestRejection = result.Value!;
+            ReservationRequestRejection reservationRequestRejection = result.Value!;
 
             var domainEvent = reservationRequestRejection.ShouldHavePublishedDomainEvent<ReservationRequestIsRejected>();
             
@@ -186,7 +183,6 @@ namespace Reservation.Domain.Tests.ReservationRequests
                 .Should()
                 .Be(reservationRequest.Id);
         }
-
         
         [Theory]
         [InlineData(15, 00, 15, 15)]
@@ -251,9 +247,6 @@ namespace Reservation.Domain.Tests.ReservationRequests
             result.ShouldFail();
             result.Errors!.ShouldContainSomethingLike("Rejection date * must not be greater than current system date *");
         }
-
-        
-
         
         // TODO: Extract to builder pattern
         private static async Task<ReservationRequest> RequestReservation(
@@ -265,7 +258,10 @@ namespace Reservation.Domain.Tests.ReservationRequests
                 Address = "restaurant address",
                 StartTime = (10, 00),
                 FinishTime = (20, 00),
-                TablesWithNumberOfSeats = new byte[] {6, 8, 10}
+                TablesInfo = new (string tableId, byte numberOfSeats)[]
+                {
+                    ("TBL-1", 6),("TBL-2", 8), ("TBL-3", 10)
+                }
             }.BuildAsync();
 
 

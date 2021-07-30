@@ -21,7 +21,7 @@ namespace Reservation.Domain.Restaurants.DomainRules
         
         public async Task<Result> CheckAsync()
         {
-            var isRestaurantUnique = await _checker.IsUniqueAsync(_restaurantName, _restaurantAddress.Value);
+            var isRestaurantUnique = await _checker.IsUniqueAsync(_restaurantName, _restaurantAddress);
 
             return isRestaurantUnique 
                 ? Result.Success() 

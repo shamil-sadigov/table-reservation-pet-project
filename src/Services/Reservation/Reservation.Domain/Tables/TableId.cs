@@ -1,18 +1,28 @@
 ﻿#region
 
-using System;
-using System.Collections.Generic;
 using BuildingBlocks.Domain;
+using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.ValueObjects;
+using BuildingBlocks.Helpers;
 
 #endregion
 
 namespace Reservation.Domain.Tables
 {
-    public sealed class TableId : GuidIdentity
+    public sealed class TableId : SingleValueObject<string>
     {
-        public TableId(Guid id):base(id)
+        public TableId(string id):base(id)
         {
+        }
+
+        public static Result<TableId> TryCreate(string id)
+        {
+            if (id.IsNullOrWhiteSpace())
+            {
+                return new Error("id should not be null");
+            }
+
+            return new TableId(id);
         }
     }
 }

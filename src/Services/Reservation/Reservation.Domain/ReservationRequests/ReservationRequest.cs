@@ -3,7 +3,6 @@
 using System;
 using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
-using BuildingBlocks.Domain.DomainRules.SyncVersion;
 using Reservation.Domain.ReservationRequests.DomainEvents;
 using Reservation.Domain.ReservationRequests.DomainRules;
 using Reservation.Domain.ReservationRequests.ReservationRequestStates;

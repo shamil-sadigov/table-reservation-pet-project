@@ -23,6 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\BuildingBlocks\BuildingBlocks.Domain.Tests\BuildingBlocks.Domain.Tests.csproj" />
+    <ProjectReference Include="..\..\..\BuildingBlocks\BuildingBlocks.Tests.Shared\BuildingBlocks.Tests.Shared.csproj" />
     <ProjectReference Include="..\Reservation.Domain\Reservation.Domain.csproj" />
   </ItemGroup>
 

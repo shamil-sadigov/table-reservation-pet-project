@@ -27,7 +27,7 @@ namespace Reservation.Domain.ReservationRequests.DomainRules
         {
             if (_approvalDateTime > _visitingDateTime)
             {
-                return new Error($"Cannot approve pending reservation request {_reservationRequestId} " +
+                return new Error($"Cannot approve reservation request {_reservationRequestId} " +
                                  $"which visitingDateTime is expired");
             }
             
