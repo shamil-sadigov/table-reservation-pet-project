@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.ValueObjects;
-using FluentAssertions;
 using Reservation.Domain.Restaurants.DomainRules;
 
 #endregion

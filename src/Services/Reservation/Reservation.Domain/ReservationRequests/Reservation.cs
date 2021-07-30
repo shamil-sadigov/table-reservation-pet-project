@@ -13,17 +13,17 @@ namespace Reservation.Domain.ReservationRequests
 {
     public class Reservation : Entity, IAggregateRoot
     {
-        private  AdministratorId _approvedByAdministratorId;
-        private  DateTime _approvedDateTime;
-        private  ReservationRequestId _reservationRequestId;
+        private readonly AdministratorId _approvedByAdministratorId;
+        private readonly DateTime _approvedDateTime;
+
+        private readonly ReservationRequestId _reservationRequestId;
         // public  ReservationRequest ReservationRequest;
 
 
         private Reservation()
         {
-            
         }
-        
+
         private Reservation(
             ReservationRequestId reservationRequestId,
             AdministratorId approvedByAdministratorId,
@@ -53,9 +53,7 @@ namespace Reservation.Domain.ReservationRequests
         {
             if (ContainsNullValues(new {reservationRequestId, approvedByAdministratorId, systemTime},
                 out var errors))
-            {
                 return errors;
-            }
 
             var rule = new ApprovalDateTimeMustNotBeFutureDateRule(approvedDateTime, systemTime);
 

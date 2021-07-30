@@ -13,9 +13,9 @@ namespace Reservation.Domain.ReservationRequests.ReservationRequestStates
     public abstract partial class ReservationRequestState : SmartEnum<ReservationRequestState>
     {
         public static readonly ReservationRequestState Pending = new PendingReservationRequestState();
-        public  static readonly ReservationRequestState Approved = new ApprovedReservationRequestState();
-        public  static readonly ReservationRequestState Rejected = new RejectedReservationRequestState();
-        
+        public static readonly ReservationRequestState Approved = new ApprovedReservationRequestState();
+        public static readonly ReservationRequestState Rejected = new RejectedReservationRequestState();
+
         private ReservationRequestState(string name, int value) : base(name, value)
         {
         }
@@ -27,7 +27,7 @@ namespace Reservation.Domain.ReservationRequests.ReservationRequestStates
 
             return new Error($"Cannot switch from '{Name}' state to '{nextState.Name}' state");
         }
-        
+
         // TODO: make protected
         public abstract bool CanSwitchTo(ReservationRequestState nextState);
     }

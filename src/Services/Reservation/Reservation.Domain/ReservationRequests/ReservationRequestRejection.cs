@@ -13,11 +13,11 @@ namespace Reservation.Domain.ReservationRequests
 {
     public class ReservationRequestRejection : Entity, IAggregateRoot
     {
+        private readonly string _reason;
         private readonly AdministratorId _rejectedByAdministratorId;
         private readonly DateTime _rejectionDateTime;
-        private readonly string _reason;
         private readonly ReservationRequestId _reservationRequestId;
-        
+
         private ReservationRequestRejection(
             ReservationRequestId reservationRequestId,
             AdministratorId rejectedByAdministratorId,
@@ -50,9 +50,7 @@ namespace Reservation.Domain.ReservationRequests
         {
             if (ContainsNullValues(new {reservationRequestId, approvedByAdministratorId, systemTime, reason},
                 out var errors))
-            {
                 return errors;
-            }
 
             var rule = new RejectionDateTimeMustNotBeFutureDateRule(approvedDateTime, systemTime);
 

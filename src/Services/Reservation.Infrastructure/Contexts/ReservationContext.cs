@@ -1,10 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿#region
+
+using Microsoft.EntityFrameworkCore;
 using Reservation.Domain.ReservationRequests;
 using Reservation.Domain.Restaurants;
 
+#endregion
+
 namespace Reservation.Infrastructure.Databass.Contexts
 {
-    public class ReservationContext:DbContext
+    public class ReservationContext : DbContext
     {
         // Uncomment when application layer is added
         // public ReservationContext(DbContextOptions<ReservationContext> ops)
@@ -13,14 +17,9 @@ namespace Reservation.Infrastructure.Databass.Contexts
         //     
         // }
 
-        public ReservationContext()
-        {
-            
-        }
-        
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<ReservationRequest> ReservationRequests { get; set; }
-        
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // TODO: Extract to settings

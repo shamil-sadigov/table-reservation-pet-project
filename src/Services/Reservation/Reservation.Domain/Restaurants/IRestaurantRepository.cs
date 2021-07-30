@@ -1,6 +1,9 @@
-﻿using System.Threading.Tasks;
-using BuildingBlocks.Domain.DomainRules;
+﻿#region
+
+using System.Threading.Tasks;
 using Reservation.Domain.Restaurants.ValueObjects;
+
+#endregion
 
 namespace Reservation.Domain.Restaurants
 {

@@ -1,11 +1,8 @@
 ﻿#region
 
-using System;
 using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.DomainRules.SyncVersion;
-using Reservation.Domain.Restaurants;
-using Reservation.Domain.Restaurants.DomainEvents;
 using Reservation.Domain.Restaurants.ValueObjects;
 using Reservation.Domain.Tables.DomainEvents;
 using Reservation.Domain.Tables.DomainRules;
@@ -17,8 +14,8 @@ namespace Reservation.Domain.Tables
 {
     public sealed class Table : Entity
     {
-        private RestaurantId _restaurantId;
         private readonly TableState _state;
+        private RestaurantId _restaurantId;
 
         // for EF
         private Table()
@@ -43,7 +40,7 @@ namespace Reservation.Domain.Tables
 
         internal bool IsAvailable => _state == TableState.Available;
 
-        internal static Result<Table> TryCreate(TableId tableId,RestaurantId restaurantId, NumberOfSeats numberOfSeats)
+        internal static Result<Table> TryCreate(TableId tableId, RestaurantId restaurantId, NumberOfSeats numberOfSeats)
         {
             if (ContainsNullValues(new {restaurantId, numberOfSeats}, out var errors))
                 return errors;
@@ -52,7 +49,7 @@ namespace Reservation.Domain.Tables
         }
 
         internal bool HasAtLeast(NumberOfSeats numberOfSeats) => NumberOfSeats >= numberOfSeats;
-        
+
         internal Result CanBeReserved(NumberOfSeats requestedNumberOfSeats)
         {
             var rule = new OnlyAvailableTableCanBeReservedRule(Id, _state)

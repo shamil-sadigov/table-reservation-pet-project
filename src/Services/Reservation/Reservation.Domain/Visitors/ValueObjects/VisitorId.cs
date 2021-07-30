@@ -11,7 +11,6 @@ namespace Reservation.Domain.Visitors.ValueObjects
     {
         public VisitorId(Guid id) : base(id)
         {
-            
         }
     }
 }

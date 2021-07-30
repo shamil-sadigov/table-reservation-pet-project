@@ -22,7 +22,7 @@ namespace BuildingBlocks.Domain.Tests.DomainRules
         public async Task<Result> CheckAsync()
         {
             await Task.Yield();
-            
+
             return _isSuccessfulRule ? Result.Success() : new Error(_errorMessage);
         }
     }

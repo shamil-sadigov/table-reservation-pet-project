@@ -1,7 +1,6 @@
 #region
 
 using System;
-using System.Collections.Generic;
 using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.ValueObjects;
 using Reservation.Domain.Tables.DomainRules;
@@ -12,13 +11,15 @@ namespace Reservation.Domain.Tables.ValueObjects
 {
     public sealed class NumberOfSeats : SingleValueObject<byte>, IComparable<NumberOfSeats>
     {
-        private NumberOfSeats(byte value):base(value){}
-        
+        private NumberOfSeats(byte value) : base(value)
+        {
+        }
+
         public int CompareTo(NumberOfSeats? other)
         {
             if (ReferenceEquals(this, other))
                 return 0;
-            
+
             return ReferenceEquals(null, other) ? 1 : Value.CompareTo(other.Value);
         }
 
@@ -28,11 +29,11 @@ namespace Reservation.Domain.Tables.ValueObjects
 
             var result = rule.Check();
 
-            return result.Succeeded 
-                ? new NumberOfSeats(numberOfSeats) 
+            return result.Succeeded
+                ? new NumberOfSeats(numberOfSeats)
                 : result.WithoutValue<NumberOfSeats>();
         }
-        
+
         #region Equality operators
 
         public static bool operator >(NumberOfSeats first, NumberOfSeats second)

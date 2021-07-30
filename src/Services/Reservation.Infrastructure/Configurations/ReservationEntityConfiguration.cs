@@ -20,11 +20,11 @@ namespace Reservation.Infrastructure.Databass.Configurations
 
             builder.Property(x => x.Id)
                 .HasConversion(x => x.Value, guid => new ReservationId(guid));
-            
+
             builder.Property<AdministratorId>("_approvedByAdministratorId")
                 .HasColumnName("ApprovedByAdministratorId")
                 .HasConversion(x => x.Value, guid => new AdministratorId(guid));
-            
+
             builder.Property<DateTime>("_approvedDateTime")
                 .HasColumnName("ApprovedDateTime");
 

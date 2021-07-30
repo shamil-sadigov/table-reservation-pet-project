@@ -3,6 +3,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using BuildingBlocks.Domain.DomainRules.AsyncVersion;
+using BuildingBlocks.Tests.Shared;
 using FluentAssertions;
 using Xunit;
 

@@ -2,6 +2,7 @@
 
 using System.Linq;
 using System.Threading.Tasks;
+using BuildingBlocks.Tests.Shared;
 using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
@@ -12,13 +13,6 @@ namespace BuildingBlocks.Domain.Tests.DomainRules
 {
     public class DomainRuleTests
     {
-        private readonly ITestOutputHelper _testOutputHelper;
-
-        public DomainRuleTests(ITestOutputHelper testOutputHelper)
-        {
-            _testOutputHelper = testOutputHelper;
-        }
-
         [Fact]
         public async Task DomainRule_check_is_successful()
         {

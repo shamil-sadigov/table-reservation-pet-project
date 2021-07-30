@@ -1,17 +1,21 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Collections.Generic;
+
+#endregion
 
 namespace BuildingBlocks.Domain.ValueObjects
 {
-    public class SingleValueObject<TValue>:ValueObject
+    public class SingleValueObject<TValue> : ValueObject
     {
-        public TValue Value { get; }
-
         protected SingleValueObject(TValue value)
         {
             Value = value ?? throw new ArgumentException(nameof(value));
         }
-        
+
+        public TValue Value { get; }
+
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return Value;

@@ -26,8 +26,8 @@ namespace Reservation.Infrastructure.Databass.Configurations
                 .HasConversion(x => x.Value, guid => new TableId(guid));
 
             builder.Property<NumberOfSeats>("NumberOfSeats")
-                .HasConversion(x=> x.Value, value => CreateNumberOfSeatsFromValue(value));
-            
+                .HasConversion(x => x.Value, value => CreateNumberOfSeatsFromValue(value));
+
             builder.HasOne<Restaurant>()
                 .WithMany("_tables")
                 .HasForeignKey("_restaurantId")

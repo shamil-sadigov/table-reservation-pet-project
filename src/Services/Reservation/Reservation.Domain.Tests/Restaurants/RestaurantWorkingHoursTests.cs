@@ -1,11 +1,10 @@
 ﻿#region
 
 using System;
+using BuildingBlocks.Tests.Shared;
 using FluentAssertions;
 using Reservation.Domain.Restaurants.ValueObjects;
-using Reservation.Domain.Tests.Helpers;
 using Xunit;
-using Xunit.Abstractions;
 
 #endregion
 
@@ -111,7 +110,7 @@ namespace Reservation.Domain.Tests.Restaurants
                 .Should()
                 .BeFalse();
         }
-        
+
         private static RestaurantWorkingHours CreateWorkingHours(int fromHours, int toHours)
         {
             var startTime = new TimeSpan(fromHours, 00, 00);

@@ -19,7 +19,7 @@ namespace Reservation.Infrastructure.Databass.Repositories
         {
             var connection = _sqlConnectionFactory.GetOrCreateConnection();
 
-            dynamic? result = await connection.QuerySingleOrDefaultAsync(
+            var result = await connection.QuerySingleOrDefaultAsync(
                 "SELECT [Id] FROM reservation.Restaurants " +
                 "WHERE [Address]=@Address AND [Name]=@Name", new
                 {

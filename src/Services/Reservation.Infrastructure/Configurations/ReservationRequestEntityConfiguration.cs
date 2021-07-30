@@ -27,7 +27,7 @@ namespace Reservation.Infrastructure.Databass.Configurations
 
             builder.HasKey(x => x.Id);
 
-            
+
             builder.HasOne<Table>()
                 .WithMany()
                 .HasForeignKey("_tableId");
@@ -46,7 +46,7 @@ namespace Reservation.Infrastructure.Databass.Configurations
             builder.Property<NumberOfSeats>("_numberOfRequestedSeats")
                 .HasConversion(x => x.Value, value => CreateNumberOfSeatsFromValue(value))
                 .HasColumnName("NumberOfRequestedSeats");
-            
+
             builder.Property<ReservationRequestState>("_state")
                 .HasColumnName("State")
                 .HasConversion(
@@ -55,7 +55,7 @@ namespace Reservation.Infrastructure.Databass.Configurations
 
             builder.Property<DateTime>("_visitingDateTime")
                 .HasColumnName("VisitingDateTime");
-            
+
             builder.Property<DateTime>("_createdDateTime")
                 .HasColumnName("CreatedDateTime");
         }

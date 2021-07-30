@@ -11,8 +11,8 @@ using BuildingBlocks.Domain.ValueObjects;
 namespace Reservation.Domain.ReservationRequests.ValueObjects
 {
     /// <summary>
-    /// Time that is specified during creation of reservation request
-    /// at which customer is going to visit restaurant
+    ///     Time that is specified during creation of reservation request
+    ///     at which customer is going to visit restaurant
     /// </summary>
     public class VisitingTime : ValueObject
     {
@@ -37,7 +37,7 @@ namespace Reservation.Domain.ReservationRequests.ValueObjects
 
             if (minutes > 59)
                 return new Error("minutes cannot not be greater than 59");
-            
+
             return new VisitingTime(hours, minutes);
         }
 
@@ -47,7 +47,7 @@ namespace Reservation.Domain.ReservationRequests.ValueObjects
         }
 
         public override string ToString() => $"{Hours}:{Minutes}";
-        
+
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return Hours;

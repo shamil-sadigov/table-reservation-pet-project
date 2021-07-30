@@ -1,10 +1,14 @@
+#region
+
 using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.DomainRules.SyncVersion;
 
+#endregion
+
 namespace Reservation.Domain.Tables.DomainRules
 {
-    internal class OnlyAvailableTableCanBeReservedRule:IDomainRule
+    internal class OnlyAvailableTableCanBeReservedRule : IDomainRule
     {
         private readonly TableState _tableState;
 
@@ -14,7 +18,7 @@ namespace Reservation.Domain.Tables.DomainRules
         {
             _tableState = tableState;
         }
-        
+
         public Result Check()
         {
             return _tableState != TableState.Available
@@ -22,6 +26,4 @@ namespace Reservation.Domain.Tables.DomainRules
                 : Result.Success();
         }
     }
-    
-    
 }

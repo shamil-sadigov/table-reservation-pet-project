@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BuildingBlocks.Helpers
+﻿namespace BuildingBlocks.Helpers
 {
     public static class StringExtensions
     {

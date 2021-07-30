@@ -1,8 +1,12 @@
-﻿using BuildingBlocks.Domain.DomainRules;
+﻿#region
 
-namespace Reservation.Domain.Tests.Helpers
+using BuildingBlocks.Domain.DomainRules;
+
+#endregion
+
+namespace BuildingBlocks.Domain.Tests
 {
-    public class SystemTimeStub:ISystemTime
+    public class SystemTimeStub : ISystemTime
     {
         public static readonly ISystemTime Instance = new SystemTimeStub();
     }

@@ -19,7 +19,7 @@ namespace Reservation.Infrastructure.Databass.Configurations
 
             builder.Property(x => x.Id)
                 .HasConversion(x => x.Value, guid => new RestaurantId(guid));
-            
+
             builder.Property<string>("_name")
                 .HasColumnName("Name");
 

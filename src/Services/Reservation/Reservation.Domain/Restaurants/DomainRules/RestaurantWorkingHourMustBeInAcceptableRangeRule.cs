@@ -34,10 +34,12 @@ namespace Reservation.Domain.Restaurants.DomainRules
                 errors.Add($"finishTime should not be greater that {RestaurantWorkingHours.MaxTime}");
 
             if (IsInvalidTimeRange(_startTime))
-                errors.Add($"startTime should be in range {RestaurantWorkingHours.MinTime:c}-{RestaurantWorkingHours.MaxTime:c}");
+                errors.Add(
+                    $"startTime should be in range {RestaurantWorkingHours.MinTime:c}-{RestaurantWorkingHours.MaxTime:c}");
 
             if (IsInvalidTimeRange(_finishTime))
-                errors.Add($"finishTime should be in range {RestaurantWorkingHours.MinTime:c}-{RestaurantWorkingHours.MaxTime:c}");
+                errors.Add(
+                    $"finishTime should be in range {RestaurantWorkingHours.MinTime:c}-{RestaurantWorkingHours.MaxTime:c}");
 
             if (_startTime > _finishTime)
                 errors.Add("startTime should not be greater than finishTime");

@@ -1,4 +1,8 @@
-﻿using System;
+﻿#region
+
+using System;
+
+#endregion
 
 namespace BuildingBlocks.Domain.ValueObjects
 {
@@ -6,7 +10,6 @@ namespace BuildingBlocks.Domain.ValueObjects
     {
         public GuidIdentity(Guid value) : base(value)
         {
-            
         }
     }
 }

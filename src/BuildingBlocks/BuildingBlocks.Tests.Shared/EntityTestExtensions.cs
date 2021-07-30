@@ -7,10 +7,15 @@ using FluentAssertions;
 
 #endregion
 
-namespace Reservation.Domain.Tests.Helpers
+namespace BuildingBlocks.Tests.Shared
 {
     public static class EntityTestExtensions
     {
+        public static void ClearAllDomainEvents(this Entity entity)
+        {
+            DomainEventsTestHelper.ClearAllDomainEvents(entity);
+        }
+        
         public static T ShouldHavePublishedDomainEvent<T>(this Entity entity)
             where T : IDomainEvent
         {

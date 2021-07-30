@@ -22,7 +22,7 @@ namespace Reservation.Domain.Restaurants.DomainRules
             _tables = tables;
             _numberOfSeats = numberOfSeats;
         }
-        
+
         public Result Check()
         {
             var availableTableExists = _tables

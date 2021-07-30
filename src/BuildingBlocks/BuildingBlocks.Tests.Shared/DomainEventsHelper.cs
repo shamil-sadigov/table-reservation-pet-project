@@ -1,4 +1,5 @@
-﻿using System;
+﻿#region
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +7,9 @@ using System.Reflection;
 using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainEvents;
 
-namespace Reservation.Domain.Tests.Helpers
+#endregion
+
+namespace BuildingBlocks.Tests.Shared
 {
     public class DomainEventsTestHelper
     {
@@ -14,13 +17,12 @@ namespace Reservation.Domain.Tests.Helpers
         {
             List<IDomainEvent> domainEvents = new();
 
-            if (aggregate.DomainEvents != null)
-            {
-                domainEvents.AddRange(aggregate.DomainEvents);
-            }
+            if (aggregate.DomainEvents != null) domainEvents.AddRange(aggregate.DomainEvents);
 
-            var fields = aggregate.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public)
-                .Concat(aggregate.GetType().BaseType.GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public)).ToArray();
+            var fields = aggregate.GetType()
+                .GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public)
+                .Concat(aggregate.GetType().BaseType
+                    .GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public)).ToArray();
 
             foreach (var field in fields)
             {
@@ -33,18 +35,10 @@ namespace Reservation.Domain.Tests.Helpers
                 }
 
                 if (field.FieldType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(field.FieldType))
-                {
                     if (field.GetValue(aggregate) is IEnumerable enumerable)
-                    {
                         foreach (var en in enumerable)
-                        {
                             if (en is Entity entityItem)
-                            {
                                 domainEvents.AddRange(GetAllDomainEvents(entityItem));
-                            }
-                        }
-                    }
-                }
             }
 
             return domainEvents;
@@ -54,7 +48,10 @@ namespace Reservation.Domain.Tests.Helpers
         {
             aggregate.ClearDomainEvents();
 
-            var fields = aggregate.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public).Concat(aggregate.GetType().BaseType.GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public)).ToArray();
+            var fields = aggregate.GetType()
+                .GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public)
+                .Concat(aggregate.GetType().BaseType
+                    .GetFields(BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Public)).ToArray();
 
             foreach (var field in fields)
             {
@@ -67,18 +64,10 @@ namespace Reservation.Domain.Tests.Helpers
                 }
 
                 if (field.FieldType != typeof(string) && typeof(IEnumerable).IsAssignableFrom(field.FieldType))
-                {
                     if (field.GetValue(aggregate) is IEnumerable enumerable)
-                    {
                         foreach (var en in enumerable)
-                        {
                             if (en is Entity entityItem)
-                            {
                                 ClearAllDomainEvents(entityItem);
-                            }
-                        }
-                    }
-                }
             }
         }
     }

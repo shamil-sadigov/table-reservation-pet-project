@@ -2,6 +2,7 @@
 
 using System;
 using System.Threading.Tasks;
+using BuildingBlocks.Tests.Shared;
 using Moq;
 using MoreLinq;
 using Reservation.Domain.Restaurants;
@@ -34,7 +35,7 @@ namespace Reservation.Domain.Tests.Helpers
 
             checker.Setup(x => x.IsUniqueAsync(Name, address))
                 .ReturnsAsync(true);
-            
+
             var result = await Restaurant.TryCreateAsync(
                 Name,
                 workingHours,
@@ -48,33 +49,20 @@ namespace Reservation.Domain.Tests.Helpers
             TablesInfo?.ForEach(async tableInfo =>
             {
                 (TableId tableId, NumberOfSeats numberOfSeats) = CreateTableIdAndNumberOfSeats(tableInfo);
-                
-                var tableUniquenessCheckerMock = CreateTableUniquenessChecker(restaurant, tableId);
 
-                var addToTableResult = await restaurant.TryAddTableAsync(
+                var addToTableResult = restaurant.TryAddTable(
                     tableId,
-                    numberOfSeats,
-                    tableUniquenessCheckerMock.Object);
-                
+                    numberOfSeats);
+
                 addToTableResult.ThrowIfNotSuccessful();
             });
 
-            restaurant.ClearDomainEvents();
-            
+            restaurant.ClearAllDomainEvents();
+
             return restaurant;
         }
 
-        private static Mock<ITableUniquenessChecker> CreateTableUniquenessChecker(Restaurant restaurant, TableId tableId)
-        {
-            var tableUniquenessCheckerMock = new Mock<ITableUniquenessChecker>();
-
-            tableUniquenessCheckerMock.Setup(x => x.IsUniqueAsync(restaurant.Id, tableId))
-                .ReturnsAsync(true);
-            
-            return tableUniquenessCheckerMock;
-        }
-
-        private static (TableId tableId, NumberOfSeats numberOfSeats) 
+        private static (TableId tableId, NumberOfSeats numberOfSeats)
             CreateTableIdAndNumberOfSeats((string tableId, byte numberOfSeats) table)
         {
             var numberOfSeatsResult = NumberOfSeats.TryCreate(table.numberOfSeats);
@@ -86,7 +74,7 @@ namespace Reservation.Domain.Tests.Helpers
 
             NumberOfSeats numberOfSeats = numberOfSeatsResult.Value!;
             TableId tableId = tableIdResult.Value!;
-            
+
             return (tableId, numberOfSeats);
         }
 

@@ -17,13 +17,13 @@ namespace Reservation.Domain.ReservationRequests
 {
     public class ReservationRequest : Entity, IAggregateRoot
     {
+        private readonly DateTime _createdDateTime;
         private readonly NumberOfSeats _numberOfRequestedSeats;
         private readonly TableId _tableId;
-        private readonly VisitorId _visitorId;
         private readonly DateTime _visitingDateTime;
-        private readonly DateTime _createdDateTime;
+        private readonly VisitorId _visitorId;
         private ReservationRequestState _state;
-        
+
         // for EF
         private ReservationRequest()
         {
@@ -41,10 +41,10 @@ namespace Reservation.Domain.ReservationRequests
             _visitorId = visitorId;
             _numberOfRequestedSeats = numberOfRequestedSeats;
             _visitingDateTime = visitingDateTime;
-            
+
             _createdDateTime = createdDateTime;
             _state = ReservationRequestState.Pending;
-            
+
             AddDomainEvent(new ReservationIsRequestedDomainEvent(
                 Id,
                 _tableId,
@@ -64,19 +64,17 @@ namespace Reservation.Domain.ReservationRequests
         {
             if (ContainsNullValues(new {tableId, numberOfRequestedSeats, visitingTime, visitorId, systemTime},
                 out var errors))
-            {
                 return errors;
-            }
 
             var visitingDateTIme = systemTime.DateNow.Add(visitingTime.AsTimeSpan());
-            
+
             return new ReservationRequest(tableId,
                 numberOfRequestedSeats,
                 visitingDateTIme,
                 visitorId,
                 systemTime.DateTimeNow);
         }
-        
+
         public Result<Reservation> TryApprove(
             AdministratorId administratorId,
             DateTime rejectionDateTime,
@@ -85,21 +83,22 @@ namespace Reservation.Domain.ReservationRequests
             if (ContainsNullValues(new {administratorId, systemTime}, out var errors))
                 return errors;
 
-            var checkResult = new ApprovalDateTimeMustNotPassVisitingDateTimeRule(Id, _visitingDateTime, rejectionDateTime)
+            var checkResult =
+                new ApprovalDateTimeMustNotPassVisitingDateTimeRule(Id, _visitingDateTime, rejectionDateTime)
                     .Check();
-            
+
             var switchResult = _state.TrySwitchTo(ReservationRequestState.Approved);
-            
+
             var combinedResult = checkResult.CombineWith(switchResult);
-            
+
             if (combinedResult.Failed)
                 return switchResult.WithoutValue<Reservation>();
-            
+
             _state = switchResult.Value!;
-            
+
             return Reservation.TryCreate(Id, administratorId, rejectionDateTime, systemTime);
         }
-     
+
         public Result<ReservationRequestRejection> TryReject(
             AdministratorId administratorId,
             DateTime rejectionDateTime,
@@ -108,19 +107,20 @@ namespace Reservation.Domain.ReservationRequests
         {
             if (ContainsNullValues(new {administratorId, systemTime}, out var errors))
                 return errors;
-            
-            var ruleResult = new RejectionDateTimeMustNotPassVisitingDateTimeRule(Id, _visitingDateTime, rejectionDateTime)
-                .Check();
+
+            var ruleResult =
+                new RejectionDateTimeMustNotPassVisitingDateTimeRule(Id, _visitingDateTime, rejectionDateTime)
+                    .Check();
 
             var switchResult = _state.TrySwitchTo(ReservationRequestState.Rejected);
 
             var combinedResult = ruleResult.CombineWith(switchResult);
-            
+
             if (combinedResult.Failed)
                 return switchResult.WithoutValue<ReservationRequestRejection>();
 
             _state = switchResult.Value!;
-            
+
             return ReservationRequestRejection.TryCreate(Id, administratorId, rejectionDateTime, reason, systemTime);
         }
     }

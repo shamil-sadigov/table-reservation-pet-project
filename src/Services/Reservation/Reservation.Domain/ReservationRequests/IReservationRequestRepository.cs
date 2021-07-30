@@ -1,4 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿#region
+
+using System.Threading.Tasks;
+
+#endregion
 
 namespace Reservation.Domain.ReservationRequests
 {
@@ -6,7 +10,5 @@ namespace Reservation.Domain.ReservationRequests
     {
         Task AddAsync(ReservationRequest reservationRequest);
         void Update(ReservationRequest reservationRequest);
-
-        
     }
 }

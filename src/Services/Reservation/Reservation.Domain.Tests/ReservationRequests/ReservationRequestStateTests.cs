@@ -1,8 +1,10 @@
-﻿using FluentAssertions;
-using Reservation.Domain.ReservationRequests;
+﻿#region
+
+using BuildingBlocks.Tests.Shared;
 using Reservation.Domain.ReservationRequests.ReservationRequestStates;
-using Reservation.Domain.Tests.Helpers;
 using Xunit;
+
+#endregion
 
 namespace Reservation.Domain.Tests.ReservationRequests
 {
@@ -16,10 +18,10 @@ namespace Reservation.Domain.Tests.ReservationRequests
             var nextState = ReservationRequestState.FromName(nextStateStr);
 
             var result = ReservationRequestState.Pending.TrySwitchTo(nextState);
-            
+
             result.ShouldSucceed();
         }
-        
+
         [Theory]
         [InlineData("Rejected")]
         [InlineData("Approved")]
@@ -29,10 +31,10 @@ namespace Reservation.Domain.Tests.ReservationRequests
             var nextState = ReservationRequestState.FromName(nextStateStr);
 
             var result = ReservationRequestState.Approved.TrySwitchTo(nextState);
-            
+
             result.ShouldFail();
         }
-        
+
         [Theory]
         [InlineData("Approved")]
         [InlineData("Pending")]
@@ -41,7 +43,7 @@ namespace Reservation.Domain.Tests.ReservationRequests
             var nextState = ReservationRequestState.FromName(nextStateStr);
 
             var result = ReservationRequestState.Rejected.TrySwitchTo(nextState);
-            
+
             result.ShouldFail();
         }
     }

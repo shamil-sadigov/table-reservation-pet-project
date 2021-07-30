@@ -1,19 +1,24 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Threading.Tasks;
 using Reservation.Application;
+using Reservation.Infrastructure.Databass.Contexts;
+
+#endregion
 
 namespace Reservation.Infrastructure.Databass.Repositories
 {
-    public class CommandRepository:ICommandRepository
+    public class CommandRepository : ICommandRepository
     {
         private readonly ApplicationContext _context;
 
-        public CommandRepository(ApplicationContext context) 
+        public CommandRepository(ApplicationContext context)
             => _context = context;
 
         public async Task<Command> GetAsync(Guid id)
         {
-            return  await _context.Commands.FindAsync(id);
+            return await _context.Commands.FindAsync(id);
         }
 
         public async Task SaveAsync(Command command)

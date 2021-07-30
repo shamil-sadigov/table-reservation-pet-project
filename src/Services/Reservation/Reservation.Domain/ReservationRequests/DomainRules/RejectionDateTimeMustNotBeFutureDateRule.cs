@@ -1,11 +1,15 @@
-﻿using System;
+﻿#region
+
+using System;
 using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.DomainRules.SyncVersion;
 
+#endregion
+
 namespace Reservation.Domain.ReservationRequests.DomainRules
 {
-    public class RejectionDateTimeMustNotBeFutureDateRule:IDomainRule
+    public class RejectionDateTimeMustNotBeFutureDateRule : IDomainRule
     {
         private readonly DateTime _rejectionDateTime;
         private readonly ISystemTime _systemTime;
@@ -15,15 +19,13 @@ namespace Reservation.Domain.ReservationRequests.DomainRules
             _rejectionDateTime = rejectionDateTime;
             _systemTime = systemTime;
         }
-        
+
         public Result Check()
         {
             if (_rejectionDateTime > _systemTime.DateTimeNow)
-            {
                 return new Error($"Rejection date '{_rejectionDateTime}' " +
                                  $"must not be greater than current system date '{_systemTime.DateTimeNow}'");
-            }
-            
+
             return Result.Success();
         }
     }

@@ -3,7 +3,6 @@
 using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.DomainRules.SyncVersion;
-using Reservation.Domain.ReservationRequests;
 using Reservation.Domain.ReservationRequests.ValueObjects;
 using Reservation.Domain.Restaurants.ValueObjects;
 
@@ -19,14 +18,14 @@ namespace Reservation.Domain.Restaurants.DomainRules
 
         public RestaurantMustBeOpenAtVisitingTimeRule(
             RestaurantId restaurantId,
-            VisitingTime visitingTime, 
+            VisitingTime visitingTime,
             RestaurantWorkingHours workingHours)
         {
             _restaurantId = restaurantId;
             _visitingTime = visitingTime;
             _workingHours = workingHours;
         }
-        
+
         public Result Check()
         {
             return _workingHours.IsWorkingTime(_visitingTime.AsTimeSpan())

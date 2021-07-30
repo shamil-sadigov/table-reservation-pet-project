@@ -3,8 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MoreLinq;
-using MoreLinq.Extensions;
 
 #endregion
 
@@ -45,21 +43,21 @@ namespace BuildingBlocks.Domain.DomainRules
                 Errors = errors
             };
         }
-        
+
         public Result<T> WithValue<T>(T? response)
         {
             return Succeeded
                 ? Result<T>.Success(response!)
                 : Result<T>.Failure(Errors!);
         }
-        
-        public Result<T> WithoutValue<T>() 
+
+        public Result<T> WithoutValue<T>()
             => Result<T>.Failure(Errors!);
-        
+
         public Result CombineWith(params Result[] otherResults)
         {
             var errors = new List<Error>();
-            
+
             var allResultAreSuccessful = otherResults.Aggregate(seed: true, (isSuccessful, result) =>
             {
                 if (result.Failed)
@@ -70,24 +68,23 @@ namespace BuildingBlocks.Domain.DomainRules
 
             return allResultAreSuccessful ? Success() : Failure(errors);
         }
-        
+
 
         public static implicit operator Result(Error error) => Failure(error);
         public static implicit operator Result(List<Error> errors) => Failure(errors);
-        
     }
 
 
     public class Result<T> : Result
     {
         /// <summary>
-        /// Has value when Succeeded is true
+        ///     Has value when Succeeded is true
         /// </summary>
         public T? Value { get; private init; }
 
         public static Result<T> Success(T response)
         {
-            if (response is null) 
+            if (response is null)
                 throw new ArgumentNullException(nameof(response));
 
             return new()
@@ -112,10 +109,9 @@ namespace BuildingBlocks.Domain.DomainRules
                 Errors = errors
             };
         }
-        
+
         public static implicit operator Result<T>(Error error) => Failure(error);
         public static implicit operator Result<T>(List<Error> errors) => Failure(errors);
         public static implicit operator Result<T>(T value) => Success(value);
-
     }
 }
