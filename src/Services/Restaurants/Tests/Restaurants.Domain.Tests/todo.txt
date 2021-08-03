@@ -1,4 +1,0 @@
-- Add builders for frequently created classes, instead of creating local static methods
-- Add entity ids in Domain Rules error message for debugging
-
-- Add Error 

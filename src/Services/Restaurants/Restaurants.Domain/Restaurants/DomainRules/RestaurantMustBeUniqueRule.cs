@@ -15,9 +15,11 @@ namespace Restaurants.Domain.Restaurants.DomainRules
     {
         private readonly IRestaurantUniquenessChecker _checker;
         private readonly RestaurantAddress _restaurantAddress;
-        private readonly string _restaurantName;
+        private readonly RestaurantName _restaurantName;
 
-        public RestaurantMustBeUniqueRule(IRestaurantUniquenessChecker checker, string restaurantName,
+        public RestaurantMustBeUniqueRule(
+            IRestaurantUniquenessChecker checker, 
+            RestaurantName restaurantName,
             RestaurantAddress restaurantAddress)
         {
             _checker = checker;

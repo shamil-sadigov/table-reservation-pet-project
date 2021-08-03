@@ -9,6 +9,6 @@ namespace Restaurants.Domain.Restaurants.Contracts
 {
     public interface IRestaurantUniquenessChecker
     {
-        Task<bool> IsUniqueAsync(string restaurantName, RestaurantAddress restaurantAddress);
+        Task<bool> IsUniqueAsync(RestaurantName restaurantName, RestaurantAddress restaurantAddress);
     }
 }

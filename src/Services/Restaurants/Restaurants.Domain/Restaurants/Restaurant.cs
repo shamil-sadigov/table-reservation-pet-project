@@ -24,14 +24,14 @@ namespace Restaurants.Domain.Restaurants
         private readonly List<Table> _tables;
         private readonly RestaurantWorkingHours _workingHours;
         private RestaurantAddress _address;
-        private string _name;
+        private RestaurantName _name;
 
         // for EF
         private Restaurant()
         {
         }
 
-        private Restaurant(string name, RestaurantWorkingHours workingHours, RestaurantAddress address)
+        private Restaurant(RestaurantName name, RestaurantWorkingHours workingHours, RestaurantAddress address)
         {
             Id = new RestaurantId(Guid.NewGuid());
             _name = name;
@@ -49,7 +49,7 @@ namespace Restaurants.Domain.Restaurants
         public RestaurantId Id { get; }
 
         public static async Task<Result<Restaurant>> TryCreateAsync(
-            string name,
+            RestaurantName name,
             RestaurantWorkingHours restaurantWorkingHours,
             RestaurantAddress address,
             IRestaurantUniquenessChecker uniquenessChecker)

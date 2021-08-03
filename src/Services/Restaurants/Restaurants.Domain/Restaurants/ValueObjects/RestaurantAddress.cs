@@ -17,8 +17,8 @@ namespace Restaurants.Domain.Restaurants.ValueObjects
 
         public static Result<RestaurantAddress> TryCreate(string address)
         {
-            if (address.IsNullOrWhiteSpace())
-                return new Error("address should contain value");
+            if (address.IsNullOrWhiteSpace() || address.Length<3)
+                return new Error("address should contain value and has at least 3 characters");
 
             return new RestaurantAddress(address);
         }

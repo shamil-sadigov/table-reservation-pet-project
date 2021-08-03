@@ -13,7 +13,7 @@ namespace Restaurants.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<Visitor> builder)
         {
-            builder.ToTable("Visitors", schema: "reservation");
+            builder.ToTable("Visitors", schema: "restaurants");
 
             builder.HasKey(x => x.Id);
 

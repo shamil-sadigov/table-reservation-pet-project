@@ -17,7 +17,7 @@ namespace Restaurants.Domain.Restaurants.ValueObjects
     {
         public static readonly TimeSpan MaxTime = new(23, 59, 59);
         public static readonly TimeSpan MinTime = new(06, 00, 00);
-
+        
         private RestaurantWorkingHours(TimeSpan startTime, TimeSpan finishTime)
         {
             StartTime = startTime;
@@ -26,8 +26,7 @@ namespace Restaurants.Domain.Restaurants.ValueObjects
 
         public TimeSpan StartTime { get; }
         public TimeSpan FinishTime { get; }
-
-
+        
         public static Result<RestaurantWorkingHours> TryCreate(TimeSpan startTime, TimeSpan finishTime)
         {
             var rule = new RestaurantWorkingHourMustBeInAcceptableRangeRule(startTime, finishTime);

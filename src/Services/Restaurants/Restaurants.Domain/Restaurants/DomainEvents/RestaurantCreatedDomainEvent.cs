@@ -9,7 +9,7 @@ namespace Restaurants.Domain.Restaurants.DomainEvents
 {
     public sealed record RestaurantCreatedDomainEvent(
         RestaurantId RestaurantId,
-        string Name,
+        RestaurantName Name,
         RestaurantWorkingHours RestaurantWorkingHours,
         RestaurantAddress RestaurantAddress) : DomainEventBase;
 }

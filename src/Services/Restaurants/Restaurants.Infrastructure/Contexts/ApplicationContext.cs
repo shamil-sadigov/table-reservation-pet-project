@@ -12,11 +12,11 @@ namespace Restaurants.Infrastructure.Contexts
 
     public class ApplicationContext : DbContext
     {
-        public ApplicationContext(DbContextOptions<ApplicationContext> ops)
-            :base(ops)
-        {
-            
-        }
+        // public ApplicationContext(DbContextOptions<ApplicationContext> ops)
+        //     :base(ops)
+        // {
+        //     
+        // }
 
         // Temp ctor. For migrations. Will be deleted
         public ApplicationContext()
@@ -26,7 +26,7 @@ namespace Restaurants.Infrastructure.Contexts
         
         public DbSet<Restaurant> Restaurants { get; set; }
         
-        public DbSet<ApplicationCommand> ApplicationCommands { get; set; }
+        // public DbSet<ApplicationCommand> ApplicationCommands { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

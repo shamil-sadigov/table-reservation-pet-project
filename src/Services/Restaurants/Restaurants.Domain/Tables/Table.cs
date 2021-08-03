@@ -3,6 +3,7 @@
 using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.DomainRules.SyncVersion;
+using Restaurants.Domain.Restaurants;
 using Restaurants.Domain.Restaurants.ValueObjects;
 using Restaurants.Domain.Tables.DomainEvents;
 using Restaurants.Domain.Tables.DomainRules;
@@ -15,7 +16,7 @@ namespace Restaurants.Domain.Tables
     public sealed class Table : Entity
     {
         private readonly TableState _state;
-        private RestaurantId _restaurantId;
+        private readonly RestaurantId _restaurantId;
 
         // for EF
         private Table()
@@ -36,6 +37,7 @@ namespace Restaurants.Domain.Tables
         }
 
         public TableId Id { get; }
+        
         internal NumberOfSeats NumberOfSeats { get; }
 
         internal bool IsAvailable => _state == TableState.Available;
