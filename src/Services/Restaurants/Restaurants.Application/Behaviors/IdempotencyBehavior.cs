@@ -7,7 +7,7 @@ using MediatR;
 
 #endregion
 
-namespace Restaurants.Application.Bahaviors
+namespace Restaurants.Application.Behaviors
 {
     public class IdempotencyBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : ICommand<TResponse>
@@ -24,24 +24,24 @@ namespace Restaurants.Application.Bahaviors
             CancellationToken cancellationToken,
             RequestHandlerDelegate<TResponse> next)
         {
-            var command = await _commandRepository.GetAsync(request.CommandId);
+            ApplicationCommand? command = await _commandRepository.GetAsync(request.CommandId);
 
-            if (command is null)
+            if (command is not null)
             {
-                var newCommand = new ApplicationCommand(
-                    request.CommandId,
-                    typeof(TRequest).FullName,
-                    DateTime.UtcNow);
-
-                await _commandRepository.SaveAsync(newCommand);
-            }
-            else
-            {
+                // TODO: Map this exception to 409 (conflict) on WebAPI
+                
                 throw new DuplicateCommandException(
-                    command,
+                    command, 
                     $"Command {command.Id} has been already handled on {command.OccuredOn}");
+                
             }
+            
+            var newCommand = new ApplicationCommand(
+                request.CommandId,
+                typeof(TRequest).FullName,
+                DateTime.UtcNow);
 
+            await _commandRepository.SaveAsync(newCommand);
             return await next();
         }
     }

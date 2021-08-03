@@ -1,5 +1,6 @@
 ﻿#region
 
+using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Restaurants.Application;
 using Restaurants.Domain.Restaurants;
@@ -9,7 +10,7 @@ using Restaurants.Domain.Restaurants;
 namespace Restaurants.Infrastructure.Contexts
 {
     // TODO: Add outgoing 'IntegrationEvents' set
-
+    
     public class ApplicationContext : DbContext
     {
         // public ApplicationContext(DbContextOptions<ApplicationContext> ops)
@@ -23,10 +24,12 @@ namespace Restaurants.Infrastructure.Contexts
         {
             
         }
+
+        public bool HasTransaction => Database.CurrentTransaction != null;
         
         public DbSet<Restaurant> Restaurants { get; set; }
         
-        // public DbSet<ApplicationCommand> ApplicationCommands { get; set; }
+        public DbSet<ApplicationCommand> ApplicationCommands { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
