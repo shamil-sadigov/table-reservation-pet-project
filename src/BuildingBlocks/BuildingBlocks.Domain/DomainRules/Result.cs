@@ -56,22 +56,26 @@ namespace BuildingBlocks.Domain.DomainRules
 
         public Result CombineWith(params Result[] otherResults)
         {
-            var errors = new List<Error>();
+            // var errors = new List<Error>();
 
-            var allResultAreSuccessful = otherResults.Aggregate(seed: true, (isSuccessful, result) =>
-            {
-                if (result.Failed)
-                    errors.AddRange(result.Errors!);
+            // if (Failed) 
+            //     errors.AddRange(Errors!);
 
-                return isSuccessful && result.Succeeded;
-            });
+            var errors = otherResults
+                .Append(this)
+                .Where(x => x.Failed)
+                .SelectMany(x => x.Errors!)
+                .ToList();
 
-            return allResultAreSuccessful ? Success() : Failure(errors);
+            return errors.Any() ? Failure(errors) : Success();
         }
 
 
         public static implicit operator Result(Error error) => Failure(error);
         public static implicit operator Result(List<Error> errors) => Failure(errors);
+
+        public override string ToString() =>
+            Succeeded  ? "Succeeded" : $"Failed";
     }
 
 
