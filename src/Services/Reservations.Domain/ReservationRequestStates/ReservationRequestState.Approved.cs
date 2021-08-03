@@ -1,8 +1,8 @@
 ﻿#region
 
-#endregion
-
 using Ardalis.SmartEnum;
+
+#endregion
 
 namespace Reservations.Domain.ReservationRequestStates
 {

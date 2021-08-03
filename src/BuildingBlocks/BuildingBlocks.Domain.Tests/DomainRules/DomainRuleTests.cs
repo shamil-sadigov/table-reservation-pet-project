@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using BuildingBlocks.Tests.Shared;
 using FluentAssertions;
 using Xunit;
-using Xunit.Abstractions;
 
 #endregion
 

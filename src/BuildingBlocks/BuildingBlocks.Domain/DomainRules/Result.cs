@@ -75,7 +75,7 @@ namespace BuildingBlocks.Domain.DomainRules
         public static implicit operator Result(List<Error> errors) => Failure(errors);
 
         public override string ToString() =>
-            Succeeded  ? "Succeeded" : $"Failed";
+            Succeeded ? "Succeeded" : "Failed";
     }
 
 

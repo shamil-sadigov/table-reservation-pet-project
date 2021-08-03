@@ -1,9 +1,12 @@
-﻿using System;
+﻿#region
+
 using AutoFixture;
 using BuildingBlocks.Tests.Shared;
 using Reservations.Domain.ReservationRequests.ValueObjects;
 
-namespace Reservation.Domain.Tests
+#endregion
+
+namespace Reservation.Domain.Tests.Helpers
 {
     public class LocalDatesCustomization : ICustomization
     {

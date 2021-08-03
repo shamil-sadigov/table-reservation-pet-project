@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 using BuildingBlocks.Tests.Shared;
 using FluentAssertions;
 using Moq;
-using Restaurants.Domain.ReservationRequests;
 using Restaurants.Domain.Restaurants;
+using Restaurants.Domain.Restaurants.Contracts;
 using Restaurants.Domain.Restaurants.DomainEvents;
 using Restaurants.Domain.Restaurants.ValueObjects;
 using Restaurants.Domain.Tables;
@@ -200,16 +200,16 @@ namespace Restaurants.Domain.Tests.Restaurants
 
             // Assert
             result.ShouldSucceed();
-            
-            var publishedDomainEvent = 
-                restaurant.ShouldHavePublishedDomainEvent<ReservationIsRequestedDomainEvent>();
 
-            publishedDomainEvent.RequestedTableId
+            var publishedDomainEvent =
+                restaurant.ShouldHavePublishedDomainEvent<TableReservationIsRequestedDomainEvent>();
+
+            publishedDomainEvent.TableId
                 .Should().NotBeNull();
 
             publishedDomainEvent.VisitorId
                 .Should().Be(visitorId);
-            
+
             publishedDomainEvent.VisitingDateTime.TimeOfDay
                 .Should().Be(visitingTime.AsTimeSpan());
         }
@@ -246,7 +246,7 @@ namespace Restaurants.Domain.Tests.Restaurants
             // Assert
             result.ShouldFail();
             result.Errors!.ShouldContainSomethingLike("Table * is too big for requested number of seats *");
-            restaurant.ShouldNotHavePublishedDomainEvent<ReservationIsRequestedDomainEvent>();
+            restaurant.ShouldNotHavePublishedDomainEvent<TableReservationIsRequestedDomainEvent>();
         }
 
         [Theory]
@@ -281,7 +281,7 @@ namespace Restaurants.Domain.Tests.Restaurants
             // Assert
             result.ShouldFail();
             result.Errors!.ShouldContainSomethingLike($"Restaurant {restaurant.Id} is not open at {visitTime} time");
-            restaurant.ShouldNotHavePublishedDomainEvent<ReservationIsRequestedDomainEvent>();
+            restaurant.ShouldNotHavePublishedDomainEvent<TableReservationIsRequestedDomainEvent>();
         }
     }
 }

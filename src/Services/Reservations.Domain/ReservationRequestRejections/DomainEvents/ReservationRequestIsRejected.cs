@@ -3,6 +3,7 @@
 using System;
 using BuildingBlocks.Domain.DomainEvents;
 using Reservations.Domain.Administrator;
+using Reservations.Domain.ReservationRequestRejections.ValueObjects;
 using Reservations.Domain.ReservationRequests.ValueObjects;
 
 #endregion

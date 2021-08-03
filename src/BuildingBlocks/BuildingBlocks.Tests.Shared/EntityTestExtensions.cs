@@ -15,7 +15,7 @@ namespace BuildingBlocks.Tests.Shared
         {
             DomainEventsTestHelper.ClearAllDomainEvents(entity);
         }
-        
+
         public static T ShouldHavePublishedDomainEvent<T>(this Entity entity)
             where T : IDomainEvent
         {

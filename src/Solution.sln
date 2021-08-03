@@ -12,25 +12,33 @@ ProjectSection(SolutionItems) = preProject
 	Services\Todo.md = Services\Todo.md
 EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rervation", "Rervation", "{5A28D477-6201-43F7-9AF4-D731AD919960}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Restaurants", "Restaurants", "{5A28D477-6201-43F7-9AF4-D731AD919960}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{FFABC791-D724-4292-B455-827BAB894BD1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Domain.Tests", "BuildingBlocks\BuildingBlocks.Domain.Tests\BuildingBlocks.Domain.Tests.csproj", "{52CD728C-892B-43C5-8332-B71A071BBEE2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reservation.Domain", "Services\Reservation\Reservation.Domain\Reservation.Domain.csproj", "{FED22D0E-5E2E-434C-81BA-C6DDE2A3C371}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurants.Domain", "Services\Reservation\Restaurants.Domain\Restaurants.Domain.csproj", "{FED22D0E-5E2E-434C-81BA-C6DDE2A3C371}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reservation.Domain.Tests", "Services\Reservation\Reservation.Domain.Tests\Reservation.Domain.Tests.csproj", "{0B048F89-C5F2-4CE6-808D-84E0D7719513}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurants.Domain.Tests", "Services\Reservation\Restaurants.Domain.Tests\Restaurants.Domain.Tests.csproj", "{0B048F89-C5F2-4CE6-808D-84E0D7719513}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reservation.Infrastructure", "Services\Reservation.Infrastructure\Reservation.Infrastructure.csproj", "{92977A38-D675-473D-92A4-559793E7388B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurants.Infrastructure", "Services\Restaurants.Infrastructure\Restaurants.Infrastructure.csproj", "{92977A38-D675-473D-92A4-559793E7388B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reservation.Application", "Services\Reservation.Application\Reservation.Application.csproj", "{EE1AA82C-527F-4DB5-ACA0-974B90AB8C9F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurants.Application", "Services\Restaurants.Application\Restaurants.Application.csproj", "{EE1AA82C-527F-4DB5-ACA0-974B90AB8C9F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{5F5E5A58-66A4-4D4A-95FC-152E1140EE3A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Helpers", "BuildingBlocks\BuildingBlocks.Helpers\BuildingBlocks.Helpers.csproj", "{513A50C8-DF2F-4F7C-9405-4ECA71096FCF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.Tests.Shared", "BuildingBlocks\BuildingBlocks.Tests.Shared\BuildingBlocks.Tests.Shared.csproj", "{C1A630E1-C90A-4121-A836-9DEB55193523}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reservation", "Reservation", "{1FD2DA9D-01B5-4EB3-BF4A-C392FD613948}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reservations.Domain", "Services\Reservations.Domain\Reservations.Domain.csproj", "{77C4F346-E871-4AA2-AF5F-CA40AE0ED8C3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{4191EC0C-74F1-46F0-B83B-1509F1A6153C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reservation.Domain.Tests", "Services\Reservation.Domain.Tests\Reservation.Domain.Tests.csproj", "{D02B9A07-0602-48C8-9C03-64000376FDC0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,6 +149,30 @@ Global
 		{C1A630E1-C90A-4121-A836-9DEB55193523}.Release|x64.Build.0 = Release|Any CPU
 		{C1A630E1-C90A-4121-A836-9DEB55193523}.Release|x86.ActiveCfg = Release|Any CPU
 		{C1A630E1-C90A-4121-A836-9DEB55193523}.Release|x86.Build.0 = Release|Any CPU
+		{77C4F346-E871-4AA2-AF5F-CA40AE0ED8C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77C4F346-E871-4AA2-AF5F-CA40AE0ED8C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77C4F346-E871-4AA2-AF5F-CA40AE0ED8C3}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{77C4F346-E871-4AA2-AF5F-CA40AE0ED8C3}.Debug|x64.Build.0 = Debug|Any CPU
+		{77C4F346-E871-4AA2-AF5F-CA40AE0ED8C3}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{77C4F346-E871-4AA2-AF5F-CA40AE0ED8C3}.Debug|x86.Build.0 = Debug|Any CPU
+		{77C4F346-E871-4AA2-AF5F-CA40AE0ED8C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77C4F346-E871-4AA2-AF5F-CA40AE0ED8C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77C4F346-E871-4AA2-AF5F-CA40AE0ED8C3}.Release|x64.ActiveCfg = Release|Any CPU
+		{77C4F346-E871-4AA2-AF5F-CA40AE0ED8C3}.Release|x64.Build.0 = Release|Any CPU
+		{77C4F346-E871-4AA2-AF5F-CA40AE0ED8C3}.Release|x86.ActiveCfg = Release|Any CPU
+		{77C4F346-E871-4AA2-AF5F-CA40AE0ED8C3}.Release|x86.Build.0 = Release|Any CPU
+		{D02B9A07-0602-48C8-9C03-64000376FDC0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D02B9A07-0602-48C8-9C03-64000376FDC0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D02B9A07-0602-48C8-9C03-64000376FDC0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{D02B9A07-0602-48C8-9C03-64000376FDC0}.Debug|x64.Build.0 = Debug|Any CPU
+		{D02B9A07-0602-48C8-9C03-64000376FDC0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D02B9A07-0602-48C8-9C03-64000376FDC0}.Debug|x86.Build.0 = Debug|Any CPU
+		{D02B9A07-0602-48C8-9C03-64000376FDC0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D02B9A07-0602-48C8-9C03-64000376FDC0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D02B9A07-0602-48C8-9C03-64000376FDC0}.Release|x64.ActiveCfg = Release|Any CPU
+		{D02B9A07-0602-48C8-9C03-64000376FDC0}.Release|x64.Build.0 = Release|Any CPU
+		{D02B9A07-0602-48C8-9C03-64000376FDC0}.Release|x86.ActiveCfg = Release|Any CPU
+		{D02B9A07-0602-48C8-9C03-64000376FDC0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5A28D477-6201-43F7-9AF4-D731AD919960} = {1F4695DD-5B79-4B62-B035-112D72DF35D3}
@@ -154,5 +186,9 @@ Global
 		{0B048F89-C5F2-4CE6-808D-84E0D7719513} = {5F5E5A58-66A4-4D4A-95FC-152E1140EE3A}
 		{513A50C8-DF2F-4F7C-9405-4ECA71096FCF} = {37D5F37B-60BB-41FA-917E-6FE57781DC76}
 		{C1A630E1-C90A-4121-A836-9DEB55193523} = {37D5F37B-60BB-41FA-917E-6FE57781DC76}
+		{1FD2DA9D-01B5-4EB3-BF4A-C392FD613948} = {1F4695DD-5B79-4B62-B035-112D72DF35D3}
+		{77C4F346-E871-4AA2-AF5F-CA40AE0ED8C3} = {1FD2DA9D-01B5-4EB3-BF4A-C392FD613948}
+		{4191EC0C-74F1-46F0-B83B-1509F1A6153C} = {1FD2DA9D-01B5-4EB3-BF4A-C392FD613948}
+		{D02B9A07-0602-48C8-9C03-64000376FDC0} = {4191EC0C-74F1-46F0-B83B-1509F1A6153C}
 	EndGlobalSection
 EndGlobal

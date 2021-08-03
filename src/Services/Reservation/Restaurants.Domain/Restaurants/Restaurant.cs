@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.DomainRules.SyncVersion;
-using Restaurants.Domain.ReservationRequests;
+using Restaurants.Domain.Restaurants.Contracts;
 using Restaurants.Domain.Restaurants.DomainEvents;
 using Restaurants.Domain.Restaurants.DomainRules;
 using Restaurants.Domain.Restaurants.ValueObjects;
@@ -61,8 +61,8 @@ namespace Restaurants.Domain.Restaurants
 
             var result = await rule.CheckAsync();
 
-            return result.Failed 
-                ? result.WithoutValue<Restaurant>() 
+            return result.Failed
+                ? result.WithoutValue<Restaurant>()
                 : new Restaurant(name, restaurantWorkingHours, address);
         }
 
@@ -109,15 +109,15 @@ namespace Restaurants.Domain.Restaurants
 
             if (!availableTable.CanBeReserved(numberOfSeats))
                 return result;
-            
+
             var visitingDateTIme = SystemClock.DateNow + visitingTime.AsTimeSpan();
-            
-            AddDomainEvent(new ReservationIsRequestedDomainEvent(
+
+            AddDomainEvent(new TableReservationIsRequestedDomainEvent(
                 Id,
                 availableTable.Id,
                 visitingDateTIme,
                 visitorId));
-            
+
             return Result.Success();
         }
 

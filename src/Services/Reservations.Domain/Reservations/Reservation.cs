@@ -15,11 +15,11 @@ namespace Reservations.Domain.Reservations
     public class Reservation : Entity, IAggregateRoot
     {
         private readonly AdministratorId _approvedByAdministratorId;
+        private readonly DateTime _approvedDateTime;
+        private readonly ReservationRequestId _reservationRequestId;
         private readonly RestaurantId _restaurantId;
         private readonly TableId _tableId;
         private readonly VisitorId _visitorId;
-        private readonly DateTime _approvedDateTime;
-        private readonly ReservationRequestId _reservationRequestId;
 
         // For EF
         private Reservation()
@@ -40,7 +40,7 @@ namespace Reservations.Domain.Reservations
             _restaurantId = restaurantId;
             _tableId = tableId;
             _visitorId = visitorId;
-            
+
             _approvedDateTime = SystemClock.DateTimeNow;
 
             // TODO: raise all props

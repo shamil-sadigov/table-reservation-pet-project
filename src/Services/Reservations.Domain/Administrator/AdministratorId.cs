@@ -13,8 +13,4 @@ namespace Reservations.Domain.Administrator
         {
         }
     }
-    
-    
-    
-    
 }

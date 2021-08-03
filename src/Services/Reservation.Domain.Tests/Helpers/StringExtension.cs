@@ -1,6 +1,10 @@
-﻿using System;
+﻿#region
 
-namespace Reservation.Domain.Tests
+using System;
+
+#endregion
+
+namespace Reservation.Domain.Tests.Helpers
 {
     public static class StringExtension
     {

@@ -5,8 +5,7 @@ using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
 using Reservations.Domain.Administrator;
 using Reservations.Domain.ReservationRequestRejections.DomainEvents;
-using Reservations.Domain.ReservationRequestRejections.DomainRules;
-using Reservations.Domain.ReservationRequests.DomainRules;
+using Reservations.Domain.ReservationRequestRejections.ValueObjects;
 using Reservations.Domain.ReservationRequests.ValueObjects;
 
 #endregion
@@ -28,7 +27,7 @@ namespace Reservations.Domain.ReservationRequestRejections
             _reservationRequestId = reservationRequestId;
             _rejectedByAdministratorId = rejectedByAdministratorId;
             _reason = reason;
-            
+
             _rejectionDateTime = SystemClock.DateTimeNow;
             Id = new ReservationRequestRejectionId(Guid.NewGuid());
 

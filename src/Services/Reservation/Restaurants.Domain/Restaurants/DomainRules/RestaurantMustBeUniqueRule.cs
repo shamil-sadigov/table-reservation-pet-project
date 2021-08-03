@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.DomainRules.AsyncVersion;
+using Restaurants.Domain.Restaurants.Contracts;
 using Restaurants.Domain.Restaurants.ValueObjects;
 
 #endregion

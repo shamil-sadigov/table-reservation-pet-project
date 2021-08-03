@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
 using Reservations.Domain.Administrator;
@@ -9,24 +11,27 @@ using Reservations.Domain.ReservationRequests.ValueObjects;
 using Reservations.Domain.ReservationRequestStates;
 using Reservations.Domain.Reservations;
 
+#endregion
+
 namespace Reservations.Domain.ReservationRequests
 {
     public class ReservationRequest : Entity, IAggregateRoot
     {
         /// <summary>
-        /// When Reservation is created
+        ///     When Reservation is created
         /// </summary>
         private readonly DateTime _createdDateTime;
-        
-        /// <summary>
-        /// When reservation is approved or rejected
-        /// </summary>
-        private DateTime? _closedDateTime;
-        private readonly DateTime _visitingDateTime;
 
         private readonly RestaurantId _restaurantId;
         private readonly TableId _tableId;
+        private readonly DateTime _visitingDateTime;
         private readonly VisitorId _visitorId;
+
+        /// <summary>
+        ///     When reservation is approved or rejected
+        /// </summary>
+        private DateTime? _closedDateTime;
+
         private ReservationRequestState _state;
 
         // for EF
@@ -44,10 +49,10 @@ namespace Reservations.Domain.ReservationRequests
             _restaurantId = restaurantId;
             _tableId = tableId;
             _visitorId = visitorId;
-            
+
             _visitingDateTime = visitingDateTime;
             _createdDateTime = SystemClock.DateTimeNow;
-            
+
             _state = ReservationRequestState.Pending;
 
             AddDomainEvent(new ReservationRequestIsCreatedDomainEvent(
@@ -70,7 +75,7 @@ namespace Reservations.Domain.ReservationRequests
             if (ContainsNullValues(new {restaurantId, tableId, visitorId},
                 out var errors))
                 return errors;
-            
+
             return new ReservationRequest(
                 restaurantId,
                 tableId,
@@ -80,16 +85,16 @@ namespace Reservations.Domain.ReservationRequests
 
         public Result<Reservation> TryApprove(AdministratorId administratorId)
         {
-            if (ContainsNullValues(new {administratorId }, out var errors))
+            if (ContainsNullValues(new {administratorId}, out var errors))
                 return errors;
-            
+
             var ruleResult = new VisitingTimeMustNotPassRule(_visitingDateTime)
                 .Check();
-            
+
             var switchResult = _state.TrySwitchTo(ReservationRequestState.Approved);
-            
+
             var combinedResult = ruleResult.CombineWith(switchResult);
-            
+
             if (combinedResult.Failed)
                 return combinedResult.WithoutValue<Reservation>();
 
@@ -106,7 +111,7 @@ namespace Reservations.Domain.ReservationRequests
                 return errors;
 
             var ruleResult = new VisitingTimeMustNotPassRule(_visitingDateTime)
-                    .Check();
+                .Check();
 
             var switchResult = _state.TrySwitchTo(ReservationRequestState.Rejected);
 
@@ -117,7 +122,7 @@ namespace Reservations.Domain.ReservationRequests
 
             _state = switchResult.Value!;
             _closedDateTime = SystemClock.DateTimeNow;
-            
+
             return ReservationRequestRejection.Create(Id, administratorId, reason);
         }
     }

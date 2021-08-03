@@ -6,6 +6,7 @@ using BuildingBlocks.Tests.Shared;
 using Moq;
 using MoreLinq;
 using Restaurants.Domain.Restaurants;
+using Restaurants.Domain.Restaurants.Contracts;
 using Restaurants.Domain.Restaurants.ValueObjects;
 using Restaurants.Domain.Tables;
 using Restaurants.Domain.Tables.ValueObjects;
