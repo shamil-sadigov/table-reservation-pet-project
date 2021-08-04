@@ -4,11 +4,13 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Restaurants.Application.Commands;
 
 #endregion
 
 namespace Restaurants.Application.Behaviors
 {
+    // TODO: Add logging
     public class IdempotencyBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : ICommand<TResponse>
     {
@@ -24,24 +26,24 @@ namespace Restaurants.Application.Behaviors
             CancellationToken cancellationToken,
             RequestHandlerDelegate<TResponse> next)
         {
-            ApplicationCommand? command = await _commandRepository.GetAsync(request.CommandId);
+            Command command = await _commandRepository.GetAsync(request.CorrelationId);
 
             if (command is not null)
             {
-                // TODO: Map this exception to 409 (conflict) on WebAPI
-                
-                throw new DuplicateCommandException(
-                    command, 
-                    $"Command {command.Id} has been already handled on {command.OccuredOn}");
-                
+                // TODO: Map this exception to 409 (conflict) on Web layer
+                throw new DuplicateCommandException<TRequest>(
+                    request, 
+                    $"Command {command.CommandId} has been already handled on {command.CreationDate}" +
+                    $"with correlation id {command.CorrelationId}");
             }
             
-            var newCommand = new ApplicationCommand(
+            var newCommand = new Command(
                 request.CommandId,
-                typeof(TRequest).FullName,
-                DateTime.UtcNow);
+                request.CorrelationId,
+                request.CausationId,
+                typeof(TRequest).FullName);
 
-            await _commandRepository.SaveAsync(newCommand);
+            await _commandRepository.AddAsync(newCommand);
             return await next();
         }
     }

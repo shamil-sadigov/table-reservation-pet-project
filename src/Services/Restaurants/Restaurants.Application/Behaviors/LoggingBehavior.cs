@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Restaurants.Application.Commands;
 
 namespace Restaurants.Application.Behaviors
 {

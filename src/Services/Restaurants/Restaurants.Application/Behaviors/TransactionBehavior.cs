@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Restaurants.Application.Commands;
 
 namespace Restaurants.Application.Behaviors
 {
@@ -17,9 +18,7 @@ namespace Restaurants.Application.Behaviors
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken,
             RequestHandlerDelegate<TResponse> next)
         {
-            // Add transaction here
-            
-            return await _resilientTransaction.ExecuteAsync(async () =>  await next());
+            return await _resilientTransaction.ExecuteAsync(async () => await next());
         }
     }
 }
