@@ -2,65 +2,31 @@
 
 using System;
 using BuildingBlocks.Domain;
-using BuildingBlocks.Domain.DomainEvents;
 using BuildingBlocks.Domain.DomainRules;
 using Reservations.Domain.Administrator;
 using Reservations.Domain.ReservationRequestRejections;
 using Reservations.Domain.ReservationRequests.DomainEvents;
 using Reservations.Domain.ReservationRequests.DomainRules;
 using Reservations.Domain.ReservationRequests.ValueObjects;
-using Reservations.Domain.ReservationRequestStates;
+using Reservations.Domain.ReservationRequests.ValueObjects.ReservationRequestStates;
 using Reservations.Domain.Reservations;
 
 #endregion
 
 namespace Reservations.Domain.ReservationRequests
 {
-    
-    public sealed record VisitorCreatedDomainEvent(
-        VisitorId VisitorId) : DomainEventBase;
-    
-    /// <summary>
-    ///     Person who creates reservation request to visit a restaurant.
-    /// </summary>
-    public class Visitor : Entity, IAggregateRoot
-    {
-        // Additional data will be added
-
-        // For EF
-        private Visitor()
-        {
-        }
-
-        private Visitor(VisitorId visitorId)
-        {
-            Id = visitorId;
-            AddDomainEvent(new VisitorCreatedDomainEvent(Id));
-        }
-
-        public VisitorId Id { get; }
-
-        public static Result<Visitor> TryCreate(VisitorId visitorId)
-        {
-            if (ContainsNullValues(new {visitorId}, out var errors))
-                return errors;
-
-            return new Visitor(visitorId);
-        }
-    }
-    
     public class ReservationRequest : Entity, IAggregateRoot
     {
         /// <summary>
         ///     When Reservation is created
         /// </summary>
-        private readonly DateTime _createdDateTime;
 
         private readonly RestaurantId _restaurantId;
         private readonly TableId _tableId;
-        private readonly DateTime _visitingDateTime;
         private readonly VisitorId _visitorId;
 
+        private readonly DateTime _createdDateTime;
+        private readonly DateTime _visitingDateTime;
         /// <summary>
         ///     When reservation is approved or rejected
         /// </summary>

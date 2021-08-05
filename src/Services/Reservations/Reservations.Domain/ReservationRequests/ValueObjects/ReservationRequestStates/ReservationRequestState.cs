@@ -8,7 +8,7 @@ using BuildingBlocks.Domain.DomainRules;
 
 // TODO: Add canceled by visitor state
 
-namespace Reservations.Domain.ReservationRequestStates
+namespace Reservations.Domain.ReservationRequests.ValueObjects.ReservationRequestStates
 {
     public abstract partial class ReservationRequestState : SmartEnum<ReservationRequestState>
     {

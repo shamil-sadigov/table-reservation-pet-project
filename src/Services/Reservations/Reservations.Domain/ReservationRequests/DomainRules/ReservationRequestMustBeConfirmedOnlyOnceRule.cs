@@ -4,7 +4,7 @@ using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.DomainRules.SyncVersion;
 using Reservations.Domain.ReservationRequests.ValueObjects;
-using Reservations.Domain.ReservationRequestStates;
+using Reservations.Domain.ReservationRequests.ValueObjects.ReservationRequestStates;
 
 #endregion
 
