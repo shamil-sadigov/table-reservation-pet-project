@@ -1,94 +1,65 @@
 ﻿#region
 
 using System;
-using Ardalis.SmartEnum;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Restaurants.Domain.Tables;
-using Restaurants.Domain.Tables.ValueObjects;
-using Restaurants.Domain.Visitors;
+using Reservations.Domain.ReservationRequests;
+using Reservations.Domain.ReservationRequests.ValueObjects;
+using Reservations.Domain.ReservationRequests.ValueObjects.ReservationRequestStates;
+using Reservations.Domain.Visitors;
 
 #endregion
 
-namespace Restaurants.Infrastructure.Configurations
+namespace Reservations.Infrastructure.Configurations
 {
     public class ReservationRequestEntityConfiguration : IEntityTypeConfiguration<ReservationRequest>
     {
         public void Configure(EntityTypeBuilder<ReservationRequest> builder)
         {
             builder.ToTable("ReservationRequests", schema: "reservation");
-
-
-            builder.Property(x => x.Id)
-                .HasConversion(x => x.Value, guid => new ReservationRequestId(guid));
-
+            
             builder.HasKey(x => x.Id);
 
-
-            builder.HasOne<Table>()
-                .WithMany()
-                .HasForeignKey("_tableId");
-
-            builder.HasOne<Visitor>()
-                .WithMany()
-                .HasForeignKey("_visitorId")
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Property("_tableId")
-                .HasColumnName("TableId");
-
-            builder.Property("_visitorId")
-                .HasColumnName("VisitorId");
-
-            builder.Property<NumberOfSeats>("_numberOfRequestedSeats")
-                .HasConversion(x => x.Value, value => CreateNumberOfSeatsFromValue(value))
-                .HasColumnName("NumberOfRequestedSeats");
+            builder.Property(x => x.Id)
+                .WithConversion();
 
             builder.Property<ReservationRequestState>("_state")
                 .HasColumnName("State")
                 .HasConversion(
                     x => x.Name,
-                    nameStr => ReservationRequestFromName(nameStr));
+                    nameStr => ConvertToReservationRequestState(nameStr))
+                .IsConcurrencyToken();
+            
+            builder.Property<TableId>("_tableId")
+                .HasColumnName("TableId")
+                .WithConversion();
+            
+            builder.Property<RestaurantId>("_restaurantId")
+                .HasColumnName("RestaurantId")
+                .WithConversion();
 
-            builder.Property<DateTime>("_visitingDateTime")
-                .HasColumnName("VisitingDateTime");
-
+            builder.Property<VisitorId>("_visitorId")
+                .HasColumnName("VisitorId");
+            
             builder.Property<DateTime>("_createdDateTime")
-                .HasColumnName("CreatedDateTime");
+                .HasColumnName("CreatedDateTime")
+                .WithUtcConversion();
+            
+            builder.Property<DateTime?>("_closedDateTime")
+                .HasColumnName("ClosedDateTime")
+                .WithUtcConversion();
+            
+            builder.Property<DateTime>("_visitingDateTime")
+                .HasColumnName("VisitingDateTime")
+                .WithUtcConversion();;
+            
+            builder.HasOne<Visitor>()
+                .WithMany()
+                .HasForeignKey("_visitorId")
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
-        private static ReservationRequestState ReservationRequestFromName(string name)
-        {
-            try
-            {
-                return ReservationRequestState.FromName(name);
-            }
-            catch (SmartEnumNotFoundException catchException)
-            {
-                var exception = new DataCorruptionException(
-                    "Retrieved ReservationRequestState name is corrupted. " +
-                    "Unable to create ReservationRequestState", catchException);
-
-                exception.Data.Add("ReservationRequestStateStr", name);
-
-                throw exception;
-            }
-        }
-
-        private static NumberOfSeats CreateNumberOfSeatsFromValue(byte value)
-        {
-            var result = NumberOfSeats.TryCreate(value);
-
-            if (result.Succeeded)
-                return result.Value!;
-
-            var exception = new DataCorruptionException(
-                "Retrieved byte value is corrupted. " +
-                "Unable to create NumberOfSeats");
-
-            exception.Data.Add("value", value);
-
-            throw exception;
-        }
+        private static ReservationRequestState ConvertToReservationRequestState(string nameStr) 
+            => ReservationRequestState.FromName(nameStr);
     }
 }

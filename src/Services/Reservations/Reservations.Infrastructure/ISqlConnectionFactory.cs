@@ -5,9 +5,9 @@ using System.Data;
 
 #endregion
 
-namespace Restaurants.Infrastructure
+namespace Reservations.Infrastructure
 {
-    public interface ISqlConnectionFactory : IDisposable
+    public interface ISqlConnectionFactory : IAsyncDisposable, IDisposable
     {
         IDbConnection GetOrCreateConnection();
     }

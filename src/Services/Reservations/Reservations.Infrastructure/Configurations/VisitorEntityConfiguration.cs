@@ -1,22 +1,16 @@
-﻿#region
-
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Restaurants.Domain.Visitors;
-using Restaurants.Domain.Visitors.ValueObjects;
+using Reservations.Domain.ReservationRequests.ValueObjects;
+using Reservations.Domain.Visitors;
 
-#endregion
-
-namespace Restaurants.Infrastructure.Configurations
+namespace Reservations.Infrastructure.Configurations
 {
     public class VisitorEntityConfiguration : IEntityTypeConfiguration<Visitor>
     {
         public void Configure(EntityTypeBuilder<Visitor> builder)
         {
-            builder.ToTable("Visitors", schema: "reservation");
-
             builder.HasKey(x => x.Id);
-
+            
             builder.Property(x => x.Id)
                 .HasConversion(x => x.Value, guid => new VisitorId(guid));
         }

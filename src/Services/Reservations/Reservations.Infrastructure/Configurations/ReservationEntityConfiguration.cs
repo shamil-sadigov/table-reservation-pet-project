@@ -1,39 +1,57 @@
 ﻿#region
 
+
+#endregion
+
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Reservations.Domain.Administrator;
+using Reservations.Domain.ReservationRequests;
+using Reservations.Domain.ReservationRequests.ValueObjects;
+using Reservations.Domain.Reservations;
+using Reservations.Domain.Visitors;
 
-#endregion
-
-namespace Restaurants.Infrastructure.Configurations
+namespace Reservations.Infrastructure.Configurations
 {
-    public class ReservationEntityTypeConfiguration : IEntityTypeConfiguration<Domain.ReservationRequests.Reservation>
+    public class ReservationEntityTypeConfiguration : IEntityTypeConfiguration<Reservation>
     {
-        public void Configure(EntityTypeBuilder<Domain.ReservationRequests.Reservation> builder)
+        public void Configure(EntityTypeBuilder<Reservation> builder)
         {
             builder.ToTable("Reservations", schema: "reservation");
 
             builder.HasKey(x => x.Id);
-
+            
             builder.Property(x => x.Id)
-                .HasConversion(x => x.Value, guid => new ReservationId(guid));
+                .WithConversion();
 
             builder.Property<AdministratorId>("_approvedByAdministratorId")
                 .HasColumnName("ApprovedByAdministratorId")
-                .HasConversion(x => x.Value, guid => new AdministratorId(guid));
-
+                .WithConversion();
+            
+            builder.Property<TableId>("_tableId")
+                .HasColumnName("TableId")
+                .WithConversion();
+            
+            builder.Property<VisitorId>("_visitorId")
+                .HasColumnName("VisitorId");
+            
             builder.Property<DateTime>("_approvedDateTime")
-                .HasColumnName("ApprovedDateTime");
+                .HasColumnName("ApprovedDateTime")
+                .WithUtcConversion();
+            
+            builder.Property<ReservationRequestId>("_reservationRequestId")
+                .HasColumnName("ReservationRequestId");
 
             builder.HasOne<ReservationRequest>()
                 .WithOne()
-                .HasForeignKey<Domain.ReservationRequests.Reservation>("_reservationRequestId")
+                .HasForeignKey<Reservation>("_reservationRequestId")
                 .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Property<ReservationRequestId>("_reservationRequestId")
-                .HasColumnName("ReservationRequestId");
+            
+            builder.HasOne<Visitor>()
+                .WithMany()
+                .HasForeignKey("_visitorId")
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

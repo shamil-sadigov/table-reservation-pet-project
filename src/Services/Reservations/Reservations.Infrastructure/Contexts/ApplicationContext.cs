@@ -1,22 +1,21 @@
 ﻿#region
 
 using Microsoft.EntityFrameworkCore;
-using Restaurants.Application;
-using Restaurants.Domain.Restaurants;
+using Reservations.Domain.ReservationRequestRejections;
+using Reservations.Domain.ReservationRequests;
+using Reservations.Domain.Reservations;
 
 #endregion
 
-namespace Restaurants.Infrastructure.Contexts
+namespace Reservations.Infrastructure.Contexts
 {
-    // TODO: Add outgoing 'IntegrationEvents' set
-
     public class ApplicationContext : DbContext
     {
-        public ApplicationContext(DbContextOptions<ApplicationContext> ops)
-            :base(ops)
-        {
-            
-        }
+        // public ApplicationContext(DbContextOptions<ApplicationContext> ops)
+        //     :base(ops)
+        // {
+        //     
+        // }
 
         // Temp ctor. For migrations. Will be deleted
         public ApplicationContext()
@@ -24,9 +23,11 @@ namespace Restaurants.Infrastructure.Contexts
             
         }
         
-        public DbSet<Restaurant> Restaurants { get; set; }
+        public DbSet<ReservationRequest> ReservationRequests { get; set; }
         
-        public DbSet<ApplicationCommand> ApplicationCommands { get; set; }
+        public DbSet<ReservationRequestRejection> ReservationRequestRejections { get; set; }
+        
+        public DbSet<Reservation> Reservations { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

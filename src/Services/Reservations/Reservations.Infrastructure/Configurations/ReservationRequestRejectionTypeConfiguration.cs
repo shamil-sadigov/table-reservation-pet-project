@@ -3,10 +3,15 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Reservations.Domain.Administrator;
+using Reservations.Domain.ReservationRequestRejections;
+using Reservations.Domain.ReservationRequestRejections.ValueObjects;
+using Reservations.Domain.ReservationRequests;
+using Reservations.Domain.ReservationRequests.ValueObjects;
 
 #endregion
 
-namespace Restaurants.Infrastructure.Configurations
+namespace Reservations.Infrastructure.Configurations
 {
     public class ReservationRequestRejectionTypeConfiguration : IEntityTypeConfiguration<ReservationRequestRejection>
     {
@@ -21,21 +26,23 @@ namespace Restaurants.Infrastructure.Configurations
 
             builder.Property<AdministratorId>("_rejectedByAdministratorId")
                 .HasColumnName("RejectedByAdministratorId")
-                .HasConversion(x => x.Value, guid => new AdministratorId(guid));
+                .WithConversion();
 
             builder.Property<DateTime>("_rejectionDateTime")
-                .HasColumnName("RejectionDateTime");
+                .HasColumnName("RejectionDateTime")
+                .WithUtcConversion();
 
-            builder.Property<string>("_reason")
-                .HasColumnName("Reason");
+            builder.Property<RejectionReason>("_reason")
+                .HasColumnName("Reason")
+                .WithConversion();
 
+            builder.Property<ReservationRequestId>("_reservationRequestId")
+                .HasColumnName("ReservationRequestId");
+            
             builder.HasOne<ReservationRequest>()
                 .WithOne()
                 .HasForeignKey<ReservationRequestRejection>("_reservationRequestId")
                 .OnDelete(DeleteBehavior.Restrict);
-
-            builder.Property<ReservationRequestId>("_reservationRequestId")
-                .HasColumnName("ReservationRequestId");
         }
     }
 }

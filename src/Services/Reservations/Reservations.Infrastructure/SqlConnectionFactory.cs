@@ -1,11 +1,13 @@
 ﻿#region
 
+using System;
 using System.Data;
+using System.Threading.Tasks;
 using Microsoft.Data.SqlClient;
 
 #endregion
 
-namespace Restaurants.Infrastructure
+namespace Reservations.Infrastructure
 {
     public class SqlConnectionFactory : ISqlConnectionFactory
     {
@@ -27,11 +29,19 @@ namespace Restaurants.Infrastructure
 
             return _connection;
         }
-
+        
+        public ValueTask DisposeAsync()
+        {
+            return _connection is {State: ConnectionState.Open} 
+                ? new ValueTask(Task.Run(_connection.Dispose)) 
+                : ValueTask.CompletedTask;
+        }
+        
         public void Dispose()
         {
             if (_connection is {State: ConnectionState.Open})
                 _connection.Dispose();
         }
+
     }
 }
