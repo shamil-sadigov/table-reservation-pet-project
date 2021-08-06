@@ -1,4 +1,4 @@
-namespace BuildingBlocks.EventBus
+namespace EventBus.Abstractions
 {
     public interface IEventBus
     {

@@ -1,16 +1,18 @@
-﻿using BuildingBlocks.EventBus;
+﻿#region
+
 using Microsoft.EntityFrameworkCore;
+
+#endregion
 
 namespace EventBus.RabbitMq
 {
-    public sealed class IntegrationEventContext:DbContext
+    public sealed class IntegrationEventContext : DbContext
     {
         public IntegrationEventContext(DbContextOptions<IntegrationEventContext> options)
-            :base(options)
+            : base(options)
         {
-            
         }
-        
+
         public DbSet<IntegrationEventEntry> IntegrationEvents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

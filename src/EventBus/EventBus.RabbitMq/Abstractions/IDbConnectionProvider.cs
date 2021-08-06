@@ -1,8 +1,11 @@
+#region
+
 using System.Data.Common;
 
-namespace EventBus.RabbitMq
+#endregion
+
+namespace EventBus.RabbitMq.Abstractions
 {
-    // Will be implemented in Application layer
     public interface IDbConnectionProvider
     {
         DbConnection GetDbConnection();

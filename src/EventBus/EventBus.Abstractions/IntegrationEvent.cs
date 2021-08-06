@@ -2,7 +2,7 @@
 using System.Text.Json.Serialization;
 using BuildingBlocks.Domain.DomainRules;
 
-namespace BuildingBlocks.EventBus
+namespace EventBus.Abstractions
 {
     // Take a look here => https://railseventstore.org/docs/v2/correlation_causation/
     // to understand what are these ids  about
@@ -15,9 +15,9 @@ namespace BuildingBlocks.EventBus
         
         public DateTime CreationDate { get; }
         
-        public IntegrationEvent(Guid eventId, Guid correlationId, Guid causationId)
+        public IntegrationEvent(Guid correlationId, Guid causationId)
         {
-            EventId = eventId;
+            EventId = Guid.NewGuid();
             CorrelationId = correlationId;
             CausationId = causationId;
             
@@ -25,7 +25,7 @@ namespace BuildingBlocks.EventBus
         }
         
         [JsonConstructor]
-        public IntegrationEvent(Guid eventId,Guid correlationId, Guid causationId, DateTime creationDate)
+        internal IntegrationEvent(Guid eventId,Guid correlationId, Guid causationId, DateTime creationDate)
         {
             EventId = eventId;
             CorrelationId = correlationId;

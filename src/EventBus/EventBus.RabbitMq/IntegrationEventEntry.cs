@@ -3,10 +3,11 @@
 using System;
 using System.Text.Json;
 using BuildingBlocks.Domain.DomainRules;
+using EventBus.Abstractions;
 
 #endregion
 
-namespace BuildingBlocks.EventBus
+namespace EventBus.RabbitMq
 {
     public class IntegrationEventEntry
     {

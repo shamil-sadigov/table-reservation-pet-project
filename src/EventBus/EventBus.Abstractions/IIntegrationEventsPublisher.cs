@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
 
-namespace BuildingBlocks.EventBus
+namespace EventBus.Abstractions
 {
-    public interface IIntegrationEventPublisher
+    public interface IIntegrationEventsPublisher
     {
         /// <summary>
         /// Adds event to storage as unpublished. And will be published later on

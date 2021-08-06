@@ -4,11 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using BuildingBlocks.EventBus;
+using EventBus.Abstractions;
 
 #endregion
 
-namespace EventBus.RabbitMq
+namespace EventBus.RabbitMq.Helpers
 {
     // TODO: Register as singleton
     public sealed class IntegrationEventTypesAccessor
@@ -26,7 +26,7 @@ namespace EventBus.RabbitMq
                     .ToList();
             });
         }
-        
+
         public IntegrationEventTypesAccessor(Assembly integrationEventAssembly)
         {
             _integrationEventTypes = new Lazy<List<Type>>(() =>
@@ -37,7 +37,7 @@ namespace EventBus.RabbitMq
                     .ToList();
             });
         }
-        
+
         public IntegrationEventTypesAccessor(Func<List<Type>> integrationEventsProvider)
         {
             _integrationEventTypes = new Lazy<List<Type>>(integrationEventsProvider);
