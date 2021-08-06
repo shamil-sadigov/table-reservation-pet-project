@@ -1,5 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Net;
+using System.Threading.Tasks;
+using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Restaurants.Api.Auth;
+using Restaurants.Api.Dto;
+using Restaurants.Application.UseCases.Restaurants.RequestTableReservation.Command;
 
 namespace Restaurants.Api.Controllers
 {
@@ -8,12 +13,31 @@ namespace Restaurants.Api.Controllers
     [AuthorizeRestaurantScope]
     public class RestaurantController : ControllerBase
     {
-        
-        
-        [HttpGet]
-        public OkResult Get()
+        private readonly IMediator _mediator;
+
+        public RestaurantController(IMediator mediator)
         {
-            return Ok();
+            _mediator = mediator;
+        }
+        
+        [Route("reservation-requests")]
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.Accepted)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public async Task<IActionResult> ReservationRequests([FromBody] RequestReservationRequest request)
+        {
+            // TODO: Handling of command can throw exception.
+            // We should create an ErrorController that 
+            // will catch all exceptions and map them to appropriate ProblemDetails and status code
+            
+            await _mediator.Send(new RequestReservationCommand
+            (
+                request.RestaurantId,
+                request.VisitingTime,
+                request.NumberOfRequestedSeats
+            ));
+            
+            return Accepted();
         }
     }
 }
