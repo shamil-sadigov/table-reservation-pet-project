@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EventBus.Abstractions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -26,7 +27,7 @@ namespace Restaurants.Api.DependencyExtensions
                 var environment = provider.GetRequiredService<IHostEnvironment>();
                 var loggerFactory = provider.GetRequiredService<ILoggerFactory>();
                 
-                if (environment.IsDevelopment())
+                if (environment.IsDevelopment() || environment.IsTesting())
                     dbOptions.EnableSensitiveDataLogging();
 
                 dbOptions.EnableDetailedErrors();
@@ -47,9 +48,9 @@ namespace Restaurants.Api.DependencyExtensions
             });
             
             services.AddScoped<IRestaurantQueryRepository, RestaurantQueryRepository>();
+            services.AddScoped<ICommandRepository, CommandRepository>();
             
             services.AddScoped<IResilientTransaction, ResilientTransaction>();
-            
             
             return services;
         }

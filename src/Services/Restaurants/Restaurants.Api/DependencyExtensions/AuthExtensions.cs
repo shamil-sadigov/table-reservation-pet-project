@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Restaurants.Api.Auth;
 using Restaurants.Api.Options;
 
 namespace Restaurants.Api.DependencyExtensions
@@ -12,6 +14,8 @@ namespace Restaurants.Api.DependencyExtensions
                 .GetSection("IdentityService")
                 .Get<IdentityServiceOptions>()
                 .EnsureValid();
+
+            
 
             services.AddAuthentication("Bearer")
                 .AddJwtBearer(ops =>
@@ -29,7 +33,7 @@ namespace Restaurants.Api.DependencyExtensions
             services.AddAuthorization(ops =>
             {
                 ops.AddPolicy("restaurant-api-policy", 
-                    policy => policy.RequireClaim("scope", "restaurant-api"));
+                    policy => policy.RequireClaim("scope", AuthorizationScope.RestaurantApi));
             });
 
             return services;

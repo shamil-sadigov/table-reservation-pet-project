@@ -1,3 +1,4 @@
+using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Restaurants.Api.DependencyExtensions;
+using Restaurants.Application;
 
 namespace Restaurants.Api
 {
@@ -22,6 +24,7 @@ namespace Restaurants.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors()
+                .AddValidatorsFromAssemblyContaining<Command>()
                 .AddLogging(ops => ops.AddSeq())
                 .AddHttpContextAccessor()
                 .AddDefaultAuthentication(Configuration)
@@ -55,7 +58,7 @@ namespace Restaurants.Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Restaurants.Api v1"));
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
 
             app.UseRouting();
 

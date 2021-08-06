@@ -19,12 +19,12 @@ namespace Restaurants.Infrastructure.Repositories
 
         public async Task<Command?> GetAsync(Guid id)
         {
-            return await _context.ApplicationCommands.FindAsync(id);
+            return await _context.Commands.FindAsync(id);
         }
 
         public async Task SaveAsync(Command applicationCommand)
         {
-            await _context.ApplicationCommands.AddAsync(applicationCommand);
+            await _context.Commands.AddAsync(applicationCommand);
 
             await _context.SaveChangesAsync();
         }

@@ -6,14 +6,15 @@ using Microsoft.EntityFrameworkCore;
 using MoreLinq;
 using Restaurants.Application;
 using Restaurants.Application.Contracts;
+using Restaurants.Infrastructure.Contexts;
 
 namespace Restaurants.Infrastructure
 {
     public class DomainEventsAccessor : IDomainEventAccessor
     {
-        private readonly DbContext _context;
+        private readonly RestaurantContext _context;
 
-        public DomainEventsAccessor(DbContext context)
+        public DomainEventsAccessor(RestaurantContext context)
         {
             _context = context;
         }

@@ -17,8 +17,11 @@ namespace Restaurants.Api.DependencyExtensions
             services.AddScoped<IIdentityProvider, IdentityProvider>();
             services.AddTransient<IRestaurantChecker, RestaurantChecker>();
             
-            services.AddMediatR(typeof(Command));
+            services.AddScoped<IDomainEventsPublisher, DomainEventsPublisher>();
+            services.AddScoped<IDomainEventAccessor, DomainEventsAccessor>();
             
+            services.AddMediatR(typeof(Command));
+
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingPipeline<,>));
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipeline<,>));
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(IdempotencyPipeline<,>));
