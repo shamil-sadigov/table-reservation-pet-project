@@ -12,31 +12,18 @@ namespace Restaurants.Infrastructure.Contexts
     
     public class RestaurantContext : DbContext
     {
-        // public ApplicationContext(DbContextOptions<ApplicationContext> ops)
-        //     :base(ops)
-        // {
-        //     
-        // }
-
-        // Temp ctor. For migrations. Will be deleted
-        public RestaurantContext()
+        public RestaurantContext(DbContextOptions<RestaurantContext> ops)
+            :base(ops)
         {
             
         }
-
+        
         public bool HasTransaction => Database.CurrentTransaction != null;
         
         public DbSet<Restaurant> Restaurants { get; set; }
         
         public DbSet<Command> ApplicationCommands { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            // TODO: Extract to settings
-            // Uncomment if you want to add migrations
-            optionsBuilder.UseSqlServer("Data Source=darwin;Initial Catalog=ReservationApp;Integrated Security=True;");
-        }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
             => modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
     }
