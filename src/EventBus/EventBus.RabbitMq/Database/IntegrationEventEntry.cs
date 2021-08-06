@@ -7,10 +7,16 @@ using EventBus.Abstractions;
 
 #endregion
 
-namespace EventBus.RabbitMq
+namespace EventBus.RabbitMq.Database
 {
     public class IntegrationEventEntry
     {
+        // for EF
+        private IntegrationEventEntry()
+        {
+            
+        }
+        
         public IntegrationEventEntry(IntegrationEvent @event)
         {
             EventId = @event.EventId;

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EventBus.Abstractions;
 using EventBus.RabbitMq.Abstractions;
+using EventBus.RabbitMq.Database;
 using EventBus.RabbitMq.Helpers;
 using Microsoft.Extensions.Logging;
 

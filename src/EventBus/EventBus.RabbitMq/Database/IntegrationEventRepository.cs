@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 #endregion
 
-namespace EventBus.RabbitMq
+namespace EventBus.RabbitMq.Database
 {
     public sealed class IntegrationEventRepository : IIntegrationEventRepository
     {

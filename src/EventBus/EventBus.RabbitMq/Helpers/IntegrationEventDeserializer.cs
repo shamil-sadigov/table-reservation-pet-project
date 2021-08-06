@@ -2,6 +2,7 @@
 
 using System.Text.Json;
 using EventBus.Abstractions;
+using EventBus.RabbitMq.Database;
 
 #endregion
 
