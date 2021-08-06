@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using Restaurants.Application.Commands;
+using Restaurants.Application.CommandContract;
 
 namespace Restaurants.Application.Behaviors
 {
@@ -10,11 +10,13 @@ namespace Restaurants.Application.Behaviors
         where TRequest : ICommand<TResponse>
     {
         
-        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken,
-            RequestHandlerDelegate<TResponse> next)
+        public async Task<TResponse> Handle(
+            TRequest request, 
+            CancellationToken cancellationToken,
+            RequestHandlerDelegate<TResponse> nextHandler)
         {
             // Add logging here
-            return await next();
+            return await nextHandler();
             // Add logging here
         }
     }

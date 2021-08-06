@@ -11,18 +11,17 @@ using Microsoft.Extensions.Logging;
 
 namespace EventBus.RabbitMq
 {
-    public sealed class IntegrationEventPublisher : IIntegrationEventPublisher
+    public sealed class IntegrationEventsPublisher : IIntegrationEventsPublisher
     {
         private readonly IEventBus _eventBus;
-        private readonly List<Type> _eventTypes;
-        private readonly ILogger<IntegrationEventPublisher> _logger;
+        private readonly ILogger<IntegrationEventsPublisher> _logger;
         private readonly IntegrationEventDeserializer _eventDeserializer;
         private readonly IIntegrationEventRepository _repository;
 
-        public IntegrationEventPublisher(
+        public IntegrationEventsPublisher(
             IIntegrationEventRepository repository,
             IEventBus eventBus,
-            ILogger<IntegrationEventPublisher> logger,
+            ILogger<IntegrationEventsPublisher> logger,
             IntegrationEventDeserializer eventDeserializer)
         {
             _repository = repository;
@@ -41,9 +40,12 @@ namespace EventBus.RabbitMq
         public async Task PublishEventsAsync(Guid correlationId)
         {
             // TODO: Add logging here
+            // TODO: ordering integration event by creation date is better to be implemented on DB side
+            
             var publishTasks = 
                 from entry in await _repository.GetUnpublishedEventsAsync(correlationId)
                 let integrationEvent = _eventDeserializer.DeserializeFrom(entry)
+                orderby integrationEvent.CreationDate
                 select Task.Run(() =>
                 {
                     try

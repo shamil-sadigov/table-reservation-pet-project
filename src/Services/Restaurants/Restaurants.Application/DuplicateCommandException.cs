@@ -1,23 +1,19 @@
 #region
 
 using System;
-using Restaurants.Application.Commands;
+using Restaurants.Application.CommandContract;
 
 #endregion
 
 namespace Restaurants.Application
 {
-    public class DuplicateCommandException<TCommand> : Exception
-    where TCommand:ICommandBase
+    public class DuplicateCommandException : Exception
     {
         public DuplicateCommandException(
-            ICommandBase command,
-            string message)
+            string message, object command)
             : base(message)
         {
-            Command = command;
         }
 
-        public ICommandBase Command { get; }
     }
 }
