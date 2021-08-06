@@ -11,11 +11,11 @@ namespace Restaurants.Api.Controllers
     [ApiController]
     [Route("api/v1/[controller]")]
     [AuthorizeRestaurantScope]
-    public class RestaurantController : ControllerBase
+    public class RestaurantsController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public RestaurantController(IMediator mediator)
+        public RestaurantsController(IMediator mediator)
         {
             _mediator = mediator;
         }
