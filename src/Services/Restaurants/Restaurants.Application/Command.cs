@@ -5,7 +5,7 @@ using BuildingBlocks.Domain.DomainRules;
 
 #endregion
 
-namespace Restaurants.Application.CommandContract
+namespace Restaurants.Application
 {
     // Take a look here => https://railseventstore.org/docs/v2/correlation_causation/
     // to understand what are these ids  about

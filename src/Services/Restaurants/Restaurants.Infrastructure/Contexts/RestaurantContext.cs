@@ -1,7 +1,7 @@
 ﻿#region
 
 using Microsoft.EntityFrameworkCore;
-using Restaurants.Application.CommandContract;
+using Restaurants.Application;
 using Restaurants.Domain.Restaurants;
 
 #endregion

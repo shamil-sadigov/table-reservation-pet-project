@@ -2,7 +2,8 @@
 
 using System;
 using System.Threading.Tasks;
-using Restaurants.Application.CommandContract;
+using Restaurants.Application;
+using Restaurants.Application.Contracts;
 using Restaurants.Infrastructure.Contexts;
 
 #endregion

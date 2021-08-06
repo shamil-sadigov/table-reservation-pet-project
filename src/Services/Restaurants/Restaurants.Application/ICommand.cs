@@ -4,7 +4,7 @@ using MediatR;
 
 #endregion
 
-namespace Restaurants.Application.CommandContract
+namespace Restaurants.Application
 {
     public interface ICommand<out TResponse> : IRequest<TResponse>
     {

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Restaurants.Application.CommandContract;
 
 #endregion
 

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 #endregion
 
-namespace Restaurants.Application.CommandContract
+namespace Restaurants.Application.Contracts
 {
     public interface ICommandRepository
     {

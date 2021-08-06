@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Restaurants.Api.ExecutionContexts;
 using Restaurants.Application;
-using Restaurants.Application.CommandContract;
 using Restaurants.Application.Contracts;
 using Restaurants.Application.Pipelines;
 using Restaurants.Domain.Restaurants.Contracts;

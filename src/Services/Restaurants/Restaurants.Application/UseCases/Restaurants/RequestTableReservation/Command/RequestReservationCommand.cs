@@ -2,7 +2,6 @@
 
 using System;
 using MediatR;
-using Restaurants.Application.CommandContract;
 
 #endregion
 
