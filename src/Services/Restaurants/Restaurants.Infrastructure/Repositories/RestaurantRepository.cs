@@ -13,9 +13,9 @@ namespace Restaurants.Infrastructure.Repositories
 {
     public class RestaurantRepository : IRestaurantRepository
     {
-        private readonly ApplicationContext _context;
+        private readonly RestaurantContext _context;
 
-        public RestaurantRepository(ApplicationContext context)
+        public RestaurantRepository(RestaurantContext context)
             => _context = context;
 
 
@@ -25,7 +25,7 @@ namespace Restaurants.Infrastructure.Repositories
         public void Update(Restaurant restaurant)
             => _context.Entry(restaurant).CurrentValues.SetValues(restaurant);
 
-        public async Task<Restaurant?> GetById(RestaurantId restaurantId)
+        public async Task<Restaurant?> GetAsync(RestaurantId restaurantId)
         {
             return await _context.Restaurants
                 .Include("_tables")

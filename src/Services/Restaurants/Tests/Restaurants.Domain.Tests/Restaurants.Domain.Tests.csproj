@@ -32,8 +32,4 @@
     <ProjectReference Include="..\Restaurants.Domain\Restaurants.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ReservationRequests" />
-  </ItemGroup>
-
 </Project>

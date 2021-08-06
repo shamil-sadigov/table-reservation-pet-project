@@ -9,6 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="AutoFixture.AutoMoq" Version="4.17.0" />
+        <PackageReference Include="Objectivity.AutoFixture.XUnit2.AutoMoq" Version="3.3.3" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.3" />
         <PackageReference Include="Moq" Version="4.16.1" />
         <PackageReference Include="xunit" Version="2.4.1" />
@@ -26,10 +27,6 @@
     <ItemGroup>
       <ProjectReference Include="..\..\..\..\BuildingBlocks\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj" />
       <ProjectReference Include="..\..\..\..\BuildingBlocks\BuildingBlocks.Tests.Shared\BuildingBlocks.Tests.Shared.csproj" />
-      <ProjectReference Include="..\..\BuildingBlocks\BuildingBlocks.Domain.Tests\BuildingBlocks.Domain.Tests.csproj" />
-      <ProjectReference Include="..\..\BuildingBlocks\BuildingBlocks.Tests.Shared\BuildingBlocks.Tests.Shared.csproj" />
       <ProjectReference Include="..\..\Reservations.Domain\Reservations.Domain.csproj" />
-      <ProjectReference Include="..\Reservations.Domain\Reservations.Domain.csproj" />
     </ItemGroup>
-
 </Project>

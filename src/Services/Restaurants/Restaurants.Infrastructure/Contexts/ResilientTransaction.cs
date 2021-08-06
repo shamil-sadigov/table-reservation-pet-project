@@ -2,15 +2,14 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Restaurants.Application;
-using Restaurants.Application.Behaviors;
 
 namespace Restaurants.Infrastructure.Contexts
 {
     public class ResilientTransaction:IResilientTransaction
     {
-        private readonly ApplicationContext _context;
+        private readonly RestaurantContext _context;
 
-        public ResilientTransaction(ApplicationContext context)
+        public ResilientTransaction(RestaurantContext context)
         {
             _context = context;
         }

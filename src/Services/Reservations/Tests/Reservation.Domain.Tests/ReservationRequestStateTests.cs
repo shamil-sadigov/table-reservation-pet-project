@@ -1,7 +1,7 @@
 ﻿#region
 
 using BuildingBlocks.Tests.Shared;
-using Reservations.Domain.ReservationRequestStates;
+using Reservations.Domain.ReservationRequests.ValueObjects.ReservationRequestStates;
 using Xunit;
 
 #endregion

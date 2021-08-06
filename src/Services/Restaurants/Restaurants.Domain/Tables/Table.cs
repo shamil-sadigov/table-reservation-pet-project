@@ -3,7 +3,6 @@
 using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.DomainRules.SyncVersion;
-using Restaurants.Domain.Restaurants;
 using Restaurants.Domain.Restaurants.ValueObjects;
 using Restaurants.Domain.Tables.DomainEvents;
 using Restaurants.Domain.Tables.DomainRules;

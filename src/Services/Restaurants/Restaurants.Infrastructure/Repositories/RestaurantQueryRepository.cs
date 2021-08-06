@@ -7,6 +7,8 @@ using Dapper;
 
 namespace Restaurants.Infrastructure.Repositories
 {
+    // Repository for Query part of CQRS
+    // Additional methods will be added
     public class RestaurantQueryRepository : IRestaurantQueryRepository
     {
         private readonly ISqlConnectionFactory _sqlConnectionFactory;
@@ -19,7 +21,7 @@ namespace Restaurants.Infrastructure.Repositories
             var connection = _sqlConnectionFactory.GetOrCreateConnection();
 
             var result = await connection.QuerySingleOrDefaultAsync(
-                "SELECT [Id] FROM reservation.Restaurants " +
+                "SELECT [Id] FROM restaurants.Restaurants " +
                 "WHERE [Address]=@Address AND [Name]=@Name", new
                 {
                     Name = restaurantName,

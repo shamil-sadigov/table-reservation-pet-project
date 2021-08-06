@@ -33,10 +33,10 @@ namespace Restaurants.Domain.Tests.Restaurants
             var address = RestaurantAddress.TryCreate("Some address").Value!;
             var name = RestaurantName.TryCreate("restaurant-name").Value!;
 
-            var uniquenessChecker = new Mock<IRestaurantUniquenessChecker>();
+            var uniquenessChecker = new Mock<IRestaurantChecker>();
 
-            uniquenessChecker.Setup(x => x.IsUniqueAsync(name, address))
-                .ReturnsAsync(true);
+            uniquenessChecker.Setup(x => x.ExistsAsync(name, address))
+                .ReturnsAsync(false);
 
             // Act
             var result = await Restaurant.TryCreateAsync(
@@ -77,10 +77,10 @@ namespace Restaurants.Domain.Tests.Restaurants
             var address = RestaurantAddress.TryCreate("Some address").Value!;
             var name = RestaurantName.TryCreate("restaurant-name").Value!;
 
-            var checker = new Mock<IRestaurantUniquenessChecker>();
+            var checker = new Mock<IRestaurantChecker>();
 
-            checker.Setup(x => x.IsUniqueAsync(name, address))
-                .ReturnsAsync(false);
+            checker.Setup(x => x.ExistsAsync(name, address))
+                .ReturnsAsync(true);
 
             // Act
             var result = await Restaurant.TryCreateAsync(

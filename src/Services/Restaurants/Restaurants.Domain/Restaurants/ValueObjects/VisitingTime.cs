@@ -2,8 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using BuildingBlocks.Domain;
-using BuildingBlocks.Domain.DomainRules;
 using BuildingBlocks.Domain.ValueObjects;
 
 #endregion

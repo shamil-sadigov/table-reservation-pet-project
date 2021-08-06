@@ -52,12 +52,12 @@ namespace Restaurants.Domain.Restaurants
             RestaurantName name,
             RestaurantWorkingHours restaurantWorkingHours,
             RestaurantAddress address,
-            IRestaurantUniquenessChecker uniquenessChecker)
+            IRestaurantChecker checker)
         {
-            if (ContainsNullValues(new {name, restaurantWorkingHours, address, uniquenessChecker}, out var errors))
+            if (ContainsNullValues(new {name, restaurantWorkingHours, address, uniquenessChecker = checker}, out var errors))
                 return errors;
 
-            var rule = new RestaurantMustBeUniqueRule(uniquenessChecker, name, address);
+            var rule = new RestaurantMustBeUniqueRule(checker, name, address);
 
             var result = await rule.CheckAsync();
 

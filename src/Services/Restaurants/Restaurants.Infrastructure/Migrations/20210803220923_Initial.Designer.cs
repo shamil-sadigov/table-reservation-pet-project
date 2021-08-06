@@ -9,7 +9,7 @@ using Restaurants.Infrastructure.Contexts;
 
 namespace Restaurants.Infrastructure.Migrations
 {
-    [DbContext(typeof(ApplicationContext))]
+    [DbContext(typeof(RestaurantContext))]
     [Migration("20210803220923_Initial")]
     partial class Initial
     {

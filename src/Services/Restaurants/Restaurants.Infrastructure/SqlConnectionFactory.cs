@@ -7,6 +7,7 @@ using Microsoft.Data.SqlClient;
 
 namespace Restaurants.Infrastructure
 {
+    // Will be used by Query part of CQRS
     public class SqlConnectionFactory : ISqlConnectionFactory
     {
         private readonly string _connectionString;

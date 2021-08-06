@@ -1,8 +1,7 @@
 ﻿#region
 
-using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
-using Restaurants.Application;
+using Restaurants.Application.CommandContract;
 using Restaurants.Domain.Restaurants;
 
 #endregion
@@ -11,7 +10,7 @@ namespace Restaurants.Infrastructure.Contexts
 {
     // TODO: Add outgoing 'IntegrationEvents' set
     
-    public class ApplicationContext : DbContext
+    public class RestaurantContext : DbContext
     {
         // public ApplicationContext(DbContextOptions<ApplicationContext> ops)
         //     :base(ops)
@@ -20,7 +19,7 @@ namespace Restaurants.Infrastructure.Contexts
         // }
 
         // Temp ctor. For migrations. Will be deleted
-        public ApplicationContext()
+        public RestaurantContext()
         {
             
         }
@@ -29,7 +28,7 @@ namespace Restaurants.Infrastructure.Contexts
         
         public DbSet<Restaurant> Restaurants { get; set; }
         
-        public DbSet<ApplicationCommand> ApplicationCommands { get; set; }
+        public DbSet<Command> ApplicationCommands { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

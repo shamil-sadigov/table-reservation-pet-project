@@ -7,8 +7,8 @@ using Restaurants.Domain.Restaurants.ValueObjects;
 
 namespace Restaurants.Domain.Restaurants.Contracts
 {
-    public interface IRestaurantUniquenessChecker
+    public interface IRestaurantChecker
     {
-        Task<bool> IsUniqueAsync(RestaurantName restaurantName, RestaurantAddress restaurantAddress);
+        Task<bool> ExistsAsync(RestaurantName restaurantName, RestaurantAddress restaurantAddress);
     }
 }

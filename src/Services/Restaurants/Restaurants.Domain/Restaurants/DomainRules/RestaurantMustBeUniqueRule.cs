@@ -13,12 +13,12 @@ namespace Restaurants.Domain.Restaurants.DomainRules
 {
     public class RestaurantMustBeUniqueRule : IDomainRuleAsync
     {
-        private readonly IRestaurantUniquenessChecker _checker;
+        private readonly IRestaurantChecker _checker;
         private readonly RestaurantAddress _restaurantAddress;
         private readonly RestaurantName _restaurantName;
 
         public RestaurantMustBeUniqueRule(
-            IRestaurantUniquenessChecker checker, 
+            IRestaurantChecker checker, 
             RestaurantName restaurantName,
             RestaurantAddress restaurantAddress)
         {
@@ -29,7 +29,7 @@ namespace Restaurants.Domain.Restaurants.DomainRules
 
         public async Task<Result> CheckAsync()
         {
-            var isRestaurantUnique = await _checker.IsUniqueAsync(_restaurantName, _restaurantAddress);
+            var isRestaurantUnique = !await _checker.ExistsAsync(_restaurantName, _restaurantAddress);
 
             return isRestaurantUnique
                 ? Result.Success()

@@ -8,7 +8,7 @@ using Restaurants.Infrastructure.Contexts;
 
 namespace Restaurants.Infrastructure.Migrations
 {
-    [DbContext(typeof(ApplicationContext))]
+    [DbContext(typeof(RestaurantContext))]
     partial class ApplicationContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

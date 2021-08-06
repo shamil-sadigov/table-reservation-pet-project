@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using BuildingBlocks.Tests.Shared;
 using Moq;
-using MoreLinq;
 using Restaurants.Domain.Restaurants;
 using Restaurants.Domain.Restaurants.Contracts;
 using Restaurants.Domain.Restaurants.ValueObjects;
@@ -85,10 +84,10 @@ namespace Restaurants.Domain.Tests.Helpers
         
         public async Task<Restaurant> BuildAsync(bool clearDomainEvent = true)
         {
-            var checker = new Mock<IRestaurantUniquenessChecker>();
+            var checker = new Mock<IRestaurantChecker>();
 
-            checker.Setup(x => x.IsUniqueAsync(_name, _address))
-                .ReturnsAsync(true);
+            checker.Setup(x => x.ExistsAsync(_name, _address))
+                .ReturnsAsync(false);
 
             var result = await Restaurant.TryCreateAsync(
                 _name,
