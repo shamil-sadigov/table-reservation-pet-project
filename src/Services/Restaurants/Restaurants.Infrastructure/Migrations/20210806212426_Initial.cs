@@ -11,6 +11,21 @@ namespace Restaurants.Infrastructure.Migrations
                 name: "restaurants");
 
             migrationBuilder.CreateTable(
+                name: "Commands",
+                columns: table => new
+                {
+                    CommandId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CorrelationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CausationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CommandType = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Commands", x => x.CommandId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Restaurants",
                 schema: "restaurants",
                 columns: table => new
@@ -61,6 +76,11 @@ namespace Restaurants.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Commands_CorrelationId",
+                table: "Commands",
+                column: "CorrelationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Tables_RestaurantId",
                 schema: "restaurants",
                 table: "Tables",
@@ -69,6 +89,9 @@ namespace Restaurants.Infrastructure.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Commands");
+
             migrationBuilder.DropTable(
                 name: "Tables",
                 schema: "restaurants");

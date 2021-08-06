@@ -9,15 +9,42 @@ using Restaurants.Infrastructure.Contexts;
 namespace Restaurants.Infrastructure.Migrations
 {
     [DbContext(typeof(RestaurantContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    partial class RestaurantContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.2");
+                .HasAnnotation("ProductVersion", "5.0.8")
+                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Restaurants.Application.Command", b =>
+                {
+                    b.Property<Guid>("CommandId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CausationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CommandType")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<Guid>("CorrelationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("CommandId");
+
+                    b.HasIndex("CorrelationId");
+
+                    b.ToTable("Commands");
+                });
 
             modelBuilder.Entity("Restaurants.Domain.Restaurants.Restaurant", b =>
                 {
