@@ -50,7 +50,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventBus.Abstractions", "Ev
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventBus.RabbitMq", "EventBus\EventBus.RabbitMq\EventBus.RabbitMq.csproj", "{504AFDE4-BE4C-49F5-A944-F6DCB6926073}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurants.IntegrationEvents", "Services\Restaurants\Tests\Restaurants.IntegrationEvents\Restaurants.IntegrationEvents.csproj", "{4B4FAFA7-CDEE-4425-8540-7D7B1965D559}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurants.IntegrationTests", "Services\Restaurants\Tests\Restaurants.IntegrationTests\Restaurants.IntegrationTests.csproj", "{4B4FAFA7-CDEE-4425-8540-7D7B1965D559}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
