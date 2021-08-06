@@ -4,7 +4,7 @@ using System;
 
 #endregion
 
-namespace Restaurants.Application.UseCases.Restaurants.RequestReservation.IntegrationEvent
+namespace Restaurants.Application.UseCases.Restaurants.RequestTableReservation.IntegrationEvent
 {
     public class TableReservationIsRequestedIntegrationEvent : EventBus.Abstractions.IntegrationEvent
     {

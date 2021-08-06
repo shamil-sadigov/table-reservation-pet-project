@@ -3,7 +3,7 @@ using EventBus.RabbitMq;
 using EventBus.RabbitMq.Abstractions;
 using EventBus.RabbitMq.Helpers;
 using Microsoft.Extensions.DependencyInjection;
-using Restaurants.Application.UseCases.Restaurants.RequestReservation.IntegrationEvent;
+using Restaurants.Application.UseCases.Restaurants.RequestTableReservation.IntegrationEvent;
 using Restaurants.Infrastructure;
 
 namespace Restaurants.Api.DependencyExtensions

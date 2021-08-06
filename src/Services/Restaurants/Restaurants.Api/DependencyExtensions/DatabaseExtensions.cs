@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using Reservations.Infrastructure;
 using Restaurants.Api.Options;
 using Restaurants.Application;
+using Restaurants.Application.Contracts;
 using Restaurants.Infrastructure.Contexts;
 using Restaurants.Infrastructure.Repositories;
 

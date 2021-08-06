@@ -5,7 +5,7 @@ using BuildingBlocks.Domain.DomainEvents;
 
 #endregion
 
-namespace Restaurants.Application
+namespace Restaurants.Application.Contracts
 {
     public interface IDomainEventAccessor
     {

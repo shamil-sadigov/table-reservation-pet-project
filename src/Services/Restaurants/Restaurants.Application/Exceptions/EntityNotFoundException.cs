@@ -4,7 +4,7 @@ using System;
 
 #endregion
 
-namespace Restaurants.Application
+namespace Restaurants.Application.Exceptions
 {
     public class EntityNotFoundException<TEntityId> : ApplicationException
     {

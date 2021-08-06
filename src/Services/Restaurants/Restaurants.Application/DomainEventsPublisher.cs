@@ -2,6 +2,7 @@
 
 using System.Threading.Tasks;
 using MediatR;
+using Restaurants.Application.Contracts;
 
 #endregion
 

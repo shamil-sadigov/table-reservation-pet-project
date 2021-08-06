@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Restaurants.Application;
+using Restaurants.Application.Contracts;
 
 namespace Restaurants.Infrastructure.Contexts
 {

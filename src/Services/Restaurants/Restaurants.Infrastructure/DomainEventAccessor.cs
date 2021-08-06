@@ -5,6 +5,7 @@ using BuildingBlocks.Domain.DomainEvents;
 using Microsoft.EntityFrameworkCore;
 using MoreLinq;
 using Restaurants.Application;
+using Restaurants.Application.Contracts;
 
 namespace Restaurants.Infrastructure
 {

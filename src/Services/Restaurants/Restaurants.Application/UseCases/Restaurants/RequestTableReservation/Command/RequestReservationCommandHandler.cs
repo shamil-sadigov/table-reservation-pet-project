@@ -6,13 +6,15 @@ using System.Threading.Tasks;
 using BuildingBlocks.Domain.DomainRules;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Restaurants.Application.Contracts;
+using Restaurants.Application.Exceptions;
 using Restaurants.Domain.Restaurants;
 using Restaurants.Domain.Restaurants.Contracts;
 using Restaurants.Domain.Restaurants.ValueObjects;
 
 #endregion
 
-namespace Restaurants.Application.UseCases.Restaurants.RequestReservation.Command
+namespace Restaurants.Application.UseCases.Restaurants.RequestTableReservation.Command
 {
     public class RequestReservationCommandHandler : IRequestHandler<RequestReservationCommand>
     {

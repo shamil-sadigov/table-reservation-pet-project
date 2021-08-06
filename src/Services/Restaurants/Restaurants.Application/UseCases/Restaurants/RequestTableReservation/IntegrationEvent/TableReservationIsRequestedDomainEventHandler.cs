@@ -5,11 +5,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using EventBus.Abstractions;
 using MediatR;
+using Restaurants.Application.Contracts;
 using Restaurants.Domain.Restaurants.DomainEvents;
 
 #endregion
 
-namespace Restaurants.Application.UseCases.Restaurants.RequestReservation.IntegrationEvent
+namespace Restaurants.Application.UseCases.Restaurants.RequestTableReservation.IntegrationEvent
 {
     public class TableReservationIsRequestedIntegrationEventRegistration
         : INotificationHandler<TableReservationIsRequestedDomainEvent>

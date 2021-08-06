@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using EventBus.Abstractions;
 using MediatR;
 using Restaurants.Application.CommandContract;
+using Restaurants.Application.Contracts;
 
 #endregion
 

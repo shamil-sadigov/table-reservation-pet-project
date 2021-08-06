@@ -4,7 +4,7 @@ using FluentValidation;
 
 #endregion
 
-namespace Restaurants.Application.UseCases.Restaurants.RequestReservation.Command
+namespace Restaurants.Application.UseCases.Restaurants.RequestTableReservation.Command
 {
     public class RequestReservationCommandValidator : AbstractValidator<RequestReservationCommand>
     {

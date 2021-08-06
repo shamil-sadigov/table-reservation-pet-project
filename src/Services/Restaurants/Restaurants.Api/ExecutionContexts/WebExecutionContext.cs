@@ -3,6 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Restaurants.Api.Exceptions;
 using Restaurants.Application;
+using Restaurants.Application.Contracts;
 
 namespace Restaurants.Api.ExecutionContexts
 {

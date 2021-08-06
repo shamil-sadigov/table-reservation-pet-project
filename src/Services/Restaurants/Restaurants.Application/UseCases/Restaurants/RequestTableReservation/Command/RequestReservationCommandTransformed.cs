@@ -1,12 +1,13 @@
 ﻿#region
 
+using Restaurants.Application.Contracts;
 using Restaurants.Domain.Restaurants.ValueObjects;
 using Restaurants.Domain.Tables.ValueObjects;
 using Restaurants.Domain.Visitors.ValueObjects;
 
 #endregion
 
-namespace Restaurants.Application.UseCases.Restaurants.RequestReservation.Command
+namespace Restaurants.Application.UseCases.Restaurants.RequestTableReservation.Command
 {
     // Just a proxy class that for the sake of convenience converts primitive types to value objects.
 

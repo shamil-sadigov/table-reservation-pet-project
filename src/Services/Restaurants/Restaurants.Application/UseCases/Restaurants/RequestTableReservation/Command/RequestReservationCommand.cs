@@ -6,7 +6,7 @@ using Restaurants.Application.CommandContract;
 
 #endregion
 
-namespace Restaurants.Application.UseCases.Restaurants.RequestReservation.Command
+namespace Restaurants.Application.UseCases.Restaurants.RequestTableReservation.Command
 {
     public record RequestReservationCommand(
             Guid RestaurantId,

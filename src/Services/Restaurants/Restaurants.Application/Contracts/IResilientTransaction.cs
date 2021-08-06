@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 #endregion
 
-namespace Restaurants.Application
+namespace Restaurants.Application.Contracts
 {
     public interface IResilientTransaction
     {

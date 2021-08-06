@@ -4,6 +4,7 @@ using Restaurants.Api.ExecutionContexts;
 using Restaurants.Application;
 using Restaurants.Application.Behaviors;
 using Restaurants.Application.CommandContract;
+using Restaurants.Application.Contracts;
 using Restaurants.Domain.Restaurants.Contracts;
 using Restaurants.Infrastructure;
 
