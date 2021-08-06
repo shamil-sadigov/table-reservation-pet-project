@@ -27,7 +27,7 @@ namespace Restaurants.Domain.Restaurants.DomainRules
 
         public Result Check()
         {
-            return _workingHours.IsWorkingTime(_visitingTime.AsTimeSpan())
+            return _workingHours.IsWorkingTime(_visitingTime)
                 ? Result.Success()
                 : new Error($"Restaurant {_restaurantId} is not open at {_visitingTime} time");
         }

@@ -110,7 +110,7 @@ namespace Restaurants.Domain.Restaurants
             if (!availableTable.CanBeReserved(numberOfSeats))
                 return result;
 
-            var visitingDateTIme = SystemClock.DateNow + visitingTime.AsTimeSpan();
+            var visitingDateTIme = SystemClock.DateNow + visitingTime.Value;
 
             AddDomainEvent(new TableReservationIsRequestedDomainEvent(
                 Id,

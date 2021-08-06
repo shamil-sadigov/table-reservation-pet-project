@@ -31,15 +31,16 @@ namespace Restaurants.Domain.Tests.Restaurants
 
             var workingHours = RestaurantWorkingHours.TryCreate(startWorkingTime, finishWorkingTime).Value!;
             var address = RestaurantAddress.TryCreate("Some address").Value!;
+            var name = RestaurantName.TryCreate("restaurant-name").Value!;
 
             var uniquenessChecker = new Mock<IRestaurantUniquenessChecker>();
 
-            uniquenessChecker.Setup(x => x.IsUniqueAsync("restaurant-name", address))
+            uniquenessChecker.Setup(x => x.IsUniqueAsync(name, address))
                 .ReturnsAsync(true);
 
             // Act
             var result = await Restaurant.TryCreateAsync(
-                "restaurant-name",
+                name,
                 workingHours,
                 address,
                 uniquenessChecker.Object);
@@ -62,7 +63,7 @@ namespace Restaurants.Domain.Tests.Restaurants
                 .Should().Be(address);
 
             publishedDomainEvent.Name
-                .Should().Be("restaurant-name");
+                .Should().Be(name);
         }
 
         [Fact]
@@ -74,15 +75,16 @@ namespace Restaurants.Domain.Tests.Restaurants
 
             var workingHours = RestaurantWorkingHours.TryCreate(startWorkingTime, finishWorkingTime).Value!;
             var address = RestaurantAddress.TryCreate("Some address").Value!;
+            var name = RestaurantName.TryCreate("restaurant-name").Value!;
 
             var checker = new Mock<IRestaurantUniquenessChecker>();
 
-            checker.Setup(x => x.IsUniqueAsync("restaurant-name", address))
+            checker.Setup(x => x.IsUniqueAsync(name, address))
                 .ReturnsAsync(false);
 
             // Act
             var result = await Restaurant.TryCreateAsync(
-                "restaurant-name",
+                name,
                 workingHours,
                 address,
                 checker.Object);
@@ -101,14 +103,12 @@ namespace Restaurants.Domain.Tests.Restaurants
         public async Task Can_add_table_to_restaurant(byte numberOfSeats_)
         {
             // Arrange 
-            var restaurant = await new RestaurantBuilder
-            {
-                Name = "restaurant name",
-                Address = "restaurant address",
-                StartTime = (09, 00),
-                FinishTime = (22, 00)
-            }.BuildAsync();
-
+            var restaurant = await RestaurantBuilder
+                                        .WithName("restaurant name")
+                                        .LocatingAt("restaurant address")
+                                        .WithWorkingSchedule("09:00", "22:00")
+                                        .BuildAsync();
+            
             var numberOfSeats = NumberOfSeats.TryCreate(numberOfSeats_).Value!;
             var tableId = TableId.TryCreate("TBL-1").Value!;
 
@@ -142,17 +142,12 @@ namespace Restaurants.Domain.Tests.Restaurants
         public async Task Cannot_add_table_to_restaurant_when_the_same_table_already_exists(byte numberOfSeats_)
         {
             // Arrange 
-            var restaurant = await new RestaurantBuilder
-            {
-                Name = "restaurant name",
-                Address = "restaurant address",
-                StartTime = (09, 00),
-                FinishTime = (22, 00),
-                TablesInfo = new (string tableId, byte numberOfSeats)[]
-                {
-                    ("TBL-1", 3)
-                }
-            }.BuildAsync();
+            var restaurant = await RestaurantBuilder
+                .WithName("restaurant name")
+                .LocatingAt("restaurant address")
+                .WithWorkingSchedule("09:00", "22:00")
+                .WithTables(("TBL-1", numberOfSeats: 3))
+                .BuildAsync();
 
             var numberOfSeats = NumberOfSeats.TryCreate(numberOfSeats_).Value!;
             var tableId = TableId.TryCreate("TBL-1").Value!;
@@ -173,28 +168,25 @@ namespace Restaurants.Domain.Tests.Restaurants
         [InlineData(2)]
         [InlineData(4)]
         [InlineData(6)]
-        public async Task Can_create_reservation_request_when_restaurant_has_available_table(byte numberOfSeats)
+        public async Task Can_create_reservation_request_when_restaurant_has_available_table(byte numberOfSeats_)
         {
             // Arrange
-            var restaurant = await new RestaurantBuilder
-            {
-                Name = "restaurant name",
-                Address = "restaurant address",
-                StartTime = (09, 00),
-                FinishTime = (22, 00),
-                TablesInfo = new (string tableId, byte numberOfSeats)[]
-                {
-                    ("TBL-1", 2), ("TBL-2", 4), ("TBL-3", 2), ("TBL-4", 8)
-                }
-            }.BuildAsync();
+            var restaurant = await RestaurantBuilder
+                .WithName("restaurant name")
+                .LocatingAt("restaurant address")
+                .WithWorkingSchedule("09:00", "22:00")
+                .WithTables(
+                    ("TBL-1", numberOfSeats: 2),
+                    ("TBL-2", numberOfSeats: 4),
+                    ("TBL-3", numberOfSeats: 2),
+                    ("TBL-4", numberOfSeats: 8))
+                .BuildAsync();
 
-            var numberOfRequestedSeats = NumberOfSeats.TryCreate(numberOfSeats).Value!;
-            VisitingTime visitingTime = VisitingTime.TryCreate(hours: 12, minutes: 00).Value!;
-            var visitorId = new VisitorId(Guid.NewGuid());
+            var (numberOfSeats, visitingTime, visitorId) = CreateReservationParameters(numberOfSeats_);
 
             // Act
             var result = restaurant.TryRequestReservation(
-                numberOfRequestedSeats,
+                numberOfSeats,
                 visitingTime,
                 visitorId);
 
@@ -211,35 +203,34 @@ namespace Restaurants.Domain.Tests.Restaurants
                 .Should().Be(visitorId);
 
             publishedDomainEvent.VisitingDateTime.TimeOfDay
-                .Should().Be(visitingTime.AsTimeSpan());
+                .Should().Be(visitingTime.Value);
         }
+
+       
 
         [Theory]
         [InlineData(1)]
         [InlineData(2)]
         public async Task Cannot_create_reservation_request_when_number_of_requested_seats_is_too_small(
-            byte numberOfSeats)
+            byte numberOfSeats_)
         {
             // Arrange
-            var restaurant = await new RestaurantBuilder
-            {
-                Name = "restaurant name",
-                Address = "restaurant address",
-                StartTime = (09, 00),
-                FinishTime = (22, 00),
-                TablesInfo = new (string tableId, byte numberOfSeats)[]
-                {
-                    ("TBL-1", 8), ("TBL-2", 10), ("TBL-3", 12), ("TBL-4", 14)
-                }
-            }.BuildAsync();
-
-            NumberOfSeats numberOfRequestedSeats = NumberOfSeats.TryCreate(numberOfSeats).Value!;
-            VisitingTime visitingTime = VisitingTime.TryCreate(hours: 12, minutes: 00).Value!;
-            var visitorId = new VisitorId(Guid.NewGuid());
-
+            var restaurant = await RestaurantBuilder
+                .WithName("restaurant name")
+                .LocatingAt("restaurant address")
+                .WithWorkingSchedule("09:00", "22:00")
+                .WithTables(
+                    ("TBL-1", numberOfSeats: 8),
+                    ("TBL-2", numberOfSeats: 10),
+                    ("TBL-3", numberOfSeats: 12),
+                    ("TBL-4", numberOfSeats: 14))
+                .BuildAsync();
+            
+            var (numberOfSeats, visitingTime, visitorId) = CreateReservationParameters(numberOfSeats_);
+            
             // Act
             var result = restaurant.TryRequestReservation(
-                numberOfRequestedSeats,
+                numberOfSeats,
                 visitingTime,
                 visitorId);
 
@@ -256,32 +247,43 @@ namespace Restaurants.Domain.Tests.Restaurants
         public async Task Cannot_create_ReservationRequest_when_restaurant_is_not_open(byte hours, byte minutes)
         {
             // Arrange
-            var restaurant = await new RestaurantBuilder
-            {
-                Name = "restaurant name",
-                Address = "restaurant address",
-                StartTime = (12, 00),
-                FinishTime = (20, 00),
-                TablesInfo = new (string tableId, byte numberOfSeats)[]
-                {
-                    ("TBL-1", 6), ("TBL-2", 8), ("TBL-3", 10)
-                }
-            }.BuildAsync();
-
-            VisitingTime visitTime = VisitingTime.TryCreate(hours, minutes).Value!;
-            NumberOfSeats numberOfRequestedSeats = NumberOfSeats.TryCreate(4).Value!;
-            var visitorId = new VisitorId(Guid.NewGuid());
-
+            var restaurant = await RestaurantBuilder
+                .WithName("restaurant name")
+                .LocatingAt("restaurant address")
+                .WithWorkingSchedule("12:00", "20:00")
+                .WithTables(
+                    ("TBL-1", numberOfSeats: 6),
+                    ("TBL-2", numberOfSeats: 8),
+                    ("TBL-3", numberOfSeats: 10),
+                    ("TBL-4", numberOfSeats: 6))
+                .BuildAsync();
+            
+            var (numberOfSeats, visitingTime, visitorId) = 
+                CreateReservationParameters(visitingTimeHours: hours, visitingTimeMinutes: minutes);
+            
             // Act
             var result = restaurant.TryRequestReservation(
-                numberOfRequestedSeats,
-                visitTime,
+                numberOfSeats,
+                visitingTime,
                 visitorId);
 
             // Assert
             result.ShouldFail();
-            result.Errors!.ShouldContainSomethingLike($"Restaurant {restaurant.Id} is not open at {visitTime} time");
+            result.Errors!.ShouldContainSomethingLike($"Restaurant {restaurant.Id} is not open at {visitingTime} time");
             restaurant.ShouldNotHavePublishedDomainEvent<TableReservationIsRequestedDomainEvent>();
+        }
+        
+        private static (NumberOfSeats numberOfSeats, VisitingTime visitingTime, VisitorId visitorId) 
+            CreateReservationParameters(
+                byte numberOfSeats = 4,
+                byte visitingTimeHours = 12,
+                byte visitingTimeMinutes = 00)
+        {
+            var numberOfRequestedSeats = NumberOfSeats.TryCreate(numberOfSeats).Value!;
+            var visitingTime = new VisitingTime(new TimeSpan(visitingTimeHours, visitingTimeMinutes, 0));
+            var visitorId = new VisitorId(Guid.NewGuid());
+            
+            return (numberOfRequestedSeats, visitingTime, visitorId);
         }
     }
 }

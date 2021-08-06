@@ -1,6 +1,7 @@
 ﻿#region
 
-using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BuildingBlocks.Tests.Shared;
 using Moq;
@@ -15,91 +16,102 @@ using Restaurants.Domain.Tables.ValueObjects;
 
 namespace Restaurants.Domain.Tests.Helpers
 {
-    public record RestaurantBuilder
+    public class RestaurantBuilder
     {
-        public string Name { get; init; }
+        private  RestaurantName _name;
+        private RestaurantAddress _address;
+        private RestaurantWorkingHours _workingHours;
+        private List<(TableId tableId, NumberOfSeats numberOfSeats)> _tableInfos;
 
-        public (byte hours, byte minutes) StartTime { get; init; }
-
-        public (byte hours, byte minutes) FinishTime { get; init; }
-
-        public string Address { get; init; }
-
-        public (string tableId, byte numberOfSeats)[] TablesInfo { get; init; }
-
-        public async Task<Restaurant> BuildAsync(bool clearDomainEvent = true)
+        public RestaurantBuilder(RestaurantName name)
         {
-            var workingHours = CreateWorkingHours();
-            var address = CreateAddress();
+            _name = name;
+        }
+        
+        public static RestaurantBuilder WithName(string name)
+        {
+            var nameResult =  RestaurantName.TryCreate(name);
+            nameResult.ThrowIfNotSuccessful();
+            return new RestaurantBuilder(nameResult.Value!);
+        }
 
-            var checker = new Mock<IRestaurantUniquenessChecker>();
+        public RestaurantBuilder LocatingAt(string address)
+        {
+            var addressResult = RestaurantAddress.TryCreate(address);
 
-            checker.Setup(x => x.IsUniqueAsync(Name, address))
-                .ReturnsAsync(true);
+            addressResult.ThrowIfNotSuccessful();
 
-            var result = await Restaurant.TryCreateAsync(
-                Name,
-                workingHours,
-                address,
-                checker.Object);
+            _address =  addressResult.Value!;
 
-            result.ThrowIfNotSuccessful();
+            return this;
+        }
 
-            Restaurant restaurant = result.Value!;
 
-            TablesInfo?.ForEach(async tableInfo =>
+        public RestaurantBuilder WithTables(params (string tableId, byte numberOfSeats)[] tableInfos)
+        {
+            _tableInfos = tableInfos.Select(table =>
             {
-                (TableId tableId, NumberOfSeats numberOfSeats) = CreateTableIdAndNumberOfSeats(tableInfo);
+                var numberOfSeatsResult = NumberOfSeats.TryCreate(table.numberOfSeats);
+                var tableIdResult = TableId.TryCreate(table.tableId);
 
-                var addToTableResult = restaurant.TryAddTable(
-                    tableId,
-                    numberOfSeats);
+                numberOfSeatsResult
+                    .CombineWith(tableIdResult)
+                    .ThrowIfNotSuccessful();
 
-                addToTableResult.ThrowIfNotSuccessful();
-            });
+                NumberOfSeats numberOfSeats = numberOfSeatsResult.Value!;
+                
+                TableId tableId = tableIdResult.Value!;
 
-            restaurant.ClearAllDomainEvents();
-
-            return restaurant;
+                return (tableId, numberOfSeats);
+            }).ToList();
+            
+            return this;
         }
-
-        private static (TableId tableId, NumberOfSeats numberOfSeats)
-            CreateTableIdAndNumberOfSeats((string tableId, byte numberOfSeats) table)
+        
+        public RestaurantBuilder WithWorkingSchedule(string startTime, string finishTime)
         {
-            var numberOfSeatsResult = NumberOfSeats.TryCreate(table.numberOfSeats);
-            var tableIdResult = TableId.TryCreate(table.tableId);
-
-            numberOfSeatsResult
-                .CombineWith(tableIdResult)
-                .ThrowIfNotSuccessful();
-
-            NumberOfSeats numberOfSeats = numberOfSeatsResult.Value!;
-            TableId tableId = tableIdResult.Value!;
-
-            return (tableId, numberOfSeats);
-        }
-
-        private RestaurantAddress CreateAddress()
-        {
-            var result = RestaurantAddress.TryCreate(Address);
-
-            result.ThrowIfNotSuccessful();
-
-            return result.Value!;
-        }
-
-        private RestaurantWorkingHours CreateWorkingHours()
-        {
-            var startWorkingTime = new TimeSpan(StartTime.hours, StartTime.minutes, 00);
-            var finishWorkingTime = new TimeSpan(FinishTime.hours, FinishTime.minutes, 00);
-
+            var startWorkingTime = startTime.AsTimeSpan();
+            var finishWorkingTime = finishTime.AsTimeSpan();
+            
             var result = RestaurantWorkingHours.TryCreate(
                 startWorkingTime,
                 finishWorkingTime);
 
             result.ThrowIfNotSuccessful();
 
-            return result.Value!;
+            _workingHours =  result.Value!;
+            return this;
+        }
+        
+        public async Task<Restaurant> BuildAsync(bool clearDomainEvent = true)
+        {
+            var checker = new Mock<IRestaurantUniquenessChecker>();
+
+            checker.Setup(x => x.IsUniqueAsync(_name, _address))
+                .ReturnsAsync(true);
+
+            var result = await Restaurant.TryCreateAsync(
+                _name,
+                _workingHours,
+                _address,
+                checker.Object);
+
+            result.ThrowIfNotSuccessful();
+
+            Restaurant restaurant = result.Value!;
+            
+            _tableInfos?.ForEach(async tableInfo =>
+            {
+                var addToTableResult = restaurant.TryAddTable(
+                    tableInfo.tableId,
+                    tableInfo.numberOfSeats);
+
+                addToTableResult.ThrowIfNotSuccessful();
+            });
+            
+            restaurant.ClearAllDomainEvents();
+
+            return restaurant;
         }
     }
 }

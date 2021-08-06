@@ -9,7 +9,7 @@ namespace Restaurants.Domain.Restaurants.Contracts
 {
     public interface IRestaurantRepository
     {
-        Task<Restaurant?> GetById(RestaurantId restaurantId);
+        Task<Restaurant?> GetAsync(RestaurantId restaurantId);
         Task AddAsync(Restaurant newRestaurant);
         void Update(Restaurant restaurant);
     }

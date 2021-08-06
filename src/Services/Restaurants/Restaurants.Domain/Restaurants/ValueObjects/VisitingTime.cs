@@ -20,38 +20,24 @@ namespace Restaurants.Domain.Restaurants.ValueObjects
         private VisitingTime()
         {
         }
-
-        private VisitingTime(byte hours, byte minutes)
+        
+        public VisitingTime(TimeSpan timeSpan)
         {
-            Hours = hours;
-            Minutes = minutes;
+            // timeSpan can contains Days which should be ignored
+            // This is why we recreate new TimeSpan
+
+            Value = new TimeSpan(timeSpan.Hours, timeSpan.Minutes, 0);
         }
-
-        public byte Hours { get; }
-        public byte Minutes { get; }
-
-        public static Result<VisitingTime> TryCreate(byte hours, byte minutes)
-        {
-            if (hours > 23)
-                return new Error("hours cannot not be greater than 23");
-
-            if (minutes > 59)
-                return new Error("minutes cannot not be greater than 59");
-
-            return new VisitingTime(hours, minutes);
-        }
-
-        public TimeSpan AsTimeSpan()
-        {
-            return new(Hours, Minutes, seconds: 0);
-        }
-
-        public override string ToString() => $"{Hours}:{Minutes}";
+        
+        public TimeSpan Value { get; }
+        
+        public override string ToString() => Value.ToString();
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
-            yield return Hours;
-            yield return Minutes;
+            yield return Value;
         }
+
+        public static implicit operator TimeSpan(VisitingTime visitingTime) => visitingTime.Value;
     }
 }
