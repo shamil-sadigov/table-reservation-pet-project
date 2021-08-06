@@ -1,22 +1,25 @@
-﻿using System;
+﻿#region
+
 using System.Threading;
 using System.Threading.Tasks;
-using BuildingBlocks.EventBus;
+using EventBus.Abstractions;
 using MediatR;
 using Restaurants.Application.CommandContract;
+
+#endregion
 
 namespace Restaurants.Application.Behaviors
 {
     public class UnitOfWorkBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : ICommand<TResponse>
     {
-        private readonly IResilientTransaction _resilientTransaction;
         private readonly IDomainEventsPublisher _domainEventsPublisher;
-        private readonly IIntegrationEventsPublisher _integrationEventsPublisher;
         private readonly IExecutionContext _executionContext;
+        private readonly IIntegrationEventsPublisher _integrationEventsPublisher;
+        private readonly IResilientTransaction _resilientTransaction;
 
         public UnitOfWorkBehavior(
-            IResilientTransaction resilientTransaction, 
+            IResilientTransaction resilientTransaction,
             IDomainEventsPublisher domainEventsPublisher,
             IIntegrationEventsPublisher integrationEventsPublisher,
             IExecutionContext executionContext)
@@ -26,24 +29,29 @@ namespace Restaurants.Application.Behaviors
             _integrationEventsPublisher = integrationEventsPublisher;
             _executionContext = executionContext;
         }
-        
+
         // TODO: Add logging
         public async Task<TResponse> Handle(
-            TRequest request, 
+            TRequest request,
             CancellationToken cancellationToken,
             RequestHandlerDelegate<TResponse> nextHandler)
         {
             var response = await _resilientTransaction.ExecuteAsync(async () =>
             {
                 var result = await nextHandler();
-                
+
                 await _domainEventsPublisher.PublishEventsAsync();
-                
+
                 return result;
             });
 
-            await _integrationEventsPublisher.PublishEventsAsync(_executionContext.CorrelationId);
+            // TODO: publishing to event bus may fail.
+            // So we need to create a separate service
+            // that would pull all 'failed to publish' integration events based on some time interval
+            // and would try to publish event again
             
+            await _integrationEventsPublisher.PublishEventsAsync(_executionContext.CorrelationId);
+
             return response;
         }
     }

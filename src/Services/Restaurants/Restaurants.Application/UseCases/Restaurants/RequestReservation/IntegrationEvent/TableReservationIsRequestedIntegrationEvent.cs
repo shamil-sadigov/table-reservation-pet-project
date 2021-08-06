@@ -1,16 +1,15 @@
-﻿using System;
+﻿#region
+
+using System;
+
+#endregion
 
 namespace Restaurants.Application.UseCases.Restaurants.RequestReservation.IntegrationEvent
 {
-    public class TableReservationIsRequestedIntegrationEvent:BuildingBlocks.EventBus.IntegrationEvent
+    public class TableReservationIsRequestedIntegrationEvent : EventBus.Abstractions.IntegrationEvent
     {
-        public Guid RestaurantId { get; }
-        public string TableId { get; }
-        public DateTime VisitingDateTime { get; }
-        public Guid VisitorId { get; }
-
         public TableReservationIsRequestedIntegrationEvent(
-            Guid correlationId, 
+            Guid correlationId,
             Guid causationId,
             Guid restaurantId,
             string tableId,
@@ -22,5 +21,10 @@ namespace Restaurants.Application.UseCases.Restaurants.RequestReservation.Integr
             VisitingDateTime = visitingDateTime;
             VisitorId = visitorId;
         }
+
+        public Guid RestaurantId { get; }
+        public string TableId { get; }
+        public DateTime VisitingDateTime { get; }
+        public Guid VisitorId { get; }
     }
 }

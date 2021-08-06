@@ -1,10 +1,13 @@
+#region
+
 using System.Threading.Tasks;
 using MediatR;
-using Restaurants.Application.Behaviors;
+
+#endregion
 
 namespace Restaurants.Application
 {
-    public class DomainEventsPublisher:IDomainEventsPublisher
+    public class DomainEventsPublisher : IDomainEventsPublisher
     {
         private readonly IDomainEventAccessor _domainEventAccessor;
         private readonly IMediator _mediator;
@@ -14,12 +17,12 @@ namespace Restaurants.Application
             _domainEventAccessor = domainEventAccessor;
             _mediator = mediator;
         }
-        
+
         public async Task PublishEventsAsync()
         {
-            foreach (var @event in _domainEventAccessor.GetAllDomainEvents()) 
+            foreach (var @event in _domainEventAccessor.GetAllDomainEvents())
                 await _mediator.Publish(@event);
-            
+
             _domainEventAccessor.ClearAllDomainEvents();
         }
     }

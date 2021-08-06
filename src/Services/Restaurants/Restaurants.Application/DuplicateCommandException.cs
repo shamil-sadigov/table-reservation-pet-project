@@ -1,7 +1,6 @@
 #region
 
 using System;
-using Restaurants.Application.CommandContract;
 
 #endregion
 
@@ -14,6 +13,5 @@ namespace Restaurants.Application
             : base(message)
         {
         }
-
     }
 }

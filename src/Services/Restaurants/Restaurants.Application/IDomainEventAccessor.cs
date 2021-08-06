@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using BuildingBlocks.Domain.DomainEvents;
+
+#endregion
 
 namespace Restaurants.Application
 {

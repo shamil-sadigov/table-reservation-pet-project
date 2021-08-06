@@ -1,4 +1,8 @@
+#region
+
 using System;
+
+#endregion
 
 namespace Restaurants.Application
 {
@@ -6,8 +10,6 @@ namespace Restaurants.Application
     {
         Guid? CurrentExecutingCommandId { get; set; }
         
-        // TODO: Set it in Web layer by injecting HttpContextAccessor 
-        // and retrievent correlationId
-        Guid CorrelationId { get; set; }
+        Guid CorrelationId { get; }
     }
 }

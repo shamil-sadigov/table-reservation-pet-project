@@ -1,6 +1,10 @@
-﻿using System;
+﻿#region
+
+using System;
 using MediatR;
 using Restaurants.Application.CommandContract;
+
+#endregion
 
 namespace Restaurants.Application.UseCases.Restaurants.RequestReservation.Command
 {

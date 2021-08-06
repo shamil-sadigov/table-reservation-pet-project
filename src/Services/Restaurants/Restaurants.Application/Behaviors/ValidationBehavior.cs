@@ -1,10 +1,14 @@
-﻿using System.Linq;
+﻿#region
+
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Restaurants.Application.CommandContract;
+
+#endregion
 
 namespace Restaurants.Application.Behaviors
 {
@@ -21,10 +25,10 @@ namespace Restaurants.Application.Behaviors
             _validators = validators;
             _logger = logger;
         }
-        
+
         // TODO: Add logging
         public async Task<TResponse> Handle(
-            TRequest request, 
+            TRequest request,
             CancellationToken cancellationToken,
             RequestHandlerDelegate<TResponse> next)
         {
@@ -34,10 +38,7 @@ namespace Restaurants.Application.Behaviors
                 .Where(error => error != null)
                 .ToList();
 
-            if (failures.Any())
-            {
-                throw new ValidationException(failures);
-            }
+            if (failures.Any()) throw new ValidationException(failures);
 
             return await next();
         }

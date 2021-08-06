@@ -1,4 +1,8 @@
-﻿using FluentValidation;
+﻿#region
+
+using FluentValidation;
+
+#endregion
 
 namespace Restaurants.Application.UseCases.Restaurants.RequestReservation.Command
 {

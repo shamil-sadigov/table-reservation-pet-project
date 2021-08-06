@@ -16,7 +16,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\BuildingBlocks\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj" />
-      <ProjectReference Include="..\..\..\EventBus.RabbitMq\EventBus.RabbitMq.csproj" />
+      <ProjectReference Include="..\..\..\EventBus\EventBus.Abstractions\EventBus.Abstractions.csproj" />
       <ProjectReference Include="..\..\BuildingBlocks\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj" />
       <ProjectReference Include="..\Reservation\Restaurants.Domain\Restaurants.Domain.csproj" />
       <ProjectReference Include="..\Restaurants.Domain\Restaurants.Domain.csproj" />
