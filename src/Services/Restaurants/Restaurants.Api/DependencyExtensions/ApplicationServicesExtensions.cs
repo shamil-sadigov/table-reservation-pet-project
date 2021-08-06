@@ -2,9 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Restaurants.Api.ExecutionContexts;
 using Restaurants.Application;
-using Restaurants.Application.Behaviors;
 using Restaurants.Application.CommandContract;
 using Restaurants.Application.Contracts;
+using Restaurants.Application.Pipelines;
 using Restaurants.Domain.Restaurants.Contracts;
 using Restaurants.Infrastructure;
 
@@ -20,10 +20,10 @@ namespace Restaurants.Api.DependencyExtensions
             
             services.AddMediatR(typeof(Command));
             
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(IdempotencyBehavior<,>));
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(UnitOfWorkBehavior<,>));
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingPipeline<,>));
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipeline<,>));
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(IdempotencyPipeline<,>));
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(UnitOfWorkPipeline<,>));
             
             return services;
         }

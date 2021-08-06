@@ -7,9 +7,9 @@ using Restaurants.Application.CommandContract;
 
 #endregion
 
-namespace Restaurants.Application.Behaviors
+namespace Restaurants.Application.Pipelines
 {
-    public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    public class LoggingPipeline<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : ICommand<TResponse>
     {
         public async Task<TResponse> Handle(

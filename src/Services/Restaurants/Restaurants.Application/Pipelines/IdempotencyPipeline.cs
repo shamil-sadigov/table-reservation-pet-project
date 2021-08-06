@@ -10,16 +10,16 @@ using Restaurants.Application.Exceptions;
 
 #endregion
 
-namespace Restaurants.Application.Behaviors
+namespace Restaurants.Application.Pipelines
 {
     // TODO: Add logging
-    public class IdempotencyBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    public class IdempotencyPipeline<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : ICommand<TResponse>
     {
         private readonly ICommandRepository _commandRepository;
         private readonly IExecutionContext _executionContext;
 
-        public IdempotencyBehavior(
+        public IdempotencyPipeline(
             ICommandRepository commandRepository,
             IExecutionContext executionContext)
         {

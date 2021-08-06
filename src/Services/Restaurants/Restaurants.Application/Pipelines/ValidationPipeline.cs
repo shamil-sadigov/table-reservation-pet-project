@@ -10,17 +10,17 @@ using Restaurants.Application.CommandContract;
 
 #endregion
 
-namespace Restaurants.Application.Behaviors
+namespace Restaurants.Application.Pipelines
 {
-    public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    public class ValidationPipeline<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : ICommand<TResponse>
     {
-        private readonly ILogger<ValidationBehavior<TRequest, TResponse>> _logger;
+        private readonly ILogger<ValidationPipeline<TRequest, TResponse>> _logger;
         private readonly IValidator<TRequest>[] _validators;
 
-        public ValidationBehavior(
+        public ValidationPipeline(
             IValidator<TRequest>[] validators,
-            ILogger<ValidationBehavior<TRequest, TResponse>> logger)
+            ILogger<ValidationPipeline<TRequest, TResponse>> logger)
         {
             _validators = validators;
             _logger = logger;

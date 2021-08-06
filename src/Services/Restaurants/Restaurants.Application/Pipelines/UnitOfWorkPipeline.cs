@@ -9,9 +9,9 @@ using Restaurants.Application.Contracts;
 
 #endregion
 
-namespace Restaurants.Application.Behaviors
+namespace Restaurants.Application.Pipelines
 {
-    public class UnitOfWorkBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+    public class UnitOfWorkPipeline<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : ICommand<TResponse>
     {
         private readonly IDomainEventsPublisher _domainEventsPublisher;
@@ -19,7 +19,7 @@ namespace Restaurants.Application.Behaviors
         private readonly IIntegrationEventsPublisher _integrationEventsPublisher;
         private readonly IResilientTransaction _resilientTransaction;
 
-        public UnitOfWorkBehavior(
+        public UnitOfWorkPipeline(
             IResilientTransaction resilientTransaction,
             IDomainEventsPublisher domainEventsPublisher,
             IIntegrationEventsPublisher integrationEventsPublisher,
