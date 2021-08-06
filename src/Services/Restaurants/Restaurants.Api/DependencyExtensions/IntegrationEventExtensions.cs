@@ -1,6 +1,7 @@
 ﻿using EventBus.Abstractions;
 using EventBus.RabbitMq;
 using EventBus.RabbitMq.Abstractions;
+using EventBus.RabbitMq.Database;
 using EventBus.RabbitMq.Helpers;
 using Microsoft.Extensions.DependencyInjection;
 using Restaurants.Application.UseCases.Restaurants.RequestTableReservation.IntegrationEvent;
