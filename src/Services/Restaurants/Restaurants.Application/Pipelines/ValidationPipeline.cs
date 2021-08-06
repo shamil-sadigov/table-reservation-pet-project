@@ -1,5 +1,6 @@
 ﻿#region
 
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,10 +16,10 @@ namespace Restaurants.Application.Pipelines
         where TRequest : ICommand<TResponse>
     {
         private readonly ILogger<ValidationPipeline<TRequest, TResponse>> _logger;
-        private readonly IValidator<TRequest>[] _validators;
+        private readonly IEnumerable<IValidator<TRequest>> _validators;
 
         public ValidationPipeline(
-            IValidator<TRequest>[] validators,
+            IEnumerable<IValidator<TRequest>> validators,
             ILogger<ValidationPipeline<TRequest, TResponse>> logger)
         {
             _validators = validators;
