@@ -1,7 +1,9 @@
-﻿using System;
-using System.Security.Claims;
+﻿#region
+
 using EventBus.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
+
+#endregion
 
 namespace Restaurants.Api.IntegrationTests.EventBus
 {
@@ -13,8 +15,8 @@ namespace Restaurants.Api.IntegrationTests.EventBus
             factory.ConfigureServices += services => services.AddScoped<IEventBus, AvailableEventBus>();
             return factory;
         }
-        
-        
+
+
         public static RestaurantsWebApplicationFactory WithUnavailableEventBus(
             this RestaurantsWebApplicationFactory factory)
         {

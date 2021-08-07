@@ -1,7 +1,11 @@
+#region
+
 using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+
+#endregion
 
 namespace Restaurants.Api
 {
@@ -10,7 +14,7 @@ namespace Restaurants.Api
         public static int Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
-            
+
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Information()
                 .Enrich.FromLogContext()
@@ -19,7 +23,7 @@ namespace Restaurants.Api
                 .CreateLogger();
 
             // TODO: Add seeding here
-            
+
             try
             {
                 Log.Information("Starting host...");
@@ -40,9 +44,6 @@ namespace Restaurants.Api
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .UseSerilog()
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+                .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });
     }
 }

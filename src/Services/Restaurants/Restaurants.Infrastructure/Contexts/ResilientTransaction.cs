@@ -1,12 +1,15 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Restaurants.Application;
 using Restaurants.Application.Contracts;
+
+#endregion
 
 namespace Restaurants.Infrastructure.Contexts
 {
-    public class ResilientTransaction:IResilientTransaction
+    public class ResilientTransaction : IResilientTransaction
     {
         private readonly RestaurantContext _context;
 
@@ -14,20 +17,20 @@ namespace Restaurants.Infrastructure.Contexts
         {
             _context = context;
         }
-        
+
         public async Task ExecuteAsync(Func<Task> func)
         {
             if (_context.HasTransaction)
                 throw new InvalidOperationException("Transaction has been already began");
-            
+
             var executionStrategy = _context.Database.CreateExecutionStrategy();
 
             await executionStrategy.ExecuteAsync(async () =>
             {
                 await using var transaction = await _context.Database.BeginTransactionAsync();
-                
+
                 await func();
-                
+
                 await transaction.CommitAsync();
             });
         }
@@ -36,17 +39,17 @@ namespace Restaurants.Infrastructure.Contexts
         {
             if (_context.HasTransaction)
                 throw new InvalidOperationException("Transaction has been already began");
-            
+
             var executionStrategy = _context.Database.CreateExecutionStrategy();
 
             return await executionStrategy.ExecuteAsync(async () =>
             {
                 await using var transaction = await _context.Database.BeginTransactionAsync();
-                
+
                 var result = await func();
-                
+
                 await transaction.CommitAsync();
-                
+
                 return result;
             });
         }

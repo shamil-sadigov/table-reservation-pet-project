@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using MediatR;
@@ -6,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using Restaurants.Api.Auth;
 using Restaurants.Api.Dto;
 using Restaurants.Application.UseCases.Restaurants.RequestTableReservation.Command;
+
+#endregion
 
 namespace Restaurants.Api.Controllers
 {
@@ -20,11 +24,11 @@ namespace Restaurants.Api.Controllers
         {
             _mediator = mediator;
         }
-        
+
         [Route("reservation-requests")]
         [HttpPost]
-        [ProducesResponseType((int)HttpStatusCode.Accepted)]
-        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int) HttpStatusCode.Accepted)]
+        [ProducesResponseType((int) HttpStatusCode.BadRequest)]
         public async Task<IActionResult> ReservationRequests([FromBody] RequestReservationRequest request)
         {
             // TODO: Handling of command can throw exception.
@@ -36,7 +40,7 @@ namespace Restaurants.Api.Controllers
                 new TimeSpan(request.VisitingTime.Hours, request.VisitingTime.Minutes, 0),
                 request.NumberOfRequestedSeats
             ));
-            
+
             return Accepted();
         }
     }

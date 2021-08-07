@@ -1,23 +1,15 @@
 #region
 
 using System;
-using System.Linq;
-using System.Net;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using EventBus.RabbitMq.Database;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Restaurant.Tests.Shared;
 using Restaurants.Api.Exceptions;
 using Restaurants.Api.IntegrationTests.Auth;
 using Restaurants.Api.IntegrationTests.DataSeeders;
 using Restaurants.Api.IntegrationTests.EventBus;
 using Restaurants.Api.IntegrationTests.Helpers;
-using Restaurants.Application;
 using Restaurants.Application.Exceptions;
-using Restaurants.Infrastructure.Contexts;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -27,8 +19,8 @@ namespace Restaurants.Api.IntegrationTests.Tests
 {
     public class CorrelationIdTests : TestBase, IClassFixture<RestaurantsWebApplicationFactory>
     {
-        public CorrelationIdTests(RestaurantsWebApplicationFactory restaurantApi, ITestOutputHelper output) 
-            :base(restaurantApi)
+        public CorrelationIdTests(RestaurantsWebApplicationFactory restaurantApi, ITestOutputHelper output)
+            : base(restaurantApi)
         {
         }
 
@@ -39,17 +31,17 @@ namespace Restaurants.Api.IntegrationTests.Tests
             var restaurant = await CreateSingleRestaurant();
 
             var restaurantSeeder = new RestaurantSeeder(restaurant);
-            
+
             var correlationId = Guid.NewGuid();
-            
+
             var httpClient = RestaurantApi
-                                .WithPredefinedData(restaurantSeeder)
-                                .WithAvailableEventBus()
-                                .WithAuthenticatedUser(userId: Guid.NewGuid())
-                                .CreateDefaultClient
-                                (
-                                    new Uri(IntegrationTests.RestaurantApi.BaseUrl)
-                                );
+                .WithPredefinedData(restaurantSeeder)
+                .WithAvailableEventBus()
+                .WithAuthenticatedUser(userId: Guid.NewGuid())
+                .CreateDefaultClient
+                (
+                    new Uri(IntegrationTests.RestaurantApi.BaseUrl)
+                );
             // Act
             Func<Task> postRequest = async () =>
             {
@@ -72,7 +64,7 @@ namespace Restaurants.Api.IntegrationTests.Tests
                 .ThrowAsync<CorrelationIdException>()
                 .WithMessage("Request should contains CorrelationId *");
         }
-        
+
         [Fact]
         public async Task Cannot_Post_reservation_request_when_duplicate_correlationId_is_specified_in_request()
         {
@@ -80,9 +72,9 @@ namespace Restaurants.Api.IntegrationTests.Tests
             var restaurant = await CreateSingleRestaurant();
 
             var restaurantSeeder = new RestaurantSeeder(restaurant);
-            
+
             var correlationId = Guid.NewGuid();
-            
+
             var httpClient = RestaurantApi
                 .WithPredefinedData(restaurantSeeder)
                 .WithAvailableEventBus()
@@ -92,9 +84,9 @@ namespace Restaurants.Api.IntegrationTests.Tests
                     new Uri(IntegrationTests.RestaurantApi.BaseUrl),
                     new CorrelationIdProvider(correlationId)
                 );
-            
+
             // Act
-            
+
             // First post
             var response = await httpClient.PostAsJsonAsync(IntegrationTests.RestaurantApi.ReservationRequestsPath, new
             {
@@ -110,7 +102,7 @@ namespace Restaurants.Api.IntegrationTests.Tests
             });
 
             response.IsSuccessStatusCode.Should().BeTrue();
-            
+
             // second duplicated post
             Func<Task> duplicatePost = async () =>
             {

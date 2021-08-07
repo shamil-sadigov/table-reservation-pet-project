@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿#region
+
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Restaurants.Api.ExecutionContexts;
 using Restaurants.Application;
@@ -6,6 +8,8 @@ using Restaurants.Application.Contracts;
 using Restaurants.Application.Pipelines;
 using Restaurants.Domain.Restaurants.Contracts;
 using Restaurants.Infrastructure;
+
+#endregion
 
 namespace Restaurants.Api.DependencyExtensions
 {
@@ -16,17 +20,17 @@ namespace Restaurants.Api.DependencyExtensions
             services.AddScoped<IExecutionContext, WebExecutionContext>();
             services.AddScoped<IIdentityProvider, IdentityProvider>();
             services.AddTransient<IRestaurantChecker, RestaurantChecker>();
-            
+
             services.AddScoped<IDomainEventsPublisher, DomainEventsPublisher>();
             services.AddScoped<IDomainEventAccessor, DomainEventsAccessor>();
-            
+
             services.AddMediatR(typeof(Command));
 
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingPipeline<,>));
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationPipeline<,>));
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(IdempotencyPipeline<,>));
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(UnitOfWorkPipeline<,>));
-            
+
             return services;
         }
     }

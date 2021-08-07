@@ -1,13 +1,16 @@
+#region
+
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Restaurants.Api.DependencyExtensions;
 using Restaurants.Application;
+
+#endregion
 
 namespace Restaurants.Api
 {
@@ -32,18 +35,18 @@ namespace Restaurants.Api
                 .AddApplicationServices()
                 .AddIntegrationEventBus()
                 .AddControllers();
-            
+
             services.AddSwaggerGen(c =>
             {
                 // TODO: Add authentication here
                 // when Identity Service will be ready
-                
+
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = "Restaurants.Api", Version = "v1"
                 });
             });
-            
+
             // TODO: Add health checks
         }
 
@@ -58,7 +61,7 @@ namespace Restaurants.Api
             }
 
             // TODO: add error handling
-            
+
             // app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -66,7 +69,7 @@ namespace Restaurants.Api
             app.UseCors();
 
             app.UseAuthentication();
-            
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });

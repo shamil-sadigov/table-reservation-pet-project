@@ -16,7 +16,7 @@ namespace Reservations.Infrastructure
 
         public SqlConnectionFactory(string connectionString)
         {
-            _connectionString = connectionString 
+            _connectionString = connectionString
                                 ?? throw new ArgumentNullException(nameof(connectionString));
         }
 
@@ -30,19 +30,18 @@ namespace Reservations.Infrastructure
 
             return _connection;
         }
-        
+
         public ValueTask DisposeAsync()
         {
-            return _connection is {State: ConnectionState.Open} 
-                ? new ValueTask(Task.Run(_connection.Dispose)) 
+            return _connection is {State: ConnectionState.Open}
+                ? new ValueTask(Task.Run(_connection.Dispose))
                 : ValueTask.CompletedTask;
         }
-        
+
         public void Dispose()
         {
             if (_connection is {State: ConnectionState.Open})
                 _connection.Dispose();
         }
-
     }
 }

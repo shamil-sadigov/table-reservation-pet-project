@@ -18,7 +18,7 @@ namespace Restaurants.Domain.Restaurants.ValueObjects
         private VisitingTime()
         {
         }
-        
+
         public VisitingTime(TimeSpan timeSpan)
         {
             // timeSpan can contains Days which should be ignored
@@ -26,9 +26,9 @@ namespace Restaurants.Domain.Restaurants.ValueObjects
 
             Value = new TimeSpan(timeSpan.Hours, timeSpan.Minutes, 0);
         }
-        
+
         public TimeSpan Value { get; }
-        
+
         public override string ToString() => Value.ToString();
 
         protected override IEnumerable<object> GetEqualityComponents()

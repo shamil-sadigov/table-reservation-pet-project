@@ -49,7 +49,7 @@ namespace Restaurants.Application.Pipelines
             // So we need to create a separate service
             // that would pull all 'failed to publish' integration events based on some time interval
             // and would try to publish event again
-            
+
             await _integrationEventsPublisher.PublishEventsAsync(_executionContext.CorrelationId);
 
             return response;

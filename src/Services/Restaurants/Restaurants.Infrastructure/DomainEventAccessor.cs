@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
+﻿#region
+
+using System.Collections.Generic;
 using System.Linq;
 using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainEvents;
-using Microsoft.EntityFrameworkCore;
 using MoreLinq;
-using Restaurants.Application;
 using Restaurants.Application.Contracts;
 using Restaurants.Infrastructure.Contexts;
+
+#endregion
 
 namespace Restaurants.Infrastructure
 {
@@ -23,7 +25,7 @@ namespace Restaurants.Infrastructure
             _context.ChangeTracker
                 .Entries<Entity>()
                 .Where(x => x.Entity.HasDomainEvents)
-                .SelectMany(x=> x.Entity.DomainEvents!)
+                .SelectMany(x => x.Entity.DomainEvents!)
                 .ToList();
 
         public void ClearAllDomainEvents() =>

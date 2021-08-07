@@ -1,4 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿#region
+
+using Microsoft.EntityFrameworkCore;
+
+#endregion
 
 namespace Restaurants.Api.IntegrationTests.DataSeeders
 {

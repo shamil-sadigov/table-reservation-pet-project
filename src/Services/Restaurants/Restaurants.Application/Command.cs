@@ -15,10 +15,9 @@ namespace Restaurants.Application
         // For EF
         private Command()
         {
-            
         }
-            
-        
+
+
         public Command(Guid commandId, Guid correlationId, Guid causationId, string commandType)
         {
             CommandId = commandId;

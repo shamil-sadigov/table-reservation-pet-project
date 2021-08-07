@@ -43,7 +43,7 @@ namespace Restaurants.Api.DependencyExtensions
                     sqlOptions.MigrationsAssembly(typeof(RestaurantContext).Assembly.FullName);
                 });
             });
-            
+
             services.AddDbContext<IntegrationEventContext>((provider, dbOptions) =>
             {
                 var restaurantContext = provider.GetRequiredService<RestaurantContext>();
@@ -58,12 +58,12 @@ namespace Restaurants.Api.DependencyExtensions
                 dbOptions.UseLoggerFactory(loggerFactory);
 
                 dbOptions.UseSqlServer(
-                    restaurantContext.Database.GetDbConnection(), 
+                    restaurantContext.Database.GetDbConnection(),
                     sqlOptions =>
-                {
-                    sqlOptions.EnableRetryOnFailure();
-                    sqlOptions.MigrationsAssembly(typeof(IntegrationEventContext).Assembly.FullName);
-                });
+                    {
+                        sqlOptions.EnableRetryOnFailure();
+                        sqlOptions.MigrationsAssembly(typeof(IntegrationEventContext).Assembly.FullName);
+                    });
             });
 
 
@@ -81,7 +81,7 @@ namespace Restaurants.Api.DependencyExtensions
 
             services.AddScoped<IResilientTransaction, ResilientTransaction>();
             services.AddScoped<IDbTransactionProvider, RestaurantTransactionProvider>();
-            
+
             return services;
         }
     }

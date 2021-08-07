@@ -13,9 +13,9 @@ namespace BuildingBlocks.Domain
         private List<IDomainEvent>? _domainEvents;
 
         public IReadOnlyCollection<IDomainEvent>? DomainEvents => _domainEvents?.AsReadOnly();
-        
+
         public bool HasDomainEvents => _domainEvents?.Any() is true;
-        
+
         public void ClearDomainEvents()
         {
             _domainEvents?.Clear();

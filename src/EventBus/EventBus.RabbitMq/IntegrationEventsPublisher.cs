@@ -15,9 +15,9 @@ namespace EventBus.RabbitMq
 {
     public sealed class IntegrationEventsPublisher : IIntegrationEventsPublisher
     {
+        private readonly IDbTransactionProvider _dbTransactionProvider;
         private readonly IEventBus _eventBus;
         private readonly IntegrationEventDeserializer _eventDeserializer;
-        private readonly IDbTransactionProvider _dbTransactionProvider;
         private readonly ILogger<IntegrationEventsPublisher> _logger;
         private readonly IIntegrationEventRepository _repository;
 

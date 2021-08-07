@@ -1,20 +1,14 @@
 #region
 
 using System;
-using System.Linq;
 using System.Net;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using EventBus.RabbitMq.Database;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Restaurants.Api.IntegrationTests.Auth;
 using Restaurants.Api.IntegrationTests.DataSeeders;
 using Restaurants.Api.IntegrationTests.EventBus;
 using Restaurants.Api.IntegrationTests.Helpers;
-using Restaurants.Application;
-using Restaurants.Infrastructure.Contexts;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -22,11 +16,11 @@ using Xunit.Abstractions;
 
 namespace Restaurants.Api.IntegrationTests.Tests
 {
-    public class RequestReservationTests :TestBase, IClassFixture<RestaurantsWebApplicationFactory>
+    public class RequestReservationTests : TestBase, IClassFixture<RestaurantsWebApplicationFactory>
     {
         private readonly ITestOutputHelper _output;
 
-        public RequestReservationTests(RestaurantsWebApplicationFactory restaurantApi, ITestOutputHelper output) 
+        public RequestReservationTests(RestaurantsWebApplicationFactory restaurantApi, ITestOutputHelper output)
             : base(restaurantApi)
         {
             _output = output;
@@ -39,23 +33,23 @@ namespace Restaurants.Api.IntegrationTests.Tests
             var restaurant = await CreateSingleRestaurant();
 
             var restaurantSeeder = new RestaurantSeeder(restaurant);
-            
+
             var correlationId = Guid.NewGuid();
-            
+
             var httpClient = RestaurantApi
-                                .WithPredefinedData(restaurantSeeder)
-                                .WithAvailableEventBus()
-                                .WithAuthenticatedUser(userId: Guid.NewGuid())
-                                .CreateDefaultClient
-                                (
-                                    new Uri(IntegrationTests.RestaurantApi.BaseUrl),
-                                    new CorrelationIdProvider(correlationId)
-                                );
+                .WithPredefinedData(restaurantSeeder)
+                .WithAvailableEventBus()
+                .WithAuthenticatedUser(userId: Guid.NewGuid())
+                .CreateDefaultClient
+                (
+                    new Uri(IntegrationTests.RestaurantApi.BaseUrl),
+                    new CorrelationIdProvider(correlationId)
+                );
             // Act
             var response = await httpClient.PostAsJsonAsync(IntegrationTests.RestaurantApi.ReservationRequestsPath, new
             {
                 // TODO: extract anonymous object to dto record
-                
+
                 RestaurantId = restaurant.Id.Value,
                 VisitingTime = new
                 {
@@ -66,20 +60,20 @@ namespace Restaurants.Api.IntegrationTests.Tests
             });
 
             // Assert            
-            if (!response.IsSuccessStatusCode) 
+            if (!response.IsSuccessStatusCode)
                 _output.WriteLine(await response.Content.ReadAsStringAsync());
-            
+
             response.StatusCode
                 .Should().Be(HttpStatusCode.Accepted);
 
             var integrationEvent = await GetIntegrationEventAsync(correlationId);
 
             integrationEvent.Should().NotBeNull();
-            
+
             integrationEvent.ShouldBePublished();
-            
+
             var executedCommand = await GetExecutedCommandAsync(correlationId);
-            
+
             executedCommand.Should().NotBeNull();
 
             integrationEvent.ShouldBeCausedBy(executedCommand);

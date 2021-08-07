@@ -19,17 +19,17 @@ namespace Restaurants.Infrastructure.Configurations
 
             builder.Property(x => x.Id)
                 .HasConversion(x => x.Value, guid => new RestaurantId(guid));
-            
-            builder.OwnsOne<RestaurantName>("_name", ops => 
+
+            builder.OwnsOne<RestaurantName>("_name", ops =>
                 ops.Property(x => x.Value)
-                      .HasColumnName("Name")
-                      .HasMaxLength(256));
-            
-            builder.OwnsOne<RestaurantAddress>("_address", ops => 
+                    .HasColumnName("Name")
+                    .HasMaxLength(256));
+
+            builder.OwnsOne<RestaurantAddress>("_address", ops =>
                 ops.Property(x => x.Value)
                     .HasColumnName("Address")
                     .HasMaxLength(256));
-            
+
             builder.OwnsOne<RestaurantWorkingHours>("_workingHours", x =>
             {
                 x.Property(ra => ra.StartTime)
@@ -40,7 +40,7 @@ namespace Restaurants.Infrastructure.Configurations
                     .HasColumnName("FinishWorkingAt")
                     .HasPrecision(0, 0);
             });
-            
+
             builder.Navigation("_name").IsRequired();
             builder.Navigation("_address").IsRequired();
             builder.Navigation("_workingHours").IsRequired();

@@ -1,13 +1,17 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Security.Claims;
 using Restaurants.Api.IntegrationTests.Helpers;
+
+#endregion
 
 namespace Restaurants.Api.IntegrationTests.Auth
 {
     public static class AuthenticationDependencyExtensions
     {
         public static RestaurantsWebApplicationFactory WithAuthenticatedUser(
-            this RestaurantsWebApplicationFactory factory, 
+            this RestaurantsWebApplicationFactory factory,
             Guid userId)
         {
             var claims = new Claim[]
@@ -21,7 +25,7 @@ namespace Restaurants.Api.IntegrationTests.Auth
         }
 
         public static RestaurantsWebApplicationFactory WithUnauthorizedUser(
-            this RestaurantsWebApplicationFactory factory, 
+            this RestaurantsWebApplicationFactory factory,
             Guid userId)
         {
             var claims = new Claim[]

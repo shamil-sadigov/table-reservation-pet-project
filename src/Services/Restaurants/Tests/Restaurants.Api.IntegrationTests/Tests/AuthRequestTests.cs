@@ -1,21 +1,14 @@
 #region
 
 using System;
-using System.Linq;
 using System.Net;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using EventBus.RabbitMq.Database;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Restaurant.Tests.Shared;
 using Restaurants.Api.IntegrationTests.Auth;
 using Restaurants.Api.IntegrationTests.DataSeeders;
 using Restaurants.Api.IntegrationTests.EventBus;
 using Restaurants.Api.IntegrationTests.Helpers;
-using Restaurants.Application;
-using Restaurants.Infrastructure.Contexts;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -27,8 +20,8 @@ namespace Restaurants.Api.IntegrationTests.Tests
     {
         private readonly ITestOutputHelper _output;
 
-        public AuthRequestTests(RestaurantsWebApplicationFactory restaurantApi, ITestOutputHelper output) 
-        : base(restaurantApi)
+        public AuthRequestTests(RestaurantsWebApplicationFactory restaurantApi, ITestOutputHelper output)
+            : base(restaurantApi)
         {
             _output = output;
         }
@@ -40,22 +33,22 @@ namespace Restaurants.Api.IntegrationTests.Tests
             var restaurant = await CreateSingleRestaurant();
 
             var restaurantSeeder = new RestaurantSeeder(restaurant);
-            
+
             var correlationId = Guid.NewGuid();
-            
+
             var httpClient = RestaurantApi
-                                .WithPredefinedData(restaurantSeeder)
-                                .WithAvailableEventBus()
-                                .CreateDefaultClient
-                                (
-                                    new Uri(IntegrationTests.RestaurantApi.BaseUrl),
-                                    new CorrelationIdProvider(correlationId)
-                                );
+                .WithPredefinedData(restaurantSeeder)
+                .WithAvailableEventBus()
+                .CreateDefaultClient
+                (
+                    new Uri(IntegrationTests.RestaurantApi.BaseUrl),
+                    new CorrelationIdProvider(correlationId)
+                );
             // Act
             var response = await httpClient.PostAsJsonAsync(IntegrationTests.RestaurantApi.ReservationRequestsPath, new
             {
                 // TODO: extract anonymous object to dto record
-                
+
                 RestaurantId = restaurant.Id.Value,
                 VisitingTime = new
                 {
@@ -69,8 +62,8 @@ namespace Restaurants.Api.IntegrationTests.Tests
             response.StatusCode
                 .Should().Be(HttpStatusCode.Unauthorized);
         }
-        
-        
+
+
         [Fact]
         public async Task Cannot_Post_reservation_request_when_user_is_not_authorized()
         {
@@ -78,24 +71,24 @@ namespace Restaurants.Api.IntegrationTests.Tests
             var restaurant = await CreateSingleRestaurant();
 
             var restaurantSeeder = new RestaurantSeeder(restaurant);
-            
+
             var correlationId = Guid.NewGuid();
-            
+
             var httpClient = RestaurantApi
-                                .WithPredefinedData(restaurantSeeder)
-                                .WithAvailableEventBus()
-                                .WithUnauthorizedUser(userId: Guid.NewGuid()) // <-
-                                .CreateDefaultClient
-                                (
-                                    new Uri(IntegrationTests.RestaurantApi.BaseUrl),
-                                    new CorrelationIdProvider(correlationId)
-                                );
-            
+                .WithPredefinedData(restaurantSeeder)
+                .WithAvailableEventBus()
+                .WithUnauthorizedUser(userId: Guid.NewGuid()) // <-
+                .CreateDefaultClient
+                (
+                    new Uri(IntegrationTests.RestaurantApi.BaseUrl),
+                    new CorrelationIdProvider(correlationId)
+                );
+
             // Act
             var response = await httpClient.PostAsJsonAsync(IntegrationTests.RestaurantApi.ReservationRequestsPath, new
             {
                 // TODO: extract anonymous object to dto record
-                
+
                 RestaurantId = restaurant.Id.Value,
                 VisitingTime = new
                 {

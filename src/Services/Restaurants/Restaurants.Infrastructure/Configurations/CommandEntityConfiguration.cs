@@ -1,6 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿#region
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Restaurants.Application;
+
+#endregion
 
 namespace Restaurants.Infrastructure.Configurations
 {
@@ -9,11 +13,11 @@ namespace Restaurants.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<Command> builder)
         {
             builder.HasKey(x => x.CommandId);
-            
+
             builder.Property(x => x.CorrelationId);
-            
+
             builder.HasIndex(x => x.CorrelationId);
-            
+
             builder.Property(x => x.CommandType)
                 .IsRequired()
                 .HasMaxLength(256);

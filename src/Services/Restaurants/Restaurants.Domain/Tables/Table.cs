@@ -14,8 +14,8 @@ namespace Restaurants.Domain.Tables
 {
     public sealed class Table : Entity
     {
-        private readonly TableState _state;
         private readonly RestaurantId _restaurantId;
+        private readonly TableState _state;
 
         // for EF
         private Table()
@@ -36,7 +36,7 @@ namespace Restaurants.Domain.Tables
         }
 
         public TableId Id { get; }
-        
+
         internal NumberOfSeats NumberOfSeats { get; }
 
         internal bool IsAvailable => _state == TableState.Available;

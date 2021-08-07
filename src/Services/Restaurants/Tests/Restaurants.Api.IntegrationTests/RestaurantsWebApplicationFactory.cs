@@ -18,14 +18,15 @@ namespace Restaurants.Api.IntegrationTests
     public class RestaurantsWebApplicationFactory : WebApplicationFactory<Startup>
     {
         public Action<IServiceCollection>? ConfigureServices;
-        
+
         protected IDataSeeder? DataSeeder;
-        
+
         public RestaurantsWebApplicationFactory WithPredefinedData(IDataSeeder dataSeeder)
         {
             DataSeeder = dataSeeder;
             return this;
         }
+
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.ConfigureAppConfiguration(ops =>
@@ -41,7 +42,7 @@ namespace Restaurants.Api.IntegrationTests
             builder.ConfigureServices(services =>
             {
                 ConfigureServices?.Invoke(services);
-                
+
                 using var provider = services.BuildServiceProvider();
                 using var scope = provider.CreateScope();
 

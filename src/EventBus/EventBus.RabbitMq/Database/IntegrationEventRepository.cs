@@ -6,7 +6,6 @@ using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 using EventBus.RabbitMq.Abstractions;
-using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 
 #endregion
@@ -38,7 +37,7 @@ namespace EventBus.RabbitMq.Database
             _context.Entry(integrationEvent).CurrentValues.SetValues(integrationEvent);
             await _context.SaveChangesAsync();
         }
-        
+
         public async Task<List<IntegrationEventEntry>> GetUnpublishedEventsAsync(Guid correlationId)
             => await _context.IntegrationEvents
                 .Where(x => x.CorrelationId == correlationId)

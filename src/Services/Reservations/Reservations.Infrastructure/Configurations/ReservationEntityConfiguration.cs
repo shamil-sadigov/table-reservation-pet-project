@@ -1,8 +1,5 @@
 ﻿#region
 
-
-#endregion
-
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -11,6 +8,8 @@ using Reservations.Domain.ReservationRequests;
 using Reservations.Domain.ReservationRequests.ValueObjects;
 using Reservations.Domain.Reservations;
 using Reservations.Domain.Visitors;
+
+#endregion
 
 namespace Reservations.Infrastructure.Configurations
 {
@@ -21,25 +20,25 @@ namespace Reservations.Infrastructure.Configurations
             builder.ToTable("Reservations", schema: "reservation");
 
             builder.HasKey(x => x.Id);
-            
+
             builder.Property(x => x.Id)
                 .WithConversion();
 
             builder.Property<AdministratorId>("_approvedByAdministratorId")
                 .HasColumnName("ApprovedByAdministratorId")
                 .WithConversion();
-            
+
             builder.Property<TableId>("_tableId")
                 .HasColumnName("TableId")
                 .WithConversion();
-            
+
             builder.Property<VisitorId>("_visitorId")
                 .HasColumnName("VisitorId");
-            
+
             builder.Property<DateTime>("_approvedDateTime")
                 .HasColumnName("ApprovedDateTime")
                 .WithUtcConversion();
-            
+
             builder.Property<ReservationRequestId>("_reservationRequestId")
                 .HasColumnName("ReservationRequestId");
 
@@ -47,7 +46,7 @@ namespace Reservations.Infrastructure.Configurations
                 .WithOne()
                 .HasForeignKey<Reservation>("_reservationRequestId")
                 .OnDelete(DeleteBehavior.Restrict);
-            
+
             builder.HasOne<Visitor>()
                 .WithMany()
                 .HasForeignKey("_visitorId")

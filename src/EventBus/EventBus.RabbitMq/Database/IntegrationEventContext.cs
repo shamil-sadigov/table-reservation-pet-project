@@ -11,9 +11,8 @@ namespace EventBus.RabbitMq.Database
         public IntegrationEventContext(DbContextOptions<IntegrationEventContext> options)
             : base(options)
         {
-            
         }
-        
+
         public DbSet<IntegrationEventEntry> IntegrationEvents { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -32,10 +31,10 @@ namespace EventBus.RabbitMq.Database
 
                 model.Property(x => x.EventType)
                     .HasMaxLength(256);
-                
+
                 model.Property(x => x.EventContent)
                     .IsRequired();
-                
+
                 model.Property(x => x.State)
                     .HasConversion<string>()
                     .HasMaxLength(256);

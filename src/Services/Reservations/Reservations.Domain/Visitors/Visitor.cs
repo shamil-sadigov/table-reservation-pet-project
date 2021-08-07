@@ -1,7 +1,11 @@
-﻿using BuildingBlocks.Domain;
+﻿#region
+
+using BuildingBlocks.Domain;
 using BuildingBlocks.Domain.DomainRules;
 using Reservations.Domain.ReservationRequests.ValueObjects;
 using Reservations.Domain.Visitors.DomainEvents;
+
+#endregion
 
 namespace Reservations.Domain.Visitors
 {

@@ -1,5 +1,8 @@
-﻿using System.Data.Common;
-using Microsoft.EntityFrameworkCore.Storage;
+﻿#region
+
+using System.Data.Common;
+
+#endregion
 
 namespace EventBus.RabbitMq.Database
 {

@@ -17,16 +17,17 @@ namespace Reservations.Domain.ReservationRequests
 {
     public class ReservationRequest : Entity, IAggregateRoot
     {
+        private readonly DateTime _createdDateTime;
+
         /// <summary>
         ///     When Reservation is created
         /// </summary>
-
         private readonly RestaurantId _restaurantId;
+
         private readonly TableId _tableId;
+        private readonly DateTime _visitingDateTime;
         private readonly VisitorId _visitorId;
 
-        private readonly DateTime _createdDateTime;
-        private readonly DateTime _visitingDateTime;
         /// <summary>
         ///     When reservation is approved or rejected
         /// </summary>

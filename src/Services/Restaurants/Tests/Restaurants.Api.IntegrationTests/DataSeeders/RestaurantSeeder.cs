@@ -1,8 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿#region
+
+using Microsoft.EntityFrameworkCore;
+
+#endregion
 
 namespace Restaurants.Api.IntegrationTests.DataSeeders
 {
-    public class RestaurantSeeder:IDataSeeder
+    public class RestaurantSeeder : IDataSeeder
     {
         private readonly Domain.Restaurants.Restaurant[] _restaurant;
 
@@ -10,7 +14,7 @@ namespace Restaurants.Api.IntegrationTests.DataSeeders
         {
             _restaurant = restaurant;
         }
-        
+
         public void Seed(DbContext context)
         {
             context.Set<Domain.Restaurants.Restaurant>().AddRange(_restaurant);

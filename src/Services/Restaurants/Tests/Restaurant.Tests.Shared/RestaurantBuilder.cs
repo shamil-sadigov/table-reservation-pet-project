@@ -16,19 +16,19 @@ namespace Restaurant.Tests.Shared
 {
     public class RestaurantBuilder
     {
-        private  RestaurantName _name;
         private RestaurantAddress _address;
-        private RestaurantWorkingHours _workingHours;
+        private readonly RestaurantName _name;
         private List<(TableId tableId, NumberOfSeats numberOfSeats)> _tableInfos;
+        private RestaurantWorkingHours _workingHours;
 
         public RestaurantBuilder(RestaurantName name)
         {
             _name = name;
         }
-        
+
         public static RestaurantBuilder WithName(string name)
         {
-            var nameResult =  RestaurantName.TryCreate(name);
+            var nameResult = RestaurantName.TryCreate(name);
             nameResult.ThrowIfNotSuccessful();
             return new RestaurantBuilder(nameResult.Value!);
         }
@@ -39,7 +39,7 @@ namespace Restaurant.Tests.Shared
 
             addressResult.ThrowIfNotSuccessful();
 
-            _address =  addressResult.Value!;
+            _address = addressResult.Value!;
 
             return this;
         }
@@ -56,31 +56,31 @@ namespace Restaurant.Tests.Shared
                     .CombineWith(tableIdResult)
                     .ThrowIfNotSuccessful();
 
-                NumberOfSeats numberOfSeats = numberOfSeatsResult.Value!;
-                
-                TableId tableId = tableIdResult.Value!;
+                var numberOfSeats = numberOfSeatsResult.Value!;
+
+                var tableId = tableIdResult.Value!;
 
                 return (tableId, numberOfSeats);
             }).ToList();
-            
+
             return this;
         }
-        
+
         public RestaurantBuilder WithWorkingSchedule(string startTime, string finishTime)
         {
             var startWorkingTime = startTime.AsTimeSpan();
             var finishWorkingTime = finishTime.AsTimeSpan();
-            
+
             var result = RestaurantWorkingHours.TryCreate(
                 startWorkingTime,
                 finishWorkingTime);
 
             result.ThrowIfNotSuccessful();
 
-            _workingHours =  result.Value!;
+            _workingHours = result.Value!;
             return this;
         }
-        
+
         public async Task<Restaurants.Domain.Restaurants.Restaurant> BuildAsync(bool clearDomainEvent = true)
         {
             var checker = new Mock<IRestaurantChecker>();
@@ -96,8 +96,8 @@ namespace Restaurant.Tests.Shared
 
             result.ThrowIfNotSuccessful();
 
-            Restaurants.Domain.Restaurants.Restaurant restaurant = result.Value!;
-            
+            var restaurant = result.Value!;
+
             _tableInfos?.ForEach(async tableInfo =>
             {
                 var addToTableResult = restaurant.TryAddTable(
@@ -106,7 +106,7 @@ namespace Restaurant.Tests.Shared
 
                 addToTableResult.ThrowIfNotSuccessful();
             });
-            
+
             restaurant.ClearAllDomainEvents();
 
             return restaurant;

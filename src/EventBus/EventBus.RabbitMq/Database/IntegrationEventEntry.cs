@@ -14,9 +14,8 @@ namespace EventBus.RabbitMq.Database
         // for EF
         private IntegrationEventEntry()
         {
-            
         }
-        
+
         public IntegrationEventEntry(IntegrationEvent @event)
         {
             EventId = @event.EventId;

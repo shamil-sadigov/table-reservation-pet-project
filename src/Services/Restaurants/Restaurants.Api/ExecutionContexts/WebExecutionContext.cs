@@ -1,28 +1,31 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Restaurants.Api.Exceptions;
-using Restaurants.Application;
 using Restaurants.Application.Contracts;
+
+#endregion
 
 namespace Restaurants.Api.ExecutionContexts
 {
-    public sealed class WebExecutionContext:IExecutionContext
+    public sealed class WebExecutionContext : IExecutionContext
     {
         private const string CorrelationIdHeader = "X-Correlation-Id";
-        
+
         public WebExecutionContext(IHttpContextAccessor httpContextAccessor)
         {
             if (httpContextAccessor.HttpContext is null)
                 throw new InvalidOperationException("HttpContext is not available");
-            
+
             SetCorrelationId(httpContextAccessor);
         }
-        
+
         public Guid CorrelationId { get; private set; }
-        
+
         public Guid? CurrentExecutingCommandId { get; set; }
-        
+
         private void SetCorrelationId(IHttpContextAccessor httpContextAccessor)
         {
             var headers = httpContextAccessor.HttpContext!.Request.Headers;
@@ -36,7 +39,7 @@ namespace Restaurants.Api.ExecutionContexts
             if (!Guid.TryParse(headerValue, out var correlationId))
                 throw new CorrelationIdException(
                     $"Provided correlation id '{headerValue}' should be in expected Guid format");
-            
+
             CorrelationId = correlationId;
         }
     }

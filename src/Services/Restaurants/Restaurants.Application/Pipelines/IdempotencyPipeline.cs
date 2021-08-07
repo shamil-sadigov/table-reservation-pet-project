@@ -44,9 +44,9 @@ namespace Restaurants.Application.Pipelines
                 _executionContext.CorrelationId,
                 causationId: _executionContext.CorrelationId,
                 typeof(TRequest).FullName);
-            
+
             await _commandRepository.SaveAsync(executingCommand);
-            
+
             _executionContext.CurrentExecutingCommandId = executingCommand.CommandId;
 
             return await nextHandler();

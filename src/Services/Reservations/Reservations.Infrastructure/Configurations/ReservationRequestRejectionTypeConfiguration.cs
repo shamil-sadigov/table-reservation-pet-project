@@ -38,7 +38,7 @@ namespace Reservations.Infrastructure.Configurations
 
             builder.Property<ReservationRequestId>("_reservationRequestId")
                 .HasColumnName("ReservationRequestId");
-            
+
             builder.HasOne<ReservationRequest>()
                 .WithOne()
                 .HasForeignKey<ReservationRequestRejection>("_reservationRequestId")

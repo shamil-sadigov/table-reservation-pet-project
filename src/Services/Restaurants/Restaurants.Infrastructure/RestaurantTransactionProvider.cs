@@ -1,12 +1,16 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Data.Common;
 using EventBus.RabbitMq.Database;
 using Microsoft.EntityFrameworkCore.Storage;
 using Restaurants.Infrastructure.Contexts;
 
+#endregion
+
 namespace Restaurants.Infrastructure
 {
-    public class RestaurantTransactionProvider:IDbTransactionProvider
+    public class RestaurantTransactionProvider : IDbTransactionProvider
     {
         private readonly RestaurantContext _context;
 
@@ -19,11 +23,8 @@ namespace Restaurants.Infrastructure
         {
             var transaction = _context.Database.CurrentTransaction;
 
-            if (transaction is null)
-            {
-                throw new InvalidOperationException("Restaurant transaction is not available");
-            }
-            
+            if (transaction is null) throw new InvalidOperationException("Restaurant transaction is not available");
+
             return transaction.GetDbTransaction();
         }
     }

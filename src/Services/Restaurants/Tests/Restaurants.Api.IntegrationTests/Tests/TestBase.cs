@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using EventBus.RabbitMq.Database;
@@ -7,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Restaurant.Tests.Shared;
 using Restaurants.Application;
 using Restaurants.Infrastructure.Contexts;
+
+#endregion
 
 namespace Restaurants.Api.IntegrationTests.Tests
 {
@@ -18,7 +22,7 @@ namespace Restaurants.Api.IntegrationTests.Tests
         {
             RestaurantApi = restaurantApi;
         }
-        
+
         protected static async Task<Domain.Restaurants.Restaurant> CreateSingleRestaurant()
         {
             var restaurant = await RestaurantBuilder
@@ -33,22 +37,22 @@ namespace Restaurants.Api.IntegrationTests.Tests
                 .BuildAsync();
             return restaurant;
         }
-        
+
         protected Task<IntegrationEventEntry> GetIntegrationEventAsync(Guid correlationId)
         {
             return RestaurantApi.Services
                 .GetRequiredService<IntegrationEventContext>()
                 .IntegrationEvents
-                .Where(x=> x.CorrelationId == correlationId)
+                .Where(x => x.CorrelationId == correlationId)
                 .SingleOrDefaultAsync();
         }
-        
+
         protected async Task<Command> GetExecutedCommandAsync(Guid correlationId)
         {
             return await RestaurantApi.Services
                 .GetRequiredService<RestaurantContext>()
                 .Commands
-                .Where(x=> x.CorrelationId == correlationId)
+                .Where(x => x.CorrelationId == correlationId)
                 .SingleOrDefaultAsync();
         }
     }

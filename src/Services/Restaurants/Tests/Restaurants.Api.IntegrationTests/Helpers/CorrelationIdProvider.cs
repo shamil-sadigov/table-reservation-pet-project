@@ -1,7 +1,11 @@
-﻿using System;
+﻿#region
+
+using System;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+
+#endregion
 
 namespace Restaurants.Api.IntegrationTests.Helpers
 {
@@ -13,8 +17,9 @@ namespace Restaurants.Api.IntegrationTests.Helpers
         {
             _correlationId = correlationId;
         }
-        
-        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
+            CancellationToken cancellationToken)
         {
             request.Headers.Add("X-Correlation-Id", _correlationId.ToString());
             return base.SendAsync(request, cancellationToken);

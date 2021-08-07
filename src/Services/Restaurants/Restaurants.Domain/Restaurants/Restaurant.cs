@@ -54,7 +54,8 @@ namespace Restaurants.Domain.Restaurants
             RestaurantAddress address,
             IRestaurantChecker checker)
         {
-            if (ContainsNullValues(new {name, restaurantWorkingHours, address, uniquenessChecker = checker}, out var errors))
+            if (ContainsNullValues(new {name, restaurantWorkingHours, address, uniquenessChecker = checker},
+                out var errors))
                 return errors;
 
             var rule = new RestaurantMustBeUniqueRule(checker, name, address);

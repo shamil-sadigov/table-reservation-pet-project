@@ -1,7 +1,6 @@
 ﻿#region
 
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Restaurants.Application;
@@ -22,7 +21,7 @@ namespace Restaurants.Infrastructure.Repositories
         public async Task<Command?> GetByCorrelationIdAsync(Guid correlationId)
         {
             return await _context.Commands
-                .SingleOrDefaultAsync(x=> x.CorrelationId == correlationId);
+                .SingleOrDefaultAsync(x => x.CorrelationId == correlationId);
         }
 
         public async Task SaveAsync(Command applicationCommand)
