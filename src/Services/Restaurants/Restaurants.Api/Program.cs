@@ -15,6 +15,7 @@ namespace Restaurants.Api
                 .MinimumLevel.Information()
                 .Enrich.FromLogContext()
                 .WriteTo.Console()
+                .WriteTo.Seq("http://localhost:5341")
                 .CreateLogger();
 
             // TODO: Add seeding here

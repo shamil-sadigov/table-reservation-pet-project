@@ -25,12 +25,11 @@ namespace Restaurants.Api
         {
             services.AddCors()
                 .AddValidatorsFromAssemblyContaining<Command>()
-                .AddLogging(ops => ops.AddSeq())
                 .AddHttpContextAccessor()
                 .AddDefaultAuthentication(Configuration)
                 .AddScopeAuthorization()
-                .AddApplicationServices()
                 .AddDatabase()
+                .AddApplicationServices()
                 .AddIntegrationEventBus()
                 .AddControllers();
             
