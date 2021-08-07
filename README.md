@@ -10,4 +10,4 @@ The solution is Table Booking Apps which is convenient for both the owner and cu
 
 > Event storming is a workshop-based method to quickly find out what is happening in the domain of a software program (Wikipedia)
 
-![asd](https://github.com/shamil-sadigov/table-reservation-pet-project/blob/master/images/User%20registration.jpg)
+![EVent storming](https://github.com/shamil-sadigov/table-reservation-pet-project/blob/master/images/event%20storming.jpg)
