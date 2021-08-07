@@ -33,3 +33,7 @@ So I open my app (table reservation app), choose a `Restaurnt` that I'm inteded 
 # Architecture overview
 
 ![Architecture](https://github.com/shamil-sadigov/table-reservation-pet-project/blob/master/images/Architecture.jpg)
+
+
+# TODO list
+... coming soon
