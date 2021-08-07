@@ -9,7 +9,7 @@ using EventBus.Abstractions;
 
 namespace EventBus.RabbitMq.Database
 {
-    public class IntegrationEventEntry
+    public sealed class IntegrationEventEntry
     {
         // for EF
         private IntegrationEventEntry()
@@ -41,13 +41,13 @@ namespace EventBus.RabbitMq.Database
         public string EventContent { get; }
         public IntegrationEventState State { get; private set; }
 
-        public void Published()
+        internal void Published()
         {
             State = IntegrationEventState.Published;
             PublishedDateTime = SystemClock.DateTimeNow;
         }
 
-        public void Failed()
+        internal void Failed()
         {
             State = IntegrationEventState.Failed;
         }
