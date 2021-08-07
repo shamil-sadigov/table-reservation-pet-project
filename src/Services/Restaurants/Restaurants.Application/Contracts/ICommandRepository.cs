@@ -9,7 +9,7 @@ namespace Restaurants.Application.Contracts
 {
     public interface ICommandRepository
     {
-        Task<Command?> GetAsync(Guid id);
+        Task<Command?> GetByCorrelationIdAsync(Guid correlationId);
         Task SaveAsync(Command command);
     }
 }

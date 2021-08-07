@@ -31,26 +31,23 @@ namespace Restaurants.Application.Pipelines
             CancellationToken cancellationToken,
             RequestHandlerDelegate<TResponse> nextHandler)
         {
-            var command = await _commandRepository.GetAsync(_executionContext.CorrelationId);
+            var command = await _commandRepository.GetByCorrelationIdAsync(_executionContext.CorrelationId);
 
             if (command is not null)
                 // TODO: Map this exception to 409 (conflict) on Web layer
-                throw new DuplicateCommandException(
-                    $"Command {command.CommandId} has been already handled on {command.CreationDate}" +
-                    $"with correlation id {command.CorrelationId}", request);
                 throw new DuplicateRequestException(
                     $"Request with CorrelationId {command.CorrelationId} has been already " +
                     $"sent on {command.CreationDate}");
 
-            var executingComand = new Command(
+            var executingCommand = new Command(
                 commandId: Guid.NewGuid(),
                 _executionContext.CorrelationId,
                 causationId: _executionContext.CorrelationId,
                 typeof(TRequest).FullName);
             
-            await _commandRepository.SaveAsync(executingComand);
+            await _commandRepository.SaveAsync(executingCommand);
             
-            _executionContext.CurrentExecutingCommandId = executingComand.CommandId;
+            _executionContext.CurrentExecutingCommandId = executingCommand.CommandId;
 
             return await nextHandler();
         }
