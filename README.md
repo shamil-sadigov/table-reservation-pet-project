@@ -30,4 +30,6 @@ So I open my app (table reservation app), choose a `Restaurnt` that I'm inteded 
 
 `Administrator` of `Restaurant` see that `Reservation request` that was sent by `Visitor`(me), and may take actions like `Approve` or `Reject`. Once `Reservation Request` is `Approved` then `Reservation` is made and `Table` is reserved for. Or `Administrator` may `Reject` `Reservation Request` by providing a reason. 
 
+# Architecture overview
 
+![Architecture](https://github.com/shamil-sadigov/table-reservation-pet-project/blob/master/images/Architecture.jpg)
