@@ -22,13 +22,7 @@ namespace Restaurants.Api.IntegrationTests
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            var claims = new Claim[]
-            {
-                new("sub", Options.UserId.ToString()),
-                new("scope", Options.ApiScope)
-            };
-
-            var claimsIdentity = new ClaimsIdentity(claims);
+            var claimsIdentity = new ClaimsIdentity(Options.Claims);
 
             var user = new ClaimsPrincipal(claimsIdentity);
 

@@ -1,18 +1,23 @@
+#region
+
 using System;
 using System.IO;
-using EventBus.Abstractions;
+using EventBus.RabbitMq.Database;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Restaurants.Api.Auth;
 using Restaurants.Infrastructure.Contexts;
+
+#endregion
 
 namespace Restaurants.Api.IntegrationTests
 {
-    public class RestaurantsWebApplicationFactory : WebApplicationFactory<Startup>
+    public abstract class RestaurantsWebApplicationFactory : WebApplicationFactory<Startup>
     {
+        protected  Action<IServiceCollection>? ConfigureServices;
+        protected IDataSeeder? DataSeeder;
+        
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.ConfigureAppConfiguration(ops =>
@@ -22,31 +27,20 @@ namespace Restaurants.Api.IntegrationTests
             });
 
             builder.UseEnvironment("testing");
-            
+
             builder.UseContentRoot(Directory.GetCurrentDirectory());
-            
+
             builder.ConfigureServices(services =>
             {
-                services.AddAuthentication("Test-Scheme")
-                    .AddScheme<TestAuthenticationSchemeOptions, TestAuthenticationHandler>("Test-Scheme", ops =>
-                    {
-                        // TODO: Ensure you seeded user with this id
-
-                        ops.UserId = Guid.NewGuid();
-                        ops.ApiScope = AuthorizationScope.RestaurantApi;
-                    });
+                ConfigureServices?.Invoke(services);
                 
-                services.AddScoped<IEventBus, FakeEventBus>();
-                
-                var provider = services.BuildServiceProvider();
-    
+                using var provider = services.BuildServiceProvider();
                 using var scope = provider.CreateScope();
-                var scopeServices = scope.ServiceProvider;
-                
-                var dbContext = scopeServices.GetRequiredService<RestaurantContext>();
 
-                dbContext.Database.EnsureDeleted();
-                dbContext.Database.Migrate();
+                var servicesProvider = scope.ServiceProvider;
+
+                servicesProvider.RecreateDatabase<RestaurantContext>(DataSeeder);
+                servicesProvider.MigrateDatabase<IntegrationEventContext>();
             });
         }
     }
