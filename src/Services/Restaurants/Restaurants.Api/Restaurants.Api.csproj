@@ -27,7 +27,6 @@
     <ItemGroup>
       <ProjectReference Include="..\..\..\EventBus\EventBus.Abstractions\EventBus.Abstractions.csproj" />
       <ProjectReference Include="..\..\..\EventBus\EventBus.RabbitMq\EventBus.RabbitMq.csproj" />
-      <ProjectReference Include="..\..\Reservations\Reservations.Infrastructure\Reservations.Infrastructure.csproj" />
       <ProjectReference Include="..\Restaurants.Application\Restaurants.Application.csproj" />
       <ProjectReference Include="..\Restaurants.Domain\Restaurants.Domain.csproj" />
       <ProjectReference Include="..\Restaurants.Infrastructure\Restaurants.Infrastructure.csproj" />
