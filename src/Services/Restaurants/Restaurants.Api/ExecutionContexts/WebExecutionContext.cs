@@ -29,7 +29,7 @@ namespace Restaurants.Api.ExecutionContexts
 
             if (!headers.TryGetValue(CorrelationIdHeader, out var headerValues))
                 throw new CorrelationIdException(
-                    $"Expected request to contain correlation id in header '{CorrelationIdHeader}");
+                    $"Request should contains CorrelationId in header '{CorrelationIdHeader}");
 
             var headerValue = headerValues.First();
 

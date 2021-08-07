@@ -15,6 +15,7 @@ namespace Restaurants.Infrastructure.Contexts
         public RestaurantContext(DbContextOptions<RestaurantContext> ops)
             : base(ops)
         {
+            
         }
 
         public bool HasTransaction => Database.CurrentTransaction != null;

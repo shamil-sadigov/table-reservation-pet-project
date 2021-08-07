@@ -57,6 +57,8 @@ namespace Restaurants.Api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Restaurants.Api v1"));
             }
 
+            // TODO: add error handling
+            
             // app.UseHttpsRedirection();
 
             app.UseRouting();
