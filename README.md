@@ -5,10 +5,13 @@ You and your family had planned a dinner to the favourite restaurants, but as th
 ## Solution
 The solution is Table Booking Apps which is convenient for both the owner and customers. For customers, it is easy to book a table and get to know it is available or not at your time. And for Restaurant owners or Staff, they don’t have to waste their time attending calls and save all the detail digitally which is easy to use. You can provide Pre-ordering of food which we discuss later in this article.
 
-# Description
+## What this project is for ?
 This is just a pet project that represent a Proof of Concept where I make an attempt to combine DDD and Microservices patterns.
+
+## WIP
 App is currently not ready to run. There are services and other technical concerns that are not implemented yet. 
-A lot of things are going to be implemented. But if you would like to take a look at the code, you may start by looking and unit/integration tests to figure out what's going on 😉 
+A lot of things are going to be implemented.
+But if you would like to take a look at the code, you may start by looking and unit/integration tests to figure out what's going on 😉 
 
 # Event storming
 
