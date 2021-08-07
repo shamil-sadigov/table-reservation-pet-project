@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -29,11 +30,10 @@ namespace Restaurants.Api.Controllers
             // TODO: Handling of command can throw exception.
             // We should create an ErrorController that 
             // will catch all exceptions and map them to appropriate ProblemDetails and status code
-            
             await _mediator.Send(new RequestReservationCommand
             (
                 request.RestaurantId,
-                request.VisitingTime,
+                new TimeSpan(request.VisitingTime.Hours, request.VisitingTime.Minutes, 0),
                 request.NumberOfRequestedSeats
             ));
             
