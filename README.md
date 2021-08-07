@@ -13,7 +13,7 @@ App is currently not ready to run. There are services and other technical concer
 A lot of things are going to be implemented.
 But if you would like to take a look at the code, you may start by looking and unit/integration tests to figure out what's going on 😉 
 
-# Event storming
+## Event storming
 
 > Event storming is a workshop-based method to quickly find out what is happening in the domain of a software program (honestly copied from Wikipedia)
 
@@ -21,3 +21,13 @@ But if you would like to take a look at the code, you may start by looking and u
 
 
 PS: These are just simple events that are initial. Multiple additional (more intereseting) events will be added...
+
+# Brief introduction to domain
+__Precondition:__ Today is cloudy weather (just like I love), and it turned out that today is also Friday, so why not to visit a cafe ? These reasons are sufficient (at least for me). By the way, it turned out that cafe is type of restaurant, more than 20 years I didn't now that. If you are interested about other type of restaurants, they are [here](https://en.wikipedia.org/wiki/Types_of_restaurants)
+
+
+So I open my app (table reservation app), choose a `Restaurnt` that I'm inteded to visit, select a `Table` that I'm going to reserve and send a `Reservation request`. So, I'm a `Visitor`, not a GoF pattern, but a person who is going to visit a Restaurant.
+
+`Administrator` of `Restaurant` see that `Reservation request` that was sent by `Visitor`(me), and may take actions like `Approve` or `Reject`. Once `Reservation Request` is `Approved` then `Reservation` is made and `Table` is reserved for. Or `Administrator` may `Reject` `Reservation Request` by providing a reason. 
+
+
