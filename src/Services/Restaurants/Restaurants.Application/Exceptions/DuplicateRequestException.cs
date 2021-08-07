@@ -6,10 +6,10 @@ using System;
 
 namespace Restaurants.Application.Exceptions
 {
-    public class DuplicateCommandException : Exception
+    public class DuplicateRequestException : Exception
     {
-        public DuplicateCommandException(
-            string message, object command)
+        public DuplicateRequestException(
+            string message)
             : base(message)
         {
         }

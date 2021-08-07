@@ -38,6 +38,9 @@ namespace Restaurants.Application.Pipelines
                 throw new DuplicateCommandException(
                     $"Command {command.CommandId} has been already handled on {command.CreationDate}" +
                     $"with correlation id {command.CorrelationId}", request);
+                throw new DuplicateRequestException(
+                    $"Request with CorrelationId {command.CorrelationId} has been already " +
+                    $"sent on {command.CreationDate}");
 
             var executingComand = new Command(
                 commandId: Guid.NewGuid(),
