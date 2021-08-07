@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using BuildingBlocks.Tests.Shared;
 using Moq;
-using Restaurants.Domain.Restaurants;
 using Restaurants.Domain.Restaurants.Contracts;
 using Restaurants.Domain.Restaurants.ValueObjects;
 using Restaurants.Domain.Tables;
@@ -13,7 +12,7 @@ using Restaurants.Domain.Tables.ValueObjects;
 
 #endregion
 
-namespace Restaurants.Domain.Tests.Helpers
+namespace Restaurant.Tests.Shared
 {
     public class RestaurantBuilder
     {
@@ -82,14 +81,14 @@ namespace Restaurants.Domain.Tests.Helpers
             return this;
         }
         
-        public async Task<Restaurant> BuildAsync(bool clearDomainEvent = true)
+        public async Task<Restaurants.Domain.Restaurants.Restaurant> BuildAsync(bool clearDomainEvent = true)
         {
             var checker = new Mock<IRestaurantChecker>();
 
             checker.Setup(x => x.ExistsAsync(_name, _address))
                 .ReturnsAsync(false);
 
-            var result = await Restaurant.TryCreateAsync(
+            var result = await Restaurants.Domain.Restaurants.Restaurant.TryCreateAsync(
                 _name,
                 _workingHours,
                 _address,
@@ -97,7 +96,7 @@ namespace Restaurants.Domain.Tests.Helpers
 
             result.ThrowIfNotSuccessful();
 
-            Restaurant restaurant = result.Value!;
+            Restaurants.Domain.Restaurants.Restaurant restaurant = result.Value!;
             
             _tableInfos?.ForEach(async tableInfo =>
             {

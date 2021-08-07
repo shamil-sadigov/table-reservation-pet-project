@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Restaurants.Domain.Tests.Helpers
+namespace Restaurant.Tests.Shared
 {
     public static class StringExtension
     {

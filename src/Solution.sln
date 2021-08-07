@@ -50,7 +50,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventBus.Abstractions", "Ev
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventBus.RabbitMq", "EventBus\EventBus.RabbitMq\EventBus.RabbitMq.csproj", "{504AFDE4-BE4C-49F5-A944-F6DCB6926073}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurants.IntegrationTests", "Services\Restaurants\Tests\Restaurants.IntegrationTests\Restaurants.IntegrationTests.csproj", "{4B4FAFA7-CDEE-4425-8540-7D7B1965D559}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurants.Api.IntegrationTests", "Services\Restaurants\Tests\Restaurants.Api.IntegrationTests\Restaurants.Api.IntegrationTests.csproj", "{4B4FAFA7-CDEE-4425-8540-7D7B1965D559}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurant.Tests.Shared", "Services\Restaurants\Tests\Restaurant.Tests.Shared\Restaurant.Tests.Shared.csproj", "{2B42D0AD-C24A-4826-B0A8-2EFA2FCAD044}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -245,6 +247,18 @@ Global
 		{4B4FAFA7-CDEE-4425-8540-7D7B1965D559}.Release|x64.Build.0 = Release|Any CPU
 		{4B4FAFA7-CDEE-4425-8540-7D7B1965D559}.Release|x86.ActiveCfg = Release|Any CPU
 		{4B4FAFA7-CDEE-4425-8540-7D7B1965D559}.Release|x86.Build.0 = Release|Any CPU
+		{2B42D0AD-C24A-4826-B0A8-2EFA2FCAD044}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B42D0AD-C24A-4826-B0A8-2EFA2FCAD044}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B42D0AD-C24A-4826-B0A8-2EFA2FCAD044}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2B42D0AD-C24A-4826-B0A8-2EFA2FCAD044}.Debug|x64.Build.0 = Debug|Any CPU
+		{2B42D0AD-C24A-4826-B0A8-2EFA2FCAD044}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2B42D0AD-C24A-4826-B0A8-2EFA2FCAD044}.Debug|x86.Build.0 = Debug|Any CPU
+		{2B42D0AD-C24A-4826-B0A8-2EFA2FCAD044}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B42D0AD-C24A-4826-B0A8-2EFA2FCAD044}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B42D0AD-C24A-4826-B0A8-2EFA2FCAD044}.Release|x64.ActiveCfg = Release|Any CPU
+		{2B42D0AD-C24A-4826-B0A8-2EFA2FCAD044}.Release|x64.Build.0 = Release|Any CPU
+		{2B42D0AD-C24A-4826-B0A8-2EFA2FCAD044}.Release|x86.ActiveCfg = Release|Any CPU
+		{2B42D0AD-C24A-4826-B0A8-2EFA2FCAD044}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5A28D477-6201-43F7-9AF4-D731AD919960} = {1F4695DD-5B79-4B62-B035-112D72DF35D3}
@@ -267,5 +281,6 @@ Global
 		{017277D1-D242-4ACF-8F3E-7ED5E9A05774} = {3E999939-F282-491E-8D37-D0FB1AACF44E}
 		{504AFDE4-BE4C-49F5-A944-F6DCB6926073} = {3E999939-F282-491E-8D37-D0FB1AACF44E}
 		{4B4FAFA7-CDEE-4425-8540-7D7B1965D559} = {5F5E5A58-66A4-4D4A-95FC-152E1140EE3A}
+		{2B42D0AD-C24A-4826-B0A8-2EFA2FCAD044} = {5F5E5A58-66A4-4D4A-95FC-152E1140EE3A}
 	EndGlobalSection
 EndGlobal

@@ -5,14 +5,13 @@ using System.Threading.Tasks;
 using BuildingBlocks.Tests.Shared;
 using FluentAssertions;
 using Moq;
-using Restaurants.Domain.Restaurants;
+using Restaurant.Tests.Shared;
 using Restaurants.Domain.Restaurants.Contracts;
 using Restaurants.Domain.Restaurants.DomainEvents;
 using Restaurants.Domain.Restaurants.ValueObjects;
 using Restaurants.Domain.Tables;
 using Restaurants.Domain.Tables.DomainEvents;
 using Restaurants.Domain.Tables.ValueObjects;
-using Restaurants.Domain.Tests.Helpers;
 using Restaurants.Domain.Visitors.ValueObjects;
 using Xunit;
 
@@ -39,7 +38,7 @@ namespace Restaurants.Domain.Tests.Restaurants
                 .ReturnsAsync(false);
 
             // Act
-            var result = await Restaurant.TryCreateAsync(
+            var result = await Domain.Restaurants.Restaurant.TryCreateAsync(
                 name,
                 workingHours,
                 address,
@@ -83,7 +82,7 @@ namespace Restaurants.Domain.Tests.Restaurants
                 .ReturnsAsync(true);
 
             // Act
-            var result = await Restaurant.TryCreateAsync(
+            var result = await Domain.Restaurants.Restaurant.TryCreateAsync(
                 name,
                 workingHours,
                 address,
@@ -104,11 +103,11 @@ namespace Restaurants.Domain.Tests.Restaurants
         {
             // Arrange 
             var restaurant = await RestaurantBuilder
-                                        .WithName("restaurant name")
-                                        .LocatingAt("restaurant address")
-                                        .WithWorkingSchedule("09:00", "22:00")
-                                        .BuildAsync();
-            
+                .WithName("restaurant name")
+                .LocatingAt("restaurant address")
+                .WithWorkingSchedule("09:00", "22:00")
+                .BuildAsync();
+
             var numberOfSeats = NumberOfSeats.TryCreate(numberOfSeats_).Value!;
             var tableId = TableId.TryCreate("TBL-1").Value!;
 
@@ -206,7 +205,6 @@ namespace Restaurants.Domain.Tests.Restaurants
                 .Should().Be(visitingTime.Value);
         }
 
-       
 
         [Theory]
         [InlineData(1)]
@@ -225,9 +223,9 @@ namespace Restaurants.Domain.Tests.Restaurants
                     ("TBL-3", numberOfSeats: 12),
                     ("TBL-4", numberOfSeats: 14))
                 .BuildAsync();
-            
+
             var (numberOfSeats, visitingTime, visitorId) = CreateReservationParameters(numberOfSeats_);
-            
+
             // Act
             var result = restaurant.TryRequestReservation(
                 numberOfSeats,
@@ -257,10 +255,10 @@ namespace Restaurants.Domain.Tests.Restaurants
                     ("TBL-3", numberOfSeats: 10),
                     ("TBL-4", numberOfSeats: 6))
                 .BuildAsync();
-            
-            var (numberOfSeats, visitingTime, visitorId) = 
+
+            var (numberOfSeats, visitingTime, visitorId) =
                 CreateReservationParameters(visitingTimeHours: hours, visitingTimeMinutes: minutes);
-            
+
             // Act
             var result = restaurant.TryRequestReservation(
                 numberOfSeats,
@@ -272,8 +270,8 @@ namespace Restaurants.Domain.Tests.Restaurants
             result.Errors!.ShouldContainSomethingLike($"Restaurant {restaurant.Id} is not open at {visitingTime} time");
             restaurant.ShouldNotHavePublishedDomainEvent<TableReservationIsRequestedDomainEvent>();
         }
-        
-        private static (NumberOfSeats numberOfSeats, VisitingTime visitingTime, VisitorId visitorId) 
+
+        private static (NumberOfSeats numberOfSeats, VisitingTime visitingTime, VisitorId visitorId)
             CreateReservationParameters(
                 byte numberOfSeats = 4,
                 byte visitingTimeHours = 12,
@@ -282,7 +280,7 @@ namespace Restaurants.Domain.Tests.Restaurants
             var numberOfRequestedSeats = NumberOfSeats.TryCreate(numberOfSeats).Value!;
             var visitingTime = new VisitingTime(new TimeSpan(visitingTimeHours, visitingTimeMinutes, 0));
             var visitorId = new VisitorId(Guid.NewGuid());
-            
+
             return (numberOfRequestedSeats, visitingTime, visitorId);
         }
     }

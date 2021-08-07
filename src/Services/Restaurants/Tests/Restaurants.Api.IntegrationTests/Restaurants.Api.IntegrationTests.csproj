@@ -4,7 +4,7 @@
         <TargetFramework>net5.0</TargetFramework>
 
         <IsPackable>false</IsPackable>
-        
+        <Nullable>enable</Nullable>
 <!--        <UserSecretsId>c4ff7af5-49a6-4be3-a640-76fb640b3487</UserSecretsId>-->
     </PropertyGroup>
 
@@ -37,6 +37,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\Restaurants.Api\Restaurants.Api.csproj" />
       <ProjectReference Include="..\..\Restaurants.Infrastructure\Restaurants.Infrastructure.csproj" />
+      <ProjectReference Include="..\Restaurant.Tests.Shared\Restaurant.Tests.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>

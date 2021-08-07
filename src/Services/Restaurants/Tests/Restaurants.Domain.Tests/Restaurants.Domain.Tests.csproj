@@ -25,5 +25,10 @@
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\..\BuildingBlocks\BuildingBlocks.Tests.Shared\BuildingBlocks.Tests.Shared.csproj" />
 		<ProjectReference Include="..\..\Restaurants.Domain\Restaurants.Domain.csproj" />
+		<ProjectReference Include="..\Restaurant.Tests.Shared\Restaurant.Tests.Shared.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Helpers" />
 	</ItemGroup>
 </Project>
