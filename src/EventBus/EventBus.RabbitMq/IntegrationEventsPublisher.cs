@@ -17,6 +17,7 @@ namespace EventBus.RabbitMq
     {
         private readonly IEventBus _eventBus;
         private readonly IntegrationEventDeserializer _eventDeserializer;
+        private readonly IDbTransactionProvider _dbTransactionProvider;
         private readonly ILogger<IntegrationEventsPublisher> _logger;
         private readonly IIntegrationEventRepository _repository;
 
@@ -24,19 +25,21 @@ namespace EventBus.RabbitMq
             IIntegrationEventRepository repository,
             IEventBus eventBus,
             ILogger<IntegrationEventsPublisher> logger,
-            IntegrationEventDeserializer eventDeserializer)
+            IntegrationEventDeserializer eventDeserializer,
+            IDbTransactionProvider dbTransactionProvider)
         {
             _repository = repository;
             _eventBus = eventBus;
             _logger = logger;
             _eventDeserializer = eventDeserializer;
+            _dbTransactionProvider = dbTransactionProvider;
         }
 
 
         public async Task RegisterEventAsync(IntegrationEvent @event)
         {
             var entry = new IntegrationEventEntry(@event);
-            await _repository.AddAsync(entry);
+            await _repository.AddAsync(entry, _dbTransactionProvider.GetCurrentDbTransaction());
         }
 
         public async Task PublishEventsAsync(Guid correlationId)
@@ -69,13 +72,13 @@ namespace EventBus.RabbitMq
         private void MarkAsPublished(IntegrationEventEntry entry)
         {
             entry.Published();
-            _repository.Update(entry);
+            _repository.UpdateAsync(entry);
         }
 
         private void MarkAsFailed(IntegrationEventEntry entry)
         {
             entry.Failed();
-            _repository.Update(entry);
+            _repository.UpdateAsync(entry);
         }
     }
 }

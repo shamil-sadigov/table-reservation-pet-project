@@ -11,6 +11,7 @@ namespace EventBus.RabbitMq.Database
         public IntegrationEventContext(DbContextOptions<IntegrationEventContext> options)
             : base(options)
         {
+            
         }
         
         public DbSet<IntegrationEventEntry> IntegrationEvents { get; set; }

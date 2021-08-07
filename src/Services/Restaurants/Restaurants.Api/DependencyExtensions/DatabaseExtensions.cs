@@ -80,7 +80,8 @@ namespace Restaurants.Api.DependencyExtensions
             services.AddScoped<ICommandRepository, CommandRepository>();
 
             services.AddScoped<IResilientTransaction, ResilientTransaction>();
-
+            services.AddScoped<IDbTransactionProvider, RestaurantTransactionProvider>();
+            
             return services;
         }
     }
