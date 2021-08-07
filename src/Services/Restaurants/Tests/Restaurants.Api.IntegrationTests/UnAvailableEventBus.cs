@@ -1,12 +1,13 @@
+using System.Net.Sockets;
 using EventBus.Abstractions;
 
 namespace Restaurants.Api.IntegrationTests
 {
-    public class FakeEventBus:IEventBus
+    public class UnAvailableEventBus:IEventBus
     {
         public void Publish(IntegrationEvent integrationEvent)
         {
-            // suppose we published
+            throw new SocketException();
         }
     }
 }
