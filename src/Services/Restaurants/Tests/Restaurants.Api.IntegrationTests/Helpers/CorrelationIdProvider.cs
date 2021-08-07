@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Restaurants.Api.IntegrationTests
+namespace Restaurants.Api.IntegrationTests.Helpers
 {
     public class CorrelationIdProvider : DelegatingHandler
     {

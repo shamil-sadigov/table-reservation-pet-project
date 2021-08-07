@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Restaurants.Infrastructure.Contexts;
 
-namespace Restaurants.Api.IntegrationTests
+namespace Restaurants.Api.IntegrationTests.DataSeeders
 {
     public interface IDataSeeder
     {

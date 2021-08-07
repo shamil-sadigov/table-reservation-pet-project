@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Restaurants.Api.IntegrationTests
+namespace Restaurants.Api.IntegrationTests.Auth
 {
     public class TestAuthenticationHandler:AuthenticationHandler<TestAuthenticationSchemeOptions>
     {

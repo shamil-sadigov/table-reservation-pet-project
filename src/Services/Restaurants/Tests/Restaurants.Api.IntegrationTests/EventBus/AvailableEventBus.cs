@@ -1,6 +1,6 @@
 ﻿using EventBus.Abstractions;
 
-namespace Restaurants.Api.IntegrationTests
+namespace Restaurants.Api.IntegrationTests.EventBus
 {
     public class AvailableEventBus:IEventBus
     {

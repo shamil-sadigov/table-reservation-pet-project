@@ -1,7 +1,7 @@
 using System.Net.Sockets;
 using EventBus.Abstractions;
 
-namespace Restaurants.Api.IntegrationTests
+namespace Restaurants.Api.IntegrationTests.EventBus
 {
     public class UnAvailableEventBus:IEventBus
     {

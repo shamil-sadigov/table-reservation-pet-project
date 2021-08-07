@@ -2,9 +2,10 @@
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Restaurants.Api.Auth;
+using Restaurants.Api.IntegrationTests.Auth;
+using Restaurants.Api.IntegrationTests.DataSeeders;
 
-namespace Restaurants.Api.IntegrationTests
+namespace Restaurants.Api.IntegrationTests.Helpers
 {
     public static class ServiceProviderExtensions
     {

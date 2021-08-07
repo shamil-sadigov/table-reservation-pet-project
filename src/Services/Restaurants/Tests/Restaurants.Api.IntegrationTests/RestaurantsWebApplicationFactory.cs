@@ -7,17 +7,25 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Restaurants.Api.IntegrationTests.DataSeeders;
+using Restaurants.Api.IntegrationTests.Helpers;
 using Restaurants.Infrastructure.Contexts;
 
 #endregion
 
 namespace Restaurants.Api.IntegrationTests
 {
-    public abstract class RestaurantsWebApplicationFactory : WebApplicationFactory<Startup>
+    public class RestaurantsWebApplicationFactory : WebApplicationFactory<Startup>
     {
-        protected  Action<IServiceCollection>? ConfigureServices;
+        public Action<IServiceCollection>? ConfigureServices;
+        
         protected IDataSeeder? DataSeeder;
         
+        public RestaurantsWebApplicationFactory WithPredefinedData(IDataSeeder dataSeeder)
+        {
+            DataSeeder = dataSeeder;
+            return this;
+        }
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.ConfigureAppConfiguration(ops =>
