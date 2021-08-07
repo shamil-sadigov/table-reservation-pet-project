@@ -5,7 +5,6 @@ using EventBus.RabbitMq.Database;
 using EventBus.RabbitMq.Helpers;
 using Microsoft.Extensions.DependencyInjection;
 using Restaurants.Application.UseCases.Restaurants.RequestTableReservation.IntegrationEvent;
-using Restaurants.Infrastructure;
 
 namespace Restaurants.Api.DependencyExtensions
 {
@@ -13,8 +12,6 @@ namespace Restaurants.Api.DependencyExtensions
     {
         public static IServiceCollection AddIntegrationEventBus(this IServiceCollection services)
         {
-            services.AddScoped<IDbConnectionProvider, RestaurantDbConnectionProvider>();
-
             services.AddScoped<IIntegrationEventRepository, IntegrationEventRepository>();
 
             services.AddScoped<IIntegrationEventsPublisher, IntegrationEventsPublisher>();
@@ -25,8 +22,8 @@ namespace Restaurants.Api.DependencyExtensions
 
             services.AddSingleton<IntegrationEventDeserializer>();
             
-            // TODO: Add IEventBus!
-
+            services.AddScoped<IEventBus, RabbitMqEventBus>();
+            
             return services;
         }
     }
