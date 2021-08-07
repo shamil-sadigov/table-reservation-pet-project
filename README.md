@@ -4,3 +4,10 @@ You and your family had planned a dinner to the favourite restaurants, but as th
 
 # Solution
 The solution is Table Booking Apps which is convenient for both the owner and customers. For customers, it is easy to book a table and get to know it is available or not at your time. And for Restaurant owners or Staff, they don’t have to waste their time attending calls and save all the detail digitally which is easy to use. You can provide Pre-ordering of food which we discuss later in this article.
+
+
+# Event storming
+
+> Event storming is a workshop-based method to quickly find out what is happening in the domain of a software program (Wikipedia)
+
+![asd](https://github.com/shamil-sadigov/table-reservation-pet-project/blob/master/images/User%20registration.jpg)
