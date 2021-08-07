@@ -15,20 +15,17 @@ namespace EventBus.RabbitMq.Database
     {
         private readonly IntegrationEventContext _context;
 
-        public IntegrationEventRepository(IDbConnectionProvider connectionProvider)
+        public IntegrationEventRepository(IntegrationEventContext context)
         {
-            var dbConnection = connectionProvider.GetDbConnection();
-
-            // TODO: Move this configuration to Startup
-            var dbContextOptions = new DbContextOptionsBuilder<IntegrationEventContext>()
-                .UseSqlServer(dbConnection)
-                .Options;
-
-            _context = new IntegrationEventContext(dbContextOptions);
+            _context = context;
         }
 
         public async Task AddAsync(IntegrationEventEntry integrationEvent)
-            => await _context.IntegrationEvents.AddAsync(integrationEvent);
+        {
+            await _context.IntegrationEvents.AddAsync(integrationEvent);
+            
+            
+        }
 
         public void Update(IntegrationEventEntry integrationEvent)
             => _context.Entry(integrationEvent).CurrentValues.SetValues(integrationEvent);
