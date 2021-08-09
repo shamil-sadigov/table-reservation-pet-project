@@ -36,4 +36,15 @@ So I open my app (table reservation app), choose a `Restaurnt` that I'm inteded 
 
 
 # TODO list
-... coming soon
+- Add Identity Service 
+   - Choose between [OpenIdDict](https://github.com/openiddict/openiddict-core) or [Identity Server](https://identityserver4.readthedocs.io/en/latest/)
+- Add WebHook service
+- Add Docker support
+- Add RabbitMQ Message Bus
+- Add BackgrounJobs services for:
+   - Sending nonpublished integration events to Message Broker
+   - Receiving incoming integration events and saving them in DB
+- Wrap integration events into docker-compose
+- Add CI on Github Actions
+- 
+- more is coming....
